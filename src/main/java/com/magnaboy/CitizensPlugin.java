@@ -7,6 +7,7 @@ import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.MenuOpened;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
@@ -990,19 +991,17 @@ public class CitizensPlugin extends Plugin {
     }
 
     protected void updateAll() {
-        //        clientThread.invokeLater(() -> {
         getAllEntities().forEach(Entity::update);
-        //        });
     }
 
     @Subscribe
     public void onGameStateChanged(GameStateChanged gameStateChanged) {
-        client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Game State Change: " + gameStateChanged.getGameState(), null);
+        System.out.println("Game State Change: " + gameStateChanged.getGameState());
         if (gameStateChanged.getGameState() == GameState.LOGIN_SCREEN) {
             despawnAll();
         }
 
-        if (gameStateChanged.getGameState() == GameState.LOADING || gameStateChanged.getGameState() == GameState.LOGGED_IN) {
+        if (gameStateChanged.getGameState() == GameState.LOGGED_IN) {
             updateAll();
         }
     }
@@ -1037,15 +1036,10 @@ public class CitizensPlugin extends Plugin {
                 }
             }
 
-            //                if (random < 6) {
-            //                    citizen.triggerIdleAnimation();
-            //                }
+            //  if (random < 6) {
+            //      citizen.triggerIdleAnimation();
+            //  }
         }
-    }
-
-    static int radToJau(double a) {
-        int j = (int) Math.round(a / Perspective.UNIT);
-        return j & 2047;
     }
 
     @Subscribe
@@ -1061,14 +1055,16 @@ public class CitizensPlugin extends Plugin {
     public void onMenuOpened(MenuOpened ignored) {
         int firstMenuIndex = 1;
 
+        Point mousePos = client.getMouseCanvasPosition();
+
         for (Citizen citizen : citizens) {
             if (citizen.isActive()) {
-                if (citizen.getClickbox()
-                           .contains(client.getMouseCanvasPosition()
-                                           .getX(),
-                                   client.getMouseCanvasPosition()
-                                         .getY())) {
-
+                SimplePolygon clickbox = citizen.getClickbox();
+                if (clickbox == null) {
+                    continue;
+                }
+                boolean doesClickBoxContainMousePos = clickbox.contains(mousePos.getX(), mousePos.getY());
+                if (doesClickBoxContainMousePos) {
                     client.createMenuEntry(firstMenuIndex)
                           .setOption("Examine")
                           .setTarget("<col=fffe00>" + citizen.name + "</col>")
@@ -1076,6 +1072,7 @@ public class CitizensPlugin extends Plugin {
                           .setParam0(0)
                           .setParam1(0)
                           .setDeprioritized(true);
+                    break;
                 }
             }
         }

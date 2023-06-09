@@ -32,8 +32,9 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
     protected int targetQueueSize;
     protected final List<ExtraObject> extraObjects = new ArrayList<>();
     public AnimationID[] randomAnimations;
-
     AnimationID movingAnimationId = AnimationID.HumanWalk;
+    // Remember last known locations so after logging in/out, they are in the same place.
+    public WorldPoint lastKnownLocation;
 
     private class Target {
         public WorldPoint worldDestinationPosition;
@@ -93,13 +94,18 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         }, 600 * 8);
     }
 
+    public T setLocation(WorldPoint location) {
+        lastKnownLocation = location;
+        return super.setLocation(location);
+    }
 
     public void spawn() {
-        plugin.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "",
-                "Spawning " + name + ", " + distanceToPlayer() + "x" +
-                        " tiles away from the player",
-                null);
+        System.out.println("Spawning " + name + ", " + distanceToPlayer() + "x" +
+                " tiles away from the player");
 
+        //        if (lastKnownLocation != null) {
+        //            this.setLocation(lastKnownLocation);
+        //        }
         for (int i = 0; i < MAX_TARGET_QUEUE_SIZE; i++) {
             targetQueue.add(new Target());
         }
@@ -115,8 +121,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
     }
 
     public void despawn() {
-        plugin.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Despawning " + name + ".",
-                null);
+        System.out.println("Despawning " + name + ".");
         this.targetQueueSize = 0;
         super.despawn();
         for (ExtraObject obj : extraObjects) {
@@ -131,6 +136,14 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         this.activeRemark = message;
         this.remarkTimer = 80;
         plugin.client.addChatMessage(ChatMessageType.PUBLICCHAT, this.name, message, null);
+    }
+
+    @Override
+    public void update() {
+        boolean inScene = shouldRender();
+        System.out.println(name + " is updating: " + (inScene ? "in scene" : "NOT in scene") + " and " + (isActive()
+                ? "active" : "inactive"));
+        super.update();
     }
 
     public int getOrientation() {
@@ -251,12 +264,17 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
                     rlObject.setLocation(newLocation, plane);
 
-                    dx = targetPosition.getX() - rlObject
+
+                    int currentX = rlObject
                             .getLocation()
                             .getX();
-                    dy = targetPosition.getY() - rlObject
+                    int currentY = rlObject
                             .getLocation()
                             .getY();
+                    dx = targetPosition.getX() - currentX;
+                    dy = targetPosition.getY() - currentY;
+
+                    lastKnownLocation = new WorldPoint(currentX, currentY, plane);
                 }
 
 

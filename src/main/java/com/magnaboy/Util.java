@@ -1,5 +1,7 @@
 package com.magnaboy;
 
+import net.runelite.api.Perspective;
+
 import java.util.Random;
 
 public final class Util {
@@ -24,6 +26,11 @@ public final class Util {
     public static int getRandomItem(int[] items) {
         int index = rng.nextInt(items.length);
         return items[index];
+    }
+
+    static int radToJau(double a) {
+        int j = (int) Math.round(a / Perspective.UNIT);
+        return j & 2047;
     }
 
 }

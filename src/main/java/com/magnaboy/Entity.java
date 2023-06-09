@@ -31,9 +31,9 @@ public class Entity<T extends Entity<T>> {
     public void update() {
         boolean inScene = shouldRender();
 
-        if (!isActive() && inScene) {
+        if (inScene) {
             spawn();
-        } else if (isActive() && !inScene) {
+        } else {
             despawn();
         }
     }
@@ -205,16 +205,15 @@ public class Entity<T extends Entity<T>> {
     }
 
     public void despawn() {
+        if (rlObject == null) {
+            return;
+        }
         rlObject.setActive(false);
     }
 
     public void spawn() {
         if (location == null) {
             throw new IllegalStateException("Tried to spawn entity with no location");
-        }
-
-        if (this.isActive()) {
-            return;
         }
 
         this.rlObject = plugin.client.createRuneLiteObject();
@@ -231,10 +230,6 @@ public class Entity<T extends Entity<T>> {
                 finalModel.recolor((short) recolorsToFind[i], (short) recolorsToReplace[i]);
             }
         }
-
-        //        if (heightTranslationInTiles != null) {
-        //            finalModel.translate(0, -(Math.round(heightTranslationInTiles * 128)), 0);
-        //        }
 
         if (scale != null) {
             finalModel.cloneVertices();
@@ -257,7 +252,8 @@ public class Entity<T extends Entity<T>> {
         rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
 
         LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, location);
-        if (localPosition != null && plugin.client.getPlane() == location.getPlane()) {
+        boolean isInSamePlaneAsPlayer = plugin.client.getPlane() == location.getPlane();
+        if (localPosition != null && isInSamePlaneAsPlayer) {
             rlObject.setLocation(localPosition, location.getPlane());
         } else {
             return;
