@@ -44,7 +44,7 @@ public class CitizensPlugin extends Plugin {
     private CitizensOverlay citizensOverlay;
 
     @Inject
-    private ClientThread clientThread;
+    public ClientThread clientThread;
 
     public List<Animation> animationPoses = new ArrayList<Animation>();
     public AnimationID[] randomIdleActionAnimationIds = {AnimationID.Flex};

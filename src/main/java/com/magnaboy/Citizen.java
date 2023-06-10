@@ -132,7 +132,9 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         }
         this.activeRemark = message;
         this.remarkTimer = 80;
-        plugin.client.addChatMessage(ChatMessageType.PUBLICCHAT, this.name, message, null);
+        plugin.clientThread.invokeLater(() -> {
+            plugin.client.addChatMessage(ChatMessageType.PUBLICCHAT, this.name, message, null);
+        });
     }
 
     @Override
