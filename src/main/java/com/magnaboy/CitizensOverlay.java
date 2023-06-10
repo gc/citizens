@@ -25,7 +25,11 @@ public class CitizensOverlay extends Overlay {
     }
 
     private void highlightTile(Graphics2D graphics, WorldPoint point, Color color) {
-        final Polygon poly = Perspective.getCanvasTilePoly(plugin.getClient(), LocalPoint.fromWorld(plugin.getClient(), point));
+        LocalPoint lp = LocalPoint.fromWorld(plugin.client, point);
+        if (lp == null) {
+            return;
+        }
+        final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
 
         if (poly != null) {
             OverlayUtil.renderPolygon(graphics, poly, color);
@@ -35,39 +39,50 @@ public class CitizensOverlay extends Overlay {
     @Override
     public Dimension render(Graphics2D graphics) {
         for (Citizen citizen : plugin.citizens) {
-            if (citizen.isActive() && citizen.isRemarking()) {
-                if (citizen.location != null) {
-                    Point p = Perspective.localToCanvas(plugin.getClient(), citizen.getLocalLocation(), plugin
-                            .getClient()
-                            .getPlane(), citizen
-                            .getRlObject().getModelHeight());
-                    if (p != null) {
-                        Font overheadFont = FontManager.getRunescapeBoldFont();
-                        FontMetrics metrics = graphics.getFontMetrics(overheadFont);
-                        Point shiftedP = new Point(p.getX() - (metrics.stringWidth(citizen.activeRemark) / 2), p.getY());
+            if (citizen.isActive() && citizen.isRemarking() && citizen.location != null) {
+                Point p = Perspective.localToCanvas(plugin.client, citizen.getLocalLocation(), plugin
+                        .client
+                        .getPlane(), citizen
+                        .rlObject.getModelHeight());
+                if (p != null) {
+                    Font overheadFont = FontManager.getRunescapeBoldFont();
+                    FontMetrics metrics = graphics.getFontMetrics(overheadFont);
+                    Point shiftedP = new Point(p.getX() - (metrics.stringWidth(citizen.activeRemark) / 2), p.getY());
 
-                        graphics.setFont(overheadFont);
-                        OverlayUtil.renderTextLocation(graphics, shiftedP, citizen.activeRemark,
-                                JagexColors.YELLOW_INTERFACE_TEXT);
-                    }
+                    graphics.setFont(overheadFont);
+                    OverlayUtil.renderTextLocation(graphics, shiftedP, citizen.activeRemark,
+                            JagexColors.YELLOW_INTERFACE_TEXT);
                 }
             }
 
-            //            if (citizen instanceof WanderingCitizen) {
-            //                WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
-            //                int x = boundingBox.getX();
-            //                int y = boundingBox.getY();
+            //                        if (citizen instanceof WanderingCitizen) {
+            //                            WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
+            //                            int x = boundingBox.getX();
+            //                            int y = boundingBox.getY();
             //
-            //                Color color = new Color(255, 0, 0);
+            //                            Color color = new Color(255, 0, 0);
             //
-            //                for (int i = y; i < y + boundingBox.getHeight(); i++) {
-            //                    for (int t = 0; t < boundingBox.getWidth(); t++) {
-            //                        highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
-            //                    }
-            //                }
-            //
-            //                highlightTile(graphics, citizen.location, new Color(0, 255, 0));
-            //            }
+            //                            for (int i = y; i < y + boundingBox.getHeight(); i++) {
+            //                                for (int t = 0; t < boundingBox.getWidth(); t++) {
+            //                                    highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
+            //                                }
+            //                            }
+
+            highlightTile(graphics, citizen.location, new Color(0, 255, 0));
+            if (citizen.targetQueue.size() > 0) {
+                citizen.targetQueue.forEach((Object _target) -> {
+                    Citizen.Target target = ((Citizen<WanderingCitizen>.Target) _target);
+                    if (target.worldDestinationPosition == null) {
+                        return;
+                    }
+                    if (target.worldDestinationPosition.equals(citizen.location)) {
+                        highlightTile(graphics, target.worldDestinationPosition, new Color(0, 255, 0));
+                    } else {
+                        highlightTile(graphics, target.worldDestinationPosition, new Color(255, 0, 0));
+                    }
+                });
+            }
+            //                        }
         }
 
         return null;

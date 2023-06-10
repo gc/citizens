@@ -30,7 +30,7 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 
     public void wander() {
         WorldPoint randomSpot = getRandomInBoundingBox();
-        this.moveTo(randomSpot, 50);
+        this.moveTo(randomSpot);
     }
 
 }

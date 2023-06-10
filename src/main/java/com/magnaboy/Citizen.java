@@ -26,17 +26,17 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
     public String activeRemark = null;
     private int remarkTimer = 0;
     public int speed = 4;
-    SimplePolygon clickbox;
+    private SimplePolygon clickbox;
     protected final int MAX_TARGET_QUEUE_SIZE = 10;
-    protected final List<Target> targetQueue = new ArrayList<>(MAX_TARGET_QUEUE_SIZE);
+    final ArrayList<Target> targetQueue = new ArrayList<Target>(MAX_TARGET_QUEUE_SIZE);
+
     protected int targetQueueSize;
     protected final List<ExtraObject> extraObjects = new ArrayList<>();
     public AnimationID[] randomAnimations;
-    AnimationID movingAnimationId = AnimationID.HumanWalk;
-    // Remember last known locations so after logging in/out, they are in the same place.
+    private AnimationID movingAnimationId = AnimationID.HumanWalk;
     public WorldPoint lastKnownLocation;
 
-    private class Target {
+    public class Target {
         public WorldPoint worldDestinationPosition;
         public LocalPoint localDestinationPosition;
         public int currentDistance;
@@ -103,9 +103,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         System.out.println("Spawning " + name + ", " + distanceToPlayer() + "x" +
                 " tiles away from the player");
 
-        //        if (lastKnownLocation != null) {
-        //            this.setLocation(lastKnownLocation);
-        //        }
         for (int i = 0; i < MAX_TARGET_QUEUE_SIZE; i++) {
             targetQueue.add(new Target());
         }
@@ -158,7 +155,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         return this.activeRemark != null;
     }
 
-    public void moveTo(WorldPoint worldPosition, int jauOrientation) {
+    public void moveTo(WorldPoint worldPosition) {
         if (!rlObject.isActive()) {
             spawn();
         }
@@ -193,6 +190,10 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
     }
 
     public void onClientTick() {
+        movementTick();
+    }
+
+    public void movementTick() {
         if (remarkTimer > 0) {
             remarkTimer--;
         }
@@ -222,23 +223,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
                 boolean rotationDone = rotateObject(intx, inty);
 
+                // Citizen is no longer in a visible area on our client, so let's despawn it
                 if (plugin.client.getPlane() != targetPlane || !targetPosition.isInScene()) {
-                    // this actor is no longer in a visible area on our client, so let's despawn it
                     despawn();
                     return;
                 }
 
-                //apply animation if move-speed / distance has changed
+                // Apply animation if move-speed / distance has changed
                 if (lastDistance != someTarget.currentDistance) {
-                    int distance = someTarget.currentDistance;
-
-                    // we don't want to go beyond walk (speed of 1)
-                    rlObject.setAnimation(distance > 1 ? null : plugin.getAnimation(movingAnimationId));
-
-                    if (rlObject.getAnimation() == null) {
-                        rlObject.setAnimation(plugin.getAnimation(movingAnimationId));
-                    }
-
+                    rlObject.setAnimation(plugin.getAnimation(movingAnimationId));
                 }
 
                 this.lastDistance = someTarget.currentDistance;
@@ -247,10 +240,8 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
                 int dx = targetPosition.getX() - currentPosition.getX();
                 int dy = targetPosition.getY() - currentPosition.getY();
 
-
                 // are we not where we need to be?
                 if (dx != 0 || dy != 0) {
-
                     // only use the delta if it won't send up past the target
                     if (Math.abs(dx) > speed) {
                         dx = Integer.signum(dx) * speed;
@@ -264,7 +255,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
                     rlObject.setLocation(newLocation, plane);
 
-
                     int currentX = rlObject
                             .getLocation()
                             .getX();
@@ -273,26 +263,32 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
                             .getY();
                     dx = targetPosition.getX() - currentX;
                     dy = targetPosition.getY() - currentY;
-
-                    lastKnownLocation = new WorldPoint(currentX, currentY, plane);
                 }
-
 
                 if (dx == 0 && dy == 0 && rotationDone) {
                     cTargetIndex = (cTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
                     targetQueueSize--;
                     rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
                 }
-
             }
 
             LocalPoint lp = getLocalLocation();
             int zOff = Perspective.getTileHeight(plugin.client, lp, plugin.client.getPlane());
+            if (rlObject.getModel() == null) {
+                System.out.println("[Citizens] Model is null for " + this.name);
+                return;
+            }
+            clickbox = calculateAABB(plugin.client,
+                    rlObject.getModel(),
+                    rlObject.getOrientation(),
+                    lp.getX(),
+                    lp.getY(),
+                    plugin.client.getPlane(),
+                    zOff);
 
-            clickbox = calculateAABB(plugin.client, getRlObject().getModel(), getOrientation(), lp.getX(), lp.getY(), plugin.client.getPlane(), zOff);
+            location = WorldPoint.fromLocalInstance(plugin.client, getLocalLocation());
         }
 
     }
-
 
 }

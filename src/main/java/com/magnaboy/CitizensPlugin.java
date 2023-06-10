@@ -957,6 +957,30 @@ public class CitizensPlugin extends Plugin {
                 .setExamine("He's on a break."));
 
 
+        citizens.add(new ScriptedCitizen(this)
+                .setLocation(new WorldPoint(3209, 3425, 0))
+                .setModelIDs(new int[]{
+                        38135
+                })
+                .setIdleAnimation(AnimationID.HumanIdle)
+                .setBaseOrientation(CardinalDirection.North)
+                .setName("ScriptedEmme")
+                .setExamine("TODO")
+                .setScript(new CitizenScript()
+                        .walkTo(3209, 3432)
+                        .say("First stop!")
+                        .wait(2)
+                        .walkTo(3216, 3432)
+                        .say("Second stop!")
+                        .wait(2)
+                        .walkTo(3216, 3425)
+                        .say("Third stop!")
+                        .wait(2)
+                        .walkTo(3209, 3425)
+                        .say("I'm back at the start!")
+                )
+        );
+
         entityCollection.add(citizens);
         entityCollection.add(scenery);
         entitiesAreReady = true;
@@ -976,10 +1000,6 @@ public class CitizensPlugin extends Plugin {
     protected void shutDown() {
         overlayManager.remove(citizensOverlay);
         despawnAll();
-    }
-
-    public Client getClient() {
-        return client;
     }
 
     protected void despawnAll() {

@@ -53,7 +53,14 @@ public class Entity<T extends Entity<T>> {
         return j & 2047;
     }
 
-    protected static SimplePolygon calculateAABB(Client client, Model m, int jauOrient, int x, int y, int z, int zOff) {
+    protected static SimplePolygon calculateAABB(Client client, Model m, Integer jauOrient, int x, int y, int z,
+                                                 int zOff) {
+        if (m == null) {
+            throw new IllegalStateException("model is null");
+        }
+        if (jauOrient == null) {
+            throw new IllegalStateException("jauOrient is null");
+        }
         AABB aabb = m.getAABB(jauOrient);
 
         int x1 = aabb.getCenterX();
@@ -178,10 +185,6 @@ public class Entity<T extends Entity<T>> {
             rlObject.setLocation(lp, plane);
         }
         return (T) this;
-    }
-
-    public RuneLiteObject getRlObject() {
-        return rlObject;
     }
 
     public boolean shouldRender() {
