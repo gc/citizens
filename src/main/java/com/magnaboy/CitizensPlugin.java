@@ -68,6 +68,7 @@ public class CitizensPlugin extends Plugin {
 
     @Override
     protected void startUp() {
+
         overlayManager.add(citizensOverlay);
 
         for (AnimationID animId : randomIdleActionAnimationIds) {
@@ -78,6 +79,10 @@ public class CitizensPlugin extends Plugin {
         for (AnimationID idList : AnimationID.values()) {
             loadAnimation(idList);
         }
+
+        clientThread.invokeLater(() -> {
+            System.out.println(getAnimation(AnimationID.HumanWalk));
+        });
 
         citizens.add(
                 new WanderingCitizen(this)

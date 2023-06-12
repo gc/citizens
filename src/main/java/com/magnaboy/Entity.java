@@ -211,7 +211,9 @@ public class Entity<T extends Entity<T>> {
         if (rlObject == null) {
             return;
         }
-        rlObject.setActive(false);
+        plugin.clientThread.invokeLater(() -> {
+            rlObject.setActive(false);
+        });
     }
 
     public void spawn() {

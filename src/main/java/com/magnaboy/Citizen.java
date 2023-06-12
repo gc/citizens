@@ -231,6 +231,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
                     return;
                 }
 
+
                 // Apply animation if move-speed / distance has changed
                 if (lastDistance != someTarget.currentDistance) {
                     rlObject.setAnimation(plugin.getAnimation(movingAnimationId));

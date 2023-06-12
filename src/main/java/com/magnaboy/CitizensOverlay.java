@@ -24,7 +24,7 @@ public class CitizensOverlay extends Overlay {
         this.plugin = plugin;
     }
 
-    private void highlightTile(Graphics2D graphics, WorldPoint point, Color color) {
+    private void highlightTile(Graphics2D graphics, WorldPoint point, Color color, String text) {
         LocalPoint lp = LocalPoint.fromWorld(plugin.client, point);
         if (lp == null) {
             return;
@@ -33,13 +33,26 @@ public class CitizensOverlay extends Overlay {
 
         if (poly != null) {
             OverlayUtil.renderPolygon(graphics, poly, color);
+            if (text != null) {
+                Point p = Perspective.localToCanvas(plugin.client, lp, plugin
+                        .client
+                        .getPlane(), 0);
+                OverlayUtil.renderTextLocation(graphics, p, text,
+                        color);
+            }
         }
     }
 
     @Override
     public Dimension render(Graphics2D graphics) {
         for (Citizen citizen : plugin.citizens) {
-            if (citizen.isActive() && citizen.isRemarking() && citizen.location != null) {
+            if (!citizen.isActive() || citizen.location == null) {
+                continue;
+            }
+
+            highlightTile(graphics, citizen.location, new Color(0, 255, 0), citizen.name);
+
+            if (citizen.isRemarking()) {
                 Point p = Perspective.localToCanvas(plugin.client, citizen.getLocalLocation(), plugin
                         .client
                         .getPlane(), citizen
@@ -68,7 +81,6 @@ public class CitizensOverlay extends Overlay {
             //                                }
             //                            }
 
-            highlightTile(graphics, citizen.location, new Color(0, 255, 0));
             if (citizen.targetQueue.size() > 0) {
                 citizen.targetQueue.forEach((Object _target) -> {
                     Citizen.Target target = ((Citizen<WanderingCitizen>.Target) _target);
@@ -76,9 +88,9 @@ public class CitizensOverlay extends Overlay {
                         return;
                     }
                     if (target.worldDestinationPosition.equals(citizen.location)) {
-                        highlightTile(graphics, target.worldDestinationPosition, new Color(0, 255, 0));
+                        highlightTile(graphics, target.worldDestinationPosition, new Color(0, 255, 0), null);
                     } else {
-                        highlightTile(graphics, target.worldDestinationPosition, new Color(255, 0, 0));
+                        highlightTile(graphics, target.worldDestinationPosition, new Color(255, 0, 0), null);
                     }
                 });
             }
