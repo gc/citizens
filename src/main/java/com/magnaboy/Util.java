@@ -2,10 +2,20 @@ package com.magnaboy;
 
 import net.runelite.api.Perspective;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public final class Util {
     public static Random rng = new Random();
+    private final static Logger logger = Logger.getLogger("Citizens");
+    public final static int TILES_WALKED_PER_GAME_TICK = 1;
+    public final static int GAME_TICK_MILLIS = 600;
 
     // Prevent instantiation
     private Util() {
@@ -33,4 +43,17 @@ public final class Util {
         return j & 2047;
     }
 
+    static void log(String message) {
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("citizens.log", true)))) {
+            out.println(message);
+        } catch (IOException e) {
+            System.err.println("Error occurred while logging: " + e.getMessage());
+        }
+    }
+
+    public static float truncateFloat(int digits, float number) {
+        BigDecimal bd = new BigDecimal(Float.toString(number));
+        bd = bd.setScale(digits, RoundingMode.DOWN);
+        return bd.floatValue();
+    }
 }

@@ -28,10 +28,19 @@ public class CitizenScript {
         return this;
     }
 
+    public CitizenScript setAnimation(AnimationID anim) {
+        actions.add(() -> {
+            citizen.rlObject.setAnimation(citizen.plugin.getAnimation(anim));
+            scheduleNextAction(0);
+        });
+        return this;
+    }
+
     public CitizenScript walkTo(int x, int y) {
         actions.add(() -> {
-            citizen.moveTo(new WorldPoint(x, y, citizen.plane));
-            scheduleNextActionWhenArrived(x, y, 500);
+            WorldPoint wp = new WorldPoint(x, y, citizen.plane);
+            citizen.moveTo(wp);
+            scheduleNextActionWhenArrived(wp, 500);
         });
         return this;
     }
@@ -65,12 +74,13 @@ public class CitizenScript {
         }, delayInSeconds, TimeUnit.SECONDS);
     }
 
-    private void scheduleNextActionWhenArrived(int x, int y, int pollingRateMillis) {
+    private void scheduleNextActionWhenArrived(WorldPoint wp, int pollingRateMillis) {
         AtomicReference<Future<?>> futureRef = new AtomicReference<>();
         Future<?> future = executorService.scheduleAtFixedRate(() -> {
-            WorldPoint currentLocation = citizen.location;
-            if (currentLocation.getX() == x && currentLocation.getY() == y) {
-                futureRef.get().cancel(false); // stop location checking
+            WorldPoint currentLocation = citizen.getWorldLocation();
+            int dist = currentLocation.distanceTo(wp);
+            if (dist <= 0) {
+                futureRef.get().cancel(false);
                 scheduleNextAction(0);
             }
         }, 0, pollingRateMillis, TimeUnit.MILLISECONDS);

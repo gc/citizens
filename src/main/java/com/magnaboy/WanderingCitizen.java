@@ -14,10 +14,7 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 
     public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
         this.boundingBox = new WorldArea(bottomLeft, Math.abs(bottomLeft.getX() - topRight.getX()), Math.abs(bottomLeft.getY() - topRight.getY()));
-        location = getRandomInBoundingBox();
-        if (location == null) {
-            throw new IllegalStateException("Received null location in WanderingCitizen init");
-        }
+        worldLocation = getRandomInBoundingBox();
         return this;
     }
 

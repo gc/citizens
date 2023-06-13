@@ -15,11 +15,13 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
     }
 
     @Override
-    public void spawn() {
-        super.spawn();
+    public boolean spawn() {
+        boolean didSpawn = super.spawn();
         if (!hasStarted) {
             script.run();
             hasStarted = true;
+            return true;
         }
+        return didSpawn;
     }
 }

@@ -13,7 +13,7 @@ import static net.runelite.api.Perspective.SINE;
 
 public class Entity<T extends Entity<T>> {
     public final int plane = 0;
-    public WorldPoint location;
+    public WorldPoint worldLocation;
     public CitizensPlugin plugin;
     public AnimationID idleAnimationId;
     protected RuneLiteObject rlObject;
@@ -24,8 +24,35 @@ public class Entity<T extends Entity<T>> {
     public float[] scale;
     public float[] translate;
 
+    private SimplePolygon clickbox;
+
+    public SimplePolygon getClickbox() {
+        return clickbox;
+    }
+
+    public void updateClickbox() {
+        LocalPoint location = getLocalLocation();
+        int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
+        clickbox = calculateAABB(plugin.client,
+                rlObject.getModel(),
+                rlObject.getOrientation(),
+                location.getX(),
+                location.getY(),
+                plugin.client.getPlane(),
+                zOff);
+    }
+
     public Entity(CitizensPlugin plugin) {
         this.plugin = plugin;
+        this.rlObject = plugin.client.createRuneLiteObject();
+    }
+
+    public LocalPoint getLocalLocation() {
+        return rlObject.getLocation();
+    }
+
+    public WorldPoint getWorldLocation() {
+        return this.worldLocation;
     }
 
     public void update() {
@@ -36,6 +63,8 @@ public class Entity<T extends Entity<T>> {
         } else {
             despawn();
         }
+
+        plugin.panel.update();
     }
 
     public T setScale(float scaleX, float scaleY, float scaleZ) {
@@ -175,116 +204,114 @@ public class Entity<T extends Entity<T>> {
         return (T) this;
     }
 
-    public T setLocation(WorldPoint location) {
-        this.location = location;
-        if (rlObject != null) {
-            LocalPoint lp = LocalPoint.fromWorld(plugin.client, location.getX(), location.getY());
-            if (lp == null) {
-                throw new IllegalStateException("Received null LocalPoint in setLocation");
-            }
-            rlObject.setLocation(lp, plane);
+    public T setWorldLocation(WorldPoint location) {
+        this.worldLocation = location;
+        return (T) this;
+    }
+
+    public T setLocation(LocalPoint location) {
+        if (location == null) {
+            throw new IllegalStateException("Tried to set null location");
         }
+        rlObject.setLocation(location, plane);
+        setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
         return (T) this;
     }
 
     public boolean shouldRender() {
-        int distanceFromPlayer = distanceToPlayer();
+        if (plane != plugin.client.getPlane()) {
+            return false;
+        }
+        float distanceFromPlayer = distanceToPlayer();
         return distanceFromPlayer < 50;
     }
 
-    public int distanceToPlayer() {
-        if (location == null) {
-            throw new IllegalStateException("Tried to get distance to player with no location");
-        }
+    public float distanceToPlayer() {
         Player player = plugin.client.getLocalPlayer();
-        if (player == null) {
-            throw new IllegalStateException("Tried to get distance to null player");
-        }
-        WorldPoint worldLoc = player.getWorldLocation();
-        if (worldLoc == null) {
-            throw new IllegalStateException("Tried to get distance with null worldLoc");
-        }
-        return worldLoc.distanceTo(location);
+        WorldPoint playerWorldLoc = player.getWorldLocation();
+        return playerWorldLoc.distanceTo(getWorldLocation());
     }
 
-    public void despawn() {
+    public boolean despawn() {
         if (rlObject == null) {
-            return;
+            return false;
+        }
+        if (!rlObject.isActive()) {
+            return false;
         }
         plugin.clientThread.invokeLater(() -> {
             rlObject.setActive(false);
         });
+        return true;
     }
 
-    public void spawn() {
-        if (location == null) {
-            throw new IllegalStateException("Tried to spawn entity with no location");
-        }
-
-        this.rlObject = plugin.client.createRuneLiteObject();
-
-        ArrayList<ModelData> models = new ArrayList<ModelData>();
-        for (int modelID : modelIDs) {
-            ModelData data = plugin.client.loadModelData(modelID);
-            models.add(data);
-        }
-
-        ModelData finalModel = plugin.client.mergeModels(models.toArray(new ModelData[models.size()]), models.size());
-        if (recolorsToReplace != null && recolorsToReplace.length > 0) {
-            for (int i = 0; i < recolorsToReplace.length; i++) {
-                finalModel.recolor((short) recolorsToFind[i], (short) recolorsToReplace[i]);
+    private void initModel() {
+        if (rlObject.getModel() == null) {
+            ArrayList<ModelData> models = new ArrayList<ModelData>();
+            for (int modelID : modelIDs) {
+                ModelData data = plugin.client.loadModelData(modelID);
+                models.add(data);
             }
+            ModelData finalModel = plugin.client.mergeModels(models.toArray(new ModelData[models.size()]), models.size());
+            if (recolorsToReplace != null && recolorsToReplace.length > 0) {
+                for (int i = 0; i < recolorsToReplace.length; i++) {
+                    finalModel.recolor((short) recolorsToFind[i], (short) recolorsToReplace[i]);
+                }
+            }
+            if (scale != null) {
+                finalModel.cloneVertices();
+                finalModel.scale(
+                        -(Math.round(scale[0] * 128)),
+                        -(Math.round(scale[1] * 128)),
+                        -(Math.round(scale[2] * 128))
+                );
+            }
+
+            if (translate != null) {
+                finalModel.cloneVertices();
+                finalModel.translate(
+                        -(Math.round(translate[0] * 128)),
+                        -(Math.round(translate[1] * 128)),
+                        -(Math.round(translate[2] * 128))
+                );
+            }
+            rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
         }
 
-        if (scale != null) {
-            finalModel.cloneVertices();
-            finalModel.scale(
-                    -(Math.round(scale[0] * 128)),
-                    -(Math.round(scale[1] * 128)),
-                    -(Math.round(scale[2] * 128))
-            );
-        }
 
-        if (translate != null) {
-            finalModel.cloneVertices();
-            finalModel.translate(
-                    -(Math.round(translate[0] * 128)),
-                    -(Math.round(translate[1] * 128)),
-                    -(Math.round(translate[2] * 128))
-            );
-        }
-
-        rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
-
-        LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, location);
-        boolean isInSamePlaneAsPlayer = plugin.client.getPlane() == location.getPlane();
-        if (localPosition != null && isInSamePlaneAsPlayer) {
-            rlObject.setLocation(localPosition, location.getPlane());
-        } else {
-            return;
-        }
-
-        if (baseOrientation != null) {
+        if (baseOrientation != null && rlObject.getOrientation() == 0) {
             rlObject.setOrientation(baseOrientation);
         }
 
-        if (this.idleAnimationId != null) {
+        if (this.idleAnimationId != null && rlObject.getAnimation() == null) {
             rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
         }
+
         rlObject.setShouldLoop(true);
-        rlObject.setActive(true);
     }
 
+    private void initLocation() {
+        LocalPoint initializedLocation = LocalPoint.fromWorld(plugin.client, worldLocation);
+        if (initializedLocation == null) {
+            throw new IllegalStateException("Tried to spawn entity with no initializedLocation");
+        }
+        setLocation(initializedLocation);
+    }
 
-    public boolean isActive() {
-        if (rlObject == null) {
+    public boolean spawn() {
+        if (this.isActive()) {
             return false;
         }
-        return rlObject.isActive();
+
+        initModel();
+        initLocation();
+
+        rlObject.setActive(true);
+        return true;
     }
 
-    public LocalPoint getLocalLocation() {
-        return rlObject.getLocation();
+    public boolean isActive() {
+        return rlObject.isActive();
     }
 
     public boolean rotateObject(double intx, double inty) {
@@ -312,7 +339,6 @@ public class Entity<T extends Entity<T>> {
             if (Math.abs(dJau) > JAU_TURN_SPEED) {
                 dJau = Integer.signum(dJau) * JAU_TURN_SPEED;
             }
-
 
             int newOrientation = (JAU_FULL_ROTATION + rlObject.getOrientation() + dJau) % JAU_FULL_ROTATION;
 

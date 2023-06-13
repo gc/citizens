@@ -1,5 +1,6 @@
 package com.magnaboy;
 
+import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
@@ -13,26 +14,39 @@ import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.task.Schedule;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.util.ImageUtil;
 
 import javax.inject.Inject;
+import java.awt.image.BufferedImage;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static com.magnaboy.Util.getRandom;
-import static com.magnaboy.Util.getRandomItem;
 
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
 public class CitizensPlugin extends Plugin {
     @Inject
     public Client client;
+
+    @Inject
+    private CitizensConfig config;
+
+    @Provides
+    CitizensConfig getConfig(ConfigManager configManager) {
+        return configManager.getConfig(CitizensConfig.class);
+    }
 
     @Inject
     private OverlayManager overlayManager;
@@ -52,6 +66,8 @@ public class CitizensPlugin extends Plugin {
     public List<Scenery> scenery = new ArrayList<Scenery>();
     public List<List<? extends Entity>> entityCollection = new ArrayList<>();
 
+    public CitizenPanel panel;
+
     public Animation getAnimation(AnimationID animID) {
         Animation anim = animationPoses.stream().filter(c -> c.getId() == animID.getId()).findFirst().orElse(null);
         if (anim == null) {
@@ -66,23 +82,35 @@ public class CitizensPlugin extends Plugin {
         return entitiesAreReady && client.getLocalPlayer() != null;
     }
 
+    @Inject
+    private ClientToolbar clientToolbar;
+
     @Override
     protected void startUp() {
+        // Init config panel
+        panel = injector.getInstance(CitizenPanel.class);
+        panel.init(this);
 
+        // Add to sidebar
+        final BufferedImage icon = ImageUtil.loadImageResource(CitizensPlugin.class, "/citizens_icon.png");
+        NavigationButton navButton = NavigationButton.builder()
+                                                     .tooltip("Citizens")
+                                                     .icon(icon)
+                                                     .priority(7)
+                                                     .panel(panel)
+                                                     .build();
+        clientToolbar.addNavigation(navButton);
+
+        // Add overlay
         overlayManager.add(citizensOverlay);
 
         for (AnimationID animId : randomIdleActionAnimationIds) {
             loadAnimation(animId);
         }
 
-
         for (AnimationID idList : AnimationID.values()) {
             loadAnimation(idList);
         }
-
-        clientThread.invokeLater(() -> {
-            System.out.println(getAnimation(AnimationID.HumanWalk));
-        });
 
         citizens.add(
                 new WanderingCitizen(this)
@@ -93,7 +121,7 @@ public class CitizensPlugin extends Plugin {
                         .setExamine("Gmme!").setRemarks(new String[]{"Good morning!"}));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3169, 3489, 0))
+                .setWorldLocation(new WorldPoint(3169, 3489, 0))
                 .setModelIDs(new int[]{217,
                         305,
                         170,
@@ -105,13 +133,13 @@ public class CitizensPlugin extends Plugin {
                 .setIdleAnimation(AnimationID.FireCook)
                 .setName("Richard")
                 .setExamine("I wonder what he's cooking.").setRemarks(new String[]{"We need to cook!"})
-                .addExtraObject(new ExtraObject(this).setLocation(new WorldPoint(3169, 3488, 0))
+                .addExtraObject(new ExtraObject(this).setWorldLocation(new WorldPoint(3169, 3488, 0))
                                                      .setModelIDs(new int[]{2260, 3818})
                                                      .setIdleAnimation(AnimationID.FireIdle))
         );
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3227, 3459, 0))
+                .setWorldLocation(new WorldPoint(3227, 3459, 0))
                 .setModelIDs(new int[]{217,
                         8798,
                         390,
@@ -142,7 +170,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.East));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3224, 3437, 0))
+                .setWorldLocation(new WorldPoint(3224, 3437, 0))
                 .setModelIDs(new int[]{15103,
                         217,
                         248,
@@ -170,7 +198,7 @@ public class CitizensPlugin extends Plugin {
 
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3191, 3425, 0))
+                .setWorldLocation(new WorldPoint(3191, 3425, 0))
                 .setModelIDs(new int[]{
                         217,
                         295,
@@ -182,11 +210,11 @@ public class CitizensPlugin extends Plugin {
                 .setName("Benny")
                 .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
                 .setBaseOrientation(CardinalDirection.East)
-                .addExtraObject(new ExtraObject(this).setLocation(new WorldPoint(3191, 3424, 0))
+                .addExtraObject(new ExtraObject(this).setWorldLocation(new WorldPoint(3191, 3424, 0))
                                                      .setModelIDs(new int[]{2548})));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3197, 3405, 0))
+                .setWorldLocation(new WorldPoint(3197, 3405, 0))
                 .setModelIDs(new int[]{
                         9452,
                         9619,
@@ -221,7 +249,7 @@ public class CitizensPlugin extends Plugin {
                         AnimationID.FurnaceSmelt, AnimationID.Think, AnimationID.SlapHead, AnimationID.Yawn}));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3216, 3402, 0))
+                .setWorldLocation(new WorldPoint(3216, 3402, 0))
                 .setModelIDs(new int[]{
                         6364,
                         215,
@@ -253,13 +281,13 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.North)
                 .addExtraObject(
                         new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3403, 0))
+                                .setWorldLocation(new WorldPoint(3216, 3403, 0))
                                 .setModelIDs(new int[]{2491})
                                 .setTranslate(0, 0.7f, 0))
         );
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3217, 3404, 0))
+                .setWorldLocation(new WorldPoint(3217, 3404, 0))
                 .setModelIDs(new int[]{
                         26120,
                         26130,
@@ -274,12 +302,12 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.West)
                 .addExtraObject(
                         new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3404, 0))
+                                .setWorldLocation(new WorldPoint(3216, 3404, 0))
                                 .setModelIDs(new int[]{2491})
                                 .setTranslate(0, 0.7f, 0)
                 ));
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3215, 3407, 0))
+                .setWorldLocation(new WorldPoint(3215, 3407, 0))
                 .setModelIDs(new int[]{
                         391,
                         364,
@@ -310,12 +338,12 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.East)
                 .addExtraObject(
                         new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3407, 0))
+                                .setWorldLocation(new WorldPoint(3216, 3407, 0))
                                 .setModelIDs(new int[]{2822})
                                 .setTranslate(0, 0.7f, 0)));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3217, 3408, 0))
+                .setWorldLocation(new WorldPoint(3217, 3408, 0))
                 .setModelIDs(new int[]{
                         6086,
                         249,
@@ -344,12 +372,12 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.South)
                 .addExtraObject(
                         new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3407, 0))
+                                .setWorldLocation(new WorldPoint(3216, 3407, 0))
                                 .setModelIDs(new int[]{2822})
                                 .setTranslate(0, 0.7f, 0)));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3238, 3425, 0))
+                .setWorldLocation(new WorldPoint(3238, 3425, 0))
                 .setModelIDs(new int[]{
                         235,
                         248,
@@ -386,7 +414,7 @@ public class CitizensPlugin extends Plugin {
 
         // TODO: would be nice to script him to use the several things in the workshop
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3227, 3436, 0))
+                .setWorldLocation(new WorldPoint(3227, 3436, 0))
                 .setModelIDs(new int[]{
                         215,
                         246,
@@ -423,7 +451,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.East));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3228, 3407, 0))
+                .setWorldLocation(new WorldPoint(3228, 3407, 0))
                 .setModelIDs(new int[]{
                         215,
                         246,
@@ -450,7 +478,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.North));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3230, 3407, 0))
+                .setWorldLocation(new WorldPoint(3230, 3407, 0))
                 .setModelIDs(new int[]{
                         217,
                         246,
@@ -467,7 +495,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.North));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3204, 3386, 0))
+                .setWorldLocation(new WorldPoint(3204, 3386, 0))
                 .setModelIDs(new int[]{
                         215,
                         228,
@@ -497,7 +525,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.West));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3203, 3387, 0))
+                .setWorldLocation(new WorldPoint(3203, 3387, 0))
                 .setModelIDs(new int[]{
                         208,
                         10304,
@@ -525,7 +553,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.South)
                 .addExtraObject(new ExtraObject(this)
                         .setModelIDs(new int[]{37201})
-                        .setLocation(new WorldPoint(3203, 3386, 0))
+                        .setWorldLocation(new WorldPoint(3203, 3386, 0))
                         .setTranslate(0, 0.7f, 0)));
 
         citizens.add(new WanderingCitizen(this)
@@ -558,7 +586,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.North));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3216, 3388, 0))
+                .setWorldLocation(new WorldPoint(3216, 3388, 0))
                 .setModelIDs(new int[]{
                         14289,
                         25846,
@@ -586,7 +614,7 @@ public class CitizensPlugin extends Plugin {
                 .setBaseOrientation(CardinalDirection.South));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3220, 3386, 0))
+                .setWorldLocation(new WorldPoint(3220, 3386, 0))
                 .setModelIDs(new int[]{
                         14289,
                         25846,
@@ -601,7 +629,7 @@ public class CitizensPlugin extends Plugin {
 
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3215, 3419, 0))
+                .setWorldLocation(new WorldPoint(3215, 3419, 0))
                 .setModelIDs(new int[]{
                         3010,
                         3006
@@ -617,7 +645,7 @@ public class CitizensPlugin extends Plugin {
 
         // TODO: this rat renders weirdly, like its underground?
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3214, 3420, 0))
+                .setWorldLocation(new WorldPoint(3214, 3420, 0))
                 .setModelIDs(new int[]{
                         9610
                 })
@@ -690,7 +718,7 @@ public class CitizensPlugin extends Plugin {
                 .setExamine("A child."));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3214, 3400, 0))
+                .setWorldLocation(new WorldPoint(3214, 3400, 0))
                 .setModelIDs(new int[]{
                         2970,
                         7059,
@@ -725,14 +753,14 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3214, 3387, 0))
+                        .setWorldLocation(new WorldPoint(3214, 3387, 0))
                         .setModelIDs(new int[]{1680})
         );
 
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3214, 3383, 0))
+                        .setWorldLocation(new WorldPoint(3214, 3383, 0))
                         .setModelRecolors(
                                 new int[]{
                                         43968
@@ -746,14 +774,14 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3217, 3385, 0))
+                        .setWorldLocation(new WorldPoint(3217, 3385, 0))
                         .setModelIDs(new int[]{2138})
         );
 
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3208, 3384, 0))
+                        .setWorldLocation(new WorldPoint(3208, 3384, 0))
                         .setModelRecolors(
                                 new int[]{
                                         7587,
@@ -776,14 +804,14 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3205, 3384, 0))
+                        .setWorldLocation(new WorldPoint(3205, 3384, 0))
                         .setModelIDs(new int[]{24840})
                         .setBaseOrientation(CardinalDirection.North)
         );
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3203, 3385, 0))
+                        .setWorldLocation(new WorldPoint(3203, 3385, 0))
                         .setModelIDs(new int[]{13446})
                         .setModelRecolors(
                                 new int[]{
@@ -801,21 +829,21 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3210, 3396, 0))
+                        .setWorldLocation(new WorldPoint(3210, 3396, 0))
                         .setModelIDs(new int[]{1569})
                         .setBaseOrientation(CardinalDirection.East)
         );
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3210, 3402, 0))
+                        .setWorldLocation(new WorldPoint(3210, 3402, 0))
                         .setModelIDs(new int[]{1569})
                         .setBaseOrientation(CardinalDirection.East)
         );
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3205, 3384, 0))
+                        .setWorldLocation(new WorldPoint(3205, 3384, 0))
                         .setModelIDs(new int[]{24884})
                         .setBaseOrientation(CardinalDirection.East)
         );
@@ -823,14 +851,14 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3202, 3393, 0))
+                        .setWorldLocation(new WorldPoint(3202, 3393, 0))
                         .setModelIDs(new int[]{2260, 3818})
                         .setIdleAnimation(AnimationID.FireIdle)
                         .setBaseOrientation(CardinalDirection.East)
         );
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3201, 3394, 0))
+                        .setWorldLocation(new WorldPoint(3201, 3394, 0))
                         .setModelIDs(new int[]{2578})
                         .setBaseOrientation(CardinalDirection.West)
                         .setScale(0.5f, 0.5f, 0.5f)
@@ -838,12 +866,12 @@ public class CitizensPlugin extends Plugin {
         );
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3201, 3394, 0))
+                        .setWorldLocation(new WorldPoint(3201, 3394, 0))
                         .setModelIDs(new int[]{2830})
                         .setTranslate(-0.2f, 0, 0.25f)
         );
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3202, 3394, 0))
+                .setWorldLocation(new WorldPoint(3202, 3394, 0))
                 .setModelIDs(new int[]{
                         214,
                         246,
@@ -861,7 +889,7 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3221, 3398, 0))
+                        .setWorldLocation(new WorldPoint(3221, 3398, 0))
                         .setModelIDs(new int[]{2491})
                         .setTranslate(0, 0.7f, 0.2f)
                         .setModelRecolors(
@@ -879,7 +907,7 @@ public class CitizensPlugin extends Plugin {
                         )
         );
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3221, 3397, 0))
+                .setWorldLocation(new WorldPoint(3221, 3397, 0))
                 .setModelIDs(new int[]{
                         229,
                         11811,
@@ -914,12 +942,12 @@ public class CitizensPlugin extends Plugin {
 
         scenery.add(
                 new Scenery(this)
-                        .setLocation(new WorldPoint(3221, 3398, 0))
+                        .setWorldLocation(new WorldPoint(3221, 3398, 0))
                         .setModelIDs(new int[]{2468})
                         .setTranslate(0, 0.7f, -0.2f)
         );
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3221, 3399, 0))
+                .setWorldLocation(new WorldPoint(3221, 3399, 0))
                 .setModelIDs(new int[]{
                         6848,
                         9620,
@@ -950,7 +978,7 @@ public class CitizensPlugin extends Plugin {
                 .setExamine("He's on his day off."));
 
         citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3224, 3399, 0))
+                .setWorldLocation(new WorldPoint(3224, 3399, 0))
                 .setModelIDs(new int[]{
                         25671,
                         25685,
@@ -963,7 +991,7 @@ public class CitizensPlugin extends Plugin {
 
 
         citizens.add(new ScriptedCitizen(this)
-                .setLocation(new WorldPoint(3209, 3425, 0))
+                .setWorldLocation(new WorldPoint(3209, 3425, 0))
                 .setModelIDs(new int[]{
                         38135
                 })
@@ -986,9 +1014,65 @@ public class CitizensPlugin extends Plugin {
                 )
         );
 
+
+        citizens.add(new ScriptedCitizen(this)
+                .setWorldLocation(new WorldPoint(3288, 3371, 0))
+                .setModelIDs(new int[]{
+                        2971,
+                        6019,
+                        7059,
+                        2979,
+                        2990,
+                        2980,
+                        2985,
+                        7053
+                })
+                .setIdleAnimation(AnimationID.DwarfIdle)
+                .setMovAnimID(AnimationID.DwarfWalk)
+                .setBaseOrientation(CardinalDirection.South)
+                .setName("Dwarf miner")
+                .setExamine("I dare not get in his way.")
+                .setScript(new CitizenScript()
+                        .setAnimation(AnimationID.DwarfMining)
+                        .wait(10)
+                        .walkTo(3296, 3371)
+                        .walkTo(3299, 3373)
+                        .walkTo(3298, 3378)
+                        .walkTo(3293, 3381)
+                        .walkTo(3291, 3388)
+                        .walkTo(3291, 3397)
+                        .walkTo(3292, 3401)
+                        .walkTo(3289, 3409)
+                        .walkTo(3286, 3413)
+                        .walkTo(3288, 3418)
+                        .walkTo(3283, 3428)
+                        .walkTo(3253, 3427)
+                        .walkTo(3253, 3419)
+                        .wait(10)
+                        .walkTo(3253, 3423)
+                        .walkTo(3253, 3428)
+                        .walkTo(3283, 3428)
+                        .walkTo(3288, 3418)
+                        .walkTo(3289, 3409)
+                        .walkTo(3293, 3400)
+                        .walkTo(3291, 3393)
+                        .walkTo(3293, 3380)
+                        .walkTo(3293, 3372)
+                        .walkTo(3288, 3371)
+
+                )
+        );
+
+        Collections.shuffle(citizens);
+
         entityCollection.add(citizens);
         entityCollection.add(scenery);
         entitiesAreReady = true;
+        citizens.forEach((citizen) -> {
+            if (citizen.worldLocation == null) {
+                throw new IllegalStateException(citizen.name + " has no initial loc");
+            }
+        });
     }
 
     public void loadAnimation(AnimationID animId) {
@@ -1007,7 +1091,13 @@ public class CitizensPlugin extends Plugin {
         despawnAll();
     }
 
+    protected void updateAll() {
+        Util.log("Updating all entities");
+        getAllEntities().forEach(Entity::update);
+    }
+
     protected void despawnAll() {
+        Util.log("Despawning all entities");
         getAllEntities().forEach(Entity::despawn);
     }
 
@@ -1015,13 +1105,8 @@ public class CitizensPlugin extends Plugin {
         return entityCollection.stream().flatMap(List::stream);
     }
 
-    protected void updateAll() {
-        getAllEntities().forEach(Entity::update);
-    }
-
     @Subscribe
     public void onGameStateChanged(GameStateChanged gameStateChanged) {
-        System.out.println("Game State Change: " + gameStateChanged.getGameState());
         if (gameStateChanged.getGameState() == GameState.LOGIN_SCREEN) {
             despawnAll();
         }
@@ -1029,6 +1114,8 @@ public class CitizensPlugin extends Plugin {
         if (gameStateChanged.getGameState() == GameState.LOGGED_IN) {
             updateAll();
         }
+
+        panel.update();
     }
 
     @Schedule(
@@ -1055,15 +1142,9 @@ public class CitizensPlugin extends Plugin {
                 citizen.triggerIdleAnimation();
             }
 
-            if (random == 9 || random == 10) {
-                if (!citizen.isRemarking() && citizen.remarks != null && citizen.remarks.length > 0) {
-                    clientThread.invokeLater(() -> citizen.say(getRandomItem(citizen.remarks)));
-                }
+            if (random == 10) {
+                citizen.sayRandomRemark();
             }
-
-            //  if (random < 6) {
-            //      citizen.triggerIdleAnimation();
-            //  }
         }
     }
 
@@ -1125,6 +1206,15 @@ public class CitizensPlugin extends Plugin {
         }
     }
 
+    public int countActiveEntities() {
+        return getAllEntities().filter(Entity::isActive).toArray().length;
+    }
+
+    public int countInactiveEntities() {
+        return getAllEntities().filter(ent -> {
+            return !ent.isActive();
+        }).toArray().length;
+    }
 
 }
 
