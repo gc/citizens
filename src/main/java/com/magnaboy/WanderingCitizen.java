@@ -10,6 +10,7 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 
     public WanderingCitizen(CitizensPlugin plugin) {
         super(plugin);
+        entityType = EntityType.WanderingCitizen;
     }
 
     public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {

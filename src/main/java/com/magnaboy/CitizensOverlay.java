@@ -26,6 +26,10 @@ public class CitizensOverlay extends Overlay {
     }
 
     private void renderText(Graphics2D graphics, LocalPoint lp, String text) {
+        renderText(graphics, lp, text, new Color(0, 255, 3));
+    }
+
+    private void renderText(Graphics2D graphics, LocalPoint lp, String text, Color color) {
         Font overheadFont = FontManager.getRunescapeSmallFont();
         graphics.setFont(overheadFont);
 
@@ -36,7 +40,7 @@ public class CitizensOverlay extends Overlay {
             return;
         FontMetrics metrics = graphics.getFontMetrics(overheadFont);
         Point shiftedP = new Point(p.getX() - (metrics.stringWidth(text) / 2), p.getY());
-        OverlayUtil.renderTextLocation(graphics, shiftedP, text, new Color(0, 255, 3));
+        OverlayUtil.renderTextLocation(graphics, shiftedP, text, color);
     }
 
     private void highlightTile(Graphics2D graphics, LocalPoint lp, Color color) {
@@ -62,6 +66,12 @@ public class CitizensOverlay extends Overlay {
 
     @Override
     public Dimension render(Graphics2D graphics) {
+        if (CitizenPanel.selectedPosition != null) {
+            Color selectedColor = new Color(255, 255, 0, 255 / 2);
+            highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
+            renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+        }
+
         for (Citizen citizen : plugin.citizens) {
             LocalPoint localLocation = citizen.getLocalLocation();
 
