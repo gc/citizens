@@ -72,8 +72,18 @@ public class Entity<T extends Entity<T>> {
         return (T) this;
     }
 
+    public T setScale(float[] scale) {
+        this.scale = scale;
+        return (T) this;
+    }
+
     public T setTranslate(float translateX, float translateY, float translateZ) {
         this.translate = new float[]{translateX, translateY, translateZ};
+        return (T) this;
+    }
+
+    public T setTranslate(float[] translate) {
+        this.translate = translate;
         return (T) this;
     }
 
@@ -190,6 +200,11 @@ public class Entity<T extends Entity<T>> {
 
     public T setBaseOrientation(CardinalDirection baseOrientation) {
         this.baseOrientation = baseOrientation.getAngle();
+        return (T) this;
+    }
+
+    public T setBaseOrientation(Integer baseOrientation) {
+        this.baseOrientation = baseOrientation;
         return (T) this;
     }
 

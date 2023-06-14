@@ -1,0 +1,28 @@
+{
+  "version": 0.8,
+  "RegionId": 13108,
+  "CitizenRoster": [
+    {
+      "name": "Dwarf miner",
+      "examineText": "I dare not get in his way.",
+      "worldLocation": {
+        "x": 3288,
+        "y": 3371,
+        "plane": 0
+      },
+      "modelIds": [
+        2971,
+        6019,
+        7059,
+        2979,
+        2990,
+        2980,
+        2985,
+        7053
+      ],
+      "idleAnimation": "DwarfIdle",
+      "moveAnimation": "DwarfWalk",
+      "baseOrientation": 0
+    }
+  ]
+}
