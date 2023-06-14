@@ -103,6 +103,8 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
     public boolean despawn() {
         this.currentTarget = null;
+        this.activeRemark = null;
+        this.remarkTimer = 0;
         boolean didDespawn = super.despawn();
         for (ExtraObject obj : extraObjects) {
             obj.despawn();
