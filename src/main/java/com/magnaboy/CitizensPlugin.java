@@ -1014,55 +1014,6 @@ public class CitizensPlugin extends Plugin {
                 )
         );
 
-
-        citizens.add(new ScriptedCitizen(this)
-                .setWorldLocation(new WorldPoint(3288, 3371, 0))
-                .setModelIDs(new int[]{
-                        2971,
-                        6019,
-                        7059,
-                        2979,
-                        2990,
-                        2980,
-                        2985,
-                        7053
-                })
-                .setIdleAnimation(AnimationID.DwarfIdle)
-                .setMovAnimID(AnimationID.DwarfWalk)
-                .setBaseOrientation(CardinalDirection.South)
-                .setName("Dwarf miner")
-                .setExamine("I dare not get in his way.")
-                .setScript(new CitizenScript()
-                        .setAnimation(AnimationID.DwarfMining)
-                        .wait(10)
-                        .walkTo(3296, 3371)
-                        .walkTo(3299, 3373)
-                        .walkTo(3298, 3378)
-                        .walkTo(3293, 3381)
-                        .walkTo(3291, 3388)
-                        .walkTo(3291, 3397)
-                        .walkTo(3292, 3401)
-                        .walkTo(3289, 3409)
-                        .walkTo(3286, 3413)
-                        .walkTo(3288, 3418)
-                        .walkTo(3283, 3428)
-                        .walkTo(3253, 3427)
-                        .walkTo(3253, 3419)
-                        .wait(10)
-                        .walkTo(3253, 3423)
-                        .walkTo(3253, 3428)
-                        .walkTo(3283, 3428)
-                        .walkTo(3288, 3418)
-                        .walkTo(3289, 3409)
-                        .walkTo(3293, 3400)
-                        .walkTo(3291, 3393)
-                        .walkTo(3293, 3380)
-                        .walkTo(3293, 3372)
-                        .walkTo(3288, 3371)
-
-                )
-        );
-
         Collections.shuffle(citizens);
 
         entityCollection.add(citizens);
