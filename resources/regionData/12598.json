@@ -1,0 +1,1 @@
+{"version":0.8,"RegionId":12598,"CitizenList":[{"name":"Richard","examineText":"I wonder what he\u0027s cooking.","remarks":["We need to cook!"],"modelRecolorFind":[],"modelRecolorReplace":[],"worldPoint":{"x":3169,"y":3489,"plane":0},"modelIds":[217,305,170,176,274,7121,246],"idleAnimation":"FireCook","moveAnimation":"HumanWalk"}]}

@@ -20,9 +20,10 @@ import net.runelite.client.task.Schedule;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.magnaboy.Util.getRandom;
@@ -52,6 +53,7 @@ public class CitizensPlugin extends Plugin {
     public List<Scenery> scenery = new ArrayList<Scenery>();
     public List<List<? extends Entity>> entityCollection = new ArrayList<>();
 
+    public static HashMap<Integer, CitizenRegion> LoadedRegions;
     public Animation getAnimation(AnimationID animID) {
         Animation anim = animationPoses.stream().filter(c -> c.getId() == animID.getId()).findFirst().orElse(null);
         if (anim == null) {
@@ -67,9 +69,9 @@ public class CitizensPlugin extends Plugin {
     }
 
     @Override
-    protected void startUp() {
+    protected void startUp() throws IOException {
         overlayManager.add(citizensOverlay);
-
+        LoadedRegions = new HashMap();
         for (AnimationID animId : randomIdleActionAnimationIds) {
             loadAnimation(animId);
         }
@@ -79,645 +81,764 @@ public class CitizensPlugin extends Plugin {
             loadAnimation(idList);
         }
 
-        citizens.add(
-                new WanderingCitizen(this)
-                        .setBoundingBox(new WorldPoint(3209, 3432, 0), new WorldPoint(3215, 3437, 0))
-                        .setModelIDs(new int[]{38135})
-                        .setIdleAnimation(AnimationID.HumanIdle)
-                        .setName("Emme")
-                        .setExamine("Gmme!").setRemarks(new String[]{"Good morning!"}));
+//        citizens.add(new WanderingCitizen(this)
+//                .setBoundingBox(new WorldPoint(3209, 3432, 0), new WorldPoint(3215, 3437, 0))
+//                .setModelIDs(new int[]{38135})
+//                .setIdleAnimation(AnimationID.HumanIdle)
+//                .setName("Emme")
+//                .setExamine("Gmme!").setRemarks(new String[]{"Good morning!"}));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3169, 3489, 0))
+//                .setModelIDs(new int[]{217,
+//                        305,
+//                        170,
+//                        176,
+//                        274,
+//                        7121,
+//                        246
+//                })
+//                .setIdleAnimation(AnimationID.FireCook)
+//                .setName("Richard")
+//                .setExamine("I wonder what he's cooking.").setRemarks(new String[]{"We need to cook!"})
+//                .addExtraObject(new ExtraObject(this).setLocation(new WorldPoint(3169, 3488, 0))
+//                                                     .setModelIDs(new int[]{2260, 3818})
+//                                                     .setIdleAnimation(AnimationID.FireIdle))
+//        );
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3227, 3459, 0))
+//                .setModelIDs(new int[]{217,
+//                        8798,
+//                        390,
+//                        7366,
+//                        471,
+//                        4392,
+//                        348,
+//                        353,
+//                        46747,
+//                        437
+//                })
+//                .setModelRecolors(new int[]{4550,
+//                                25238,
+//                                6798,
+//                                9096,
+//                                54397,
+//                                8741},
+//                        new int[]{4562,
+//                                5400,
+//                                7465,
+//                                5400,
+//                                8497,
+//                                12700})
+//                .setIdleAnimation(AnimationID.FireCook)
+//                .setName("Lily")
+//                .setExamine("Farming... such a peaceful life.").setRemarks(new String[]{"I thought I saw a " +
+//                        "Tangleroot..."})
+//                .setBaseOrientation(CardinalDirection.East));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3224, 3437, 0))
+//                .setModelIDs(new int[]{15103,
+//                        217,
+//                        248,
+//                        18546,
+//                        10980,
+//                        177,
+//                        18541,
+//                        21812,
+//                        19947
+//                })
+//                .setModelRecolors(new int[]{111,
+//                                8741,
+//                                8860,
+//                                25238,
+//                                947},
+//                        new int[]{24,
+//                                803,
+//                                922,
+//                                10409,
+//                                803})
+//                .setIdleAnimation(AnimationID.Woodcutting)
+//                .setName("Benny")
+//                .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
+//                .setBaseOrientation(CardinalDirection.South));
+//
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3191, 3425, 0))
+//                .setModelIDs(new int[]{
+//                        217,
+//                        295,
+//                        150,
+//                        3779,
+//                        246
+//                })
+//                .setIdleAnimation(AnimationID.HalfLayingDown)
+//                .setName("Benny")
+//                .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
+//                .setBaseOrientation(CardinalDirection.East)
+//                .addExtraObject(new ExtraObject(this).setLocation(new WorldPoint(3191, 3424, 0))
+//                                                     .setModelIDs(new int[]{2548})));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3197, 3405, 0))
+//                .setModelIDs(new int[]{
+//                        9452,
+//                        9619,
+//                        246,
+//                        9622,
+//                        163,
+//                        176,
+//                        4226,
+//                        4218
+//                })
+//                .setModelRecolors(new int[]{
+//                                6798,
+//                                43072,
+//                                8741,
+//                                25238,
+//                                6587,
+//                                7281
+//                        },
+//                        new int[]{
+//                                4329,
+//                                4550,
+//                                10349,
+//                                6689,
+//                                5400,
+//                                5301
+//                        })
+//                .setIdleAnimation(AnimationID.HerbloreMix)
+//                .setName("Assistant Apothecary")
+//                .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
+//                .setBaseOrientation(CardinalDirection.East)
+//                .setRandomAnimations(new AnimationID[]{AnimationID.Grabbing, AnimationID.Eat,
+//                        AnimationID.FurnaceSmelt, AnimationID.Think, AnimationID.SlapHead, AnimationID.Yawn}));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3216, 3402, 0))
+//                .setModelIDs(new int[]{
+//                        6364,
+//                        215,
+//                        244,
+//                        246,
+//                        292,
+//                        4391,
+//                        151,
+//                        10218,
+//                        271,
+//                        185
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741,
+//                                25238,
+//                                4550
+//                        },
+//                        new int[]{
+//                                6447,
+//                                6932,
+//                                4541
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setName("Alexander")
+//                .setExamine("Looks like a nice chap.")
+//                .setRemarks(new String[]{"Oi!"})
+//                .setBaseOrientation(CardinalDirection.North)
+//                .addExtraObject(
+//                        new ExtraObject(this)
+//                                .setLocation(new WorldPoint(3216, 3403, 0))
+//                                .setModelIDs(new int[]{2491})
+//                                .setTranslate(0, 0.7f, 0))
+//        );
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3217, 3404, 0))
+//                .setModelIDs(new int[]{
+//                        26120,
+//                        26130,
+//                        26114,
+//                        26125,
+//                        26119
+//                })
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setName("Darren")
+//                .setExamine("He has a nice moustache.")
+//                .setRemarks(new String[]{"We need some more beers ova ere!"})
+//                .setBaseOrientation(CardinalDirection.West)
+//                .addExtraObject(
+//                        new ExtraObject(this)
+//                                .setLocation(new WorldPoint(3216, 3404, 0))
+//                                .setModelIDs(new int[]{2491})
+//                                .setTranslate(0, 0.7f, 0)
+//                ));
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3215, 3407, 0))
+//                .setModelIDs(new int[]{
+//                        391,
+//                        364,
+//                        456,
+//                        348,
+//                        353,
+//                        431,
+//                        358
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                4550,
+//                                8741,
+//                                25238,
+//                                59515
+//                        },
+//                        new int[]{
+//                                6705,
+//                                127,
+//                                127,
+//                                127
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setName("Afrah")
+//                .setExamine("She looks like she's from Al-Kharid.")
+//                .setRemarks(new String[]{"We need some more beers ova ere!"})
+//                .setBaseOrientation(CardinalDirection.East)
+//                .addExtraObject(
+//                        new ExtraObject(this)
+//                                .setLocation(new WorldPoint(3216, 3407, 0))
+//                                .setModelIDs(new int[]{2822})
+//                                .setTranslate(0, 0.7f, 0)));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3217, 3408, 0))
+//                .setModelIDs(new int[]{
+//                        6086,
+//                        249,
+//                        292,
+//                        170,
+//                        254,
+//                        185,
+//                        176
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741,
+//                                25238,
+//                                4550
+//                        },
+//                        new int[]{
+//                                10351,
+//                                10351,
+//                                5555
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setName("Ali")
+//                .setExamine("She looks like she's from Al-Kharid.")
+//                .setRemarks(new String[]{"We need some more beers ova ere!"})
+//                .setBaseOrientation(CardinalDirection.South)
+//                .addExtraObject(
+//                        new ExtraObject(this)
+//                                .setLocation(new WorldPoint(3216, 3407, 0))
+//                                .setModelIDs(new int[]{2822})
+//                                .setTranslate(0, 0.7f, 0)));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3238, 3425, 0))
+//                .setModelIDs(new int[]{
+//                        235,
+//                        248,
+//                        292,
+//                        10980,
+//                        8918,
+//                        4045,
+//                        271,
+//                        181
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                25238,
+//                                8741,
+//                                6798,
+//                                4550,
+//                                4626,
+//                                22177
+//                        },
+//                        new int[]{
+//                                10520,
+//                                8493,
+//                                7081,
+//                                3408,
+//                                2576,
+//                                908
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Fletching)
+//                .setName("Fletching apprentice")
+//                .setExamine("She looks like she's from Al-Kharid.")
+//                .setRemarks(new String[]{"We need some more beers ova ere!"})
+//                .setBaseOrientation(CardinalDirection.South));
+//
+//        // TODO: would be nice to script him to use the several things in the workshop
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3227, 3436, 0))
+//                .setModelIDs(new int[]{
+//                        215,
+//                        246,
+//                        292,
+//                        4391,
+//                        151,
+//                        179,
+//                        274,
+//                        185,
+//                        491
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                10004,
+//                                8084,
+//                                8741,
+//                                25238,
+//                                7719,
+//                                4626
+//                        },
+//                        new int[]{
+//                                41282,
+//                                41271,
+//                                127,
+//                                41490,
+//                                41418,
+//                                43150
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.AnvilBang)
+//                .setName("Smithing apprentice")
+//                .setExamine("She looks like she's from Al-Kharid.")
+//                .setRemarks(new String[]{"Ouch!"})
+//                .setBaseOrientation(CardinalDirection.East));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3228, 3407, 0))
+//                .setModelIDs(new int[]{
+//                        215,
+//                        246,
+//                        292,
+//                        151,
+//                        10218,
+//                        254,
+//                        181
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741,
+//                                25238
+//                        },
+//                        new int[]{
+//                                21541,
+//                                7331
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.HumanIdle)
+//                .setName("Prisoner")
+//                .setExamine("I wonder what he did wrong.")
+//                .setRemarks(new String[]{"Help me!"})
+//                .setBaseOrientation(CardinalDirection.North));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3230, 3407, 0))
+//                .setModelIDs(new int[]{
+//                        217,
+//                        246,
+//                        25676,
+//                        14373,
+//                        10218,
+//                        12138,
+//                        181
+//                })
+//                .setIdleAnimation(AnimationID.Crying)
+//                .setName("Prisoner")
+//                .setExamine("He's not having a good day.")
+//                .setRemarks(new String[]{"Woe is me..."})
+//                .setBaseOrientation(CardinalDirection.North));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3204, 3386, 0))
+//                .setModelIDs(new int[]{
+//                        215,
+//                        228,
+//                        246,
+//                        292,
+//                        326,
+//                        170,
+//                        179,
+//                        254,
+//                        185,
+//                        317
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                25238,
+//                                8741
+//                        },
+//                        new int[]{
+//                                3486,
+//                                8728
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setName("Thief")
+//                .setExamine("TODO")
+//                .setRemarks(new String[]{"TODO"})
+//                .setBaseOrientation(CardinalDirection.West));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3203, 3387, 0))
+//                .setModelIDs(new int[]{
+//                        208,
+//                        10304,
+//                        25675,
+//                        317,
+//                        25643,
+//                        25652,
+//                        25668,
+//                        25650
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                7952,
+//                                8741
+//                        },
+//                        new int[]{
+//                                38156,
+//                                38160
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setName("Thief")
+//                .setExamine("TODO")
+//                .setRemarks(new String[]{"TODO"})
+//                .setBaseOrientation(CardinalDirection.South)
+//                .addExtraObject(new ExtraObject(this)
+//                        .setModelIDs(new int[]{37201})
+//                        .setLocation(new WorldPoint(3203, 3386, 0))
+//                        .setTranslate(0, 0.7f, 0)));
+//
+//        citizens.add(new WanderingCitizen(this)
+//                .setBoundingBox(new WorldPoint(3205, 3384, 0), new WorldPoint(3206, 3389, 0))
+//                .setModelIDs(new int[]{
+//                        215,
+//                        246,
+//                        292,
+//                        151,
+//                        179,
+//                        254,
+//                        185,
+//                        320,
+//                        18956
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                25238,
+//                                8741
+//                        },
+//                        new int[]{
+//                                47399,
+//                                6930
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.HumanIdle)
+//                .setName("Master Thief")
+//                .setExamine("TODO")
+//                .setRemarks(new String[]{"TODO"})
+//                .setBaseOrientation(CardinalDirection.North));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3216, 3388, 0))
+//                .setModelIDs(new int[]{
+//                        14289,
+//                        25846,
+//                        2915,
+//                        25849
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                22426,
+//                                22294,
+//                                6550,
+//                                8893
+//                        },
+//                        new int[]{
+//                                38065,
+//                                62637,
+//                                9152,
+//                                2983
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.ChildPlay1)
+//                .setName("Child")
+//                .setExamine("TODO")
+//                .setRemarks(new String[]{"TODO"})
+//                .setBaseOrientation(CardinalDirection.South));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3220, 3386, 0))
+//                .setModelIDs(new int[]{
+//                        14289,
+//                        25846,
+//                        2915,
+//                        25848
+//                })
+//                .setIdleAnimation(AnimationID.ChildPlay2)
+//                .setName("Child")
+//                .setExamine("TODO")
+//                .setRemarks(new String[]{"TODO"})
+//                .setBaseOrientation(CardinalDirection.West));
+//
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3215, 3419, 0))
+//                .setModelIDs(new int[]{
+//                        3010,
+//                        3006
+//                })
+//                .setIdleAnimation(AnimationID.CatSit)
+//                .setName("Cat")
+//                // TODO: i broke this
+//                .setScale((float) 60 / 128, (float) 60 / 128, (float) 60 / 128)
+//                .setExamine("Are you kitten me right meow?")
+//                .setRemarks(new String[]{"Meow!"})
+//                .setBaseOrientation(CardinalDirection.NorthWest)
+//                .setTranslate(0, 0, -1));
+//
+//        // TODO: this rat renders weirdly, like its underground?
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3214, 3420, 0))
+//                .setModelIDs(new int[]{
+//                        9610
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741
+//                        },
+//                        new int[]{
+//                                24
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.RatBanging)
+//                .setName("Rat")
+//                .setExamine("Eek!")
+//                .setBaseOrientation(CardinalDirection.NorthWest)
+//                .setTranslate(0.3f, -0.8f, 5));
+//
+//
+//        citizens.add(new WanderingCitizen(this)
+//                .setBoundingBox(new WorldPoint(3218, 3387, 0), new WorldPoint(3222, 3387, 0))
+//                .setModelIDs(new int[]{
+//                        390,
+//                        456,
+//                        483,
+//                        332,
+//                        353,
+//                        437,
+//                        358
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741,
+//                                25238,
+//                                6798,
+//                                43072
+//                        },
+//                        new int[]{
+//                                322,
+//                                5532,
+//                                8099,
+//                                4550
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.HumanIdle)
+//                .setName("Mary")
+//                .setExamine("She has her hands full with those kids."));
+//
+//        citizens.add(new WanderingCitizen(this)
+//                .setBoundingBox(new WorldPoint(3214, 3389, 0), new WorldPoint(3236, 3392, 0))
+//                .setModelIDs(new int[]{
+//                        2897,
+//                        2909,
+//                        2917
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                22424,
+//                                11162,
+//                                6550
+//                        },
+//                        new int[]{
+//                                51088,
+//                                4,
+//                                5027
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.ChildIdle)
+//                .setMovAnimID(AnimationID.ChildWalk)
+//                .setName("Child")
+//                .setExamine("A child."));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3214, 3400, 0))
+//                .setModelIDs(new int[]{
+//                        2970,
+//                        7059,
+//                        2978,
+//                        2981,
+//                        2985
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                803,
+//                                61,
+//                                53,
+//                                4292,
+//                                90,
+//                                2578
+//                        },
+//                        new int[]{
+//                                7322,
+//                                10646,
+//                                33,
+//                                16,
+//                                16,
+//                                10539
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.DwarfLean)
+//                .setBaseOrientation(CardinalDirection.West)
+//                .setName("Dwarf")
+//                .setExamine("A dwarf, possibly waiting for someone?")
+//                .setTranslate(0.65f, 0, 0));
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3202, 3394, 0))
+//                .setModelIDs(new int[]{
+//                        214,
+//                        246,
+//                        292,
+//                        162,
+//                        177,
+//                        18131,
+//                        18128
+//                })
+//                .setIdleAnimation(AnimationID.CurledUp)
+//                .setBaseOrientation(CardinalDirection.South)
+//                .setName("Joe the tramp")
+//                .setExamine("He's had better days."));
 
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3169, 3489, 0))
-                .setModelIDs(new int[]{217,
-                        305,
-                        170,
-                        176,
-                        274,
-                        7121,
-                        246
-                })
-                .setIdleAnimation(AnimationID.FireCook)
-                .setName("Richard")
-                .setExamine("I wonder what he's cooking.").setRemarks(new String[]{"We need to cook!"})
-                .addExtraObject(new ExtraObject(this).setLocation(new WorldPoint(3169, 3488, 0))
-                                                     .setModelIDs(new int[]{2260, 3818})
-                                                     .setIdleAnimation(AnimationID.FireIdle))
-        );
 
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3227, 3459, 0))
-                .setModelIDs(new int[]{217,
-                        8798,
-                        390,
-                        7366,
-                        471,
-                        4392,
-                        348,
-                        353,
-                        46747,
-                        437
-                })
-                .setModelRecolors(new int[]{4550,
-                                25238,
-                                6798,
-                                9096,
-                                54397,
-                                8741},
-                        new int[]{4562,
-                                5400,
-                                7465,
-                                5400,
-                                8497,
-                                12700})
-                .setIdleAnimation(AnimationID.FireCook)
-                .setName("Lily")
-                .setExamine("Farming... such a peaceful life.").setRemarks(new String[]{"I thought I saw a " +
-                        "Tangleroot..."})
-                .setBaseOrientation(CardinalDirection.East));
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3221, 3397, 0))
+//                .setModelIDs(new int[]{
+//                        229,
+//                        11811,
+//                        15106,
+//                        14373,
+//                        180,
+//                        12138,
+//                        181
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741,
+//                                8860,
+//                                38036,
+//                                33030,
+//                                4550,
+//                                25238
+//                        },
+//                        new int[]{
+//                                107,
+//                                90,
+//                                908,
+//                                532,
+//                                918,
+//                                902
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setBaseOrientation(CardinalDirection.North)
+//                .setName("Demon butler")
+//                .setExamine("He's on his day off."));
 
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3224, 3437, 0))
-                .setModelIDs(new int[]{15103,
-                        217,
-                        248,
-                        18546,
-                        10980,
-                        177,
-                        18541,
-                        21812,
-                        19947
-                })
-                .setModelRecolors(new int[]{111,
-                                8741,
-                                8860,
-                                25238,
-                                947},
-                        new int[]{24,
-                                803,
-                                922,
-                                10409,
-                                803})
-                .setIdleAnimation(AnimationID.Woodcutting)
-                .setName("Benny")
-                .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
-                .setBaseOrientation(CardinalDirection.South));
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3221, 3399, 0))
+//                .setModelIDs(new int[]{
+//                        6848,
+//                        9620,
+//                        12752,
+//                        10301,
+//                        12138,
+//                        181
+//                })
+//                .setModelRecolors(
+//                        new int[]{
+//                                8741,
+//                                25238,
+//                                4626,
+//                                6798,
+//                                10330
+//                        },
+//                        new int[]{
+//                                920,
+//                                33030,
+//                                33030,
+//                                8070,
+//                                94
+//                        }
+//                )
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setBaseOrientation(CardinalDirection.South)
+//                .setName("Butler jarvis")
+//                .setExamine("He's on his day off."));
+//
+//        citizens.add(new StationaryCitizen(this)
+//                .setLocation(new WorldPoint(3224, 3399, 0))
+//                .setModelIDs(new int[]{
+//                        25671,
+//                        25685,
+//                        25684
+//                })
+//                .setIdleAnimation(AnimationID.Sitting)
+//                .setBaseOrientation(CardinalDirection.East)
+//                .setName("Guard")
+//                .setExamine("He's on a break."));
+//
+//
+//        citizens.add(new ScriptedCitizen(this)
+//                .setLocation(new WorldPoint(3209, 3425, 0))
+//                .setModelIDs(new int[]{
+//                        38135
+//                })
+//                .setIdleAnimation(AnimationID.HumanIdle)
+//                .setBaseOrientation(CardinalDirection.North)
+//                .setName("ScriptedEmme")
+//                .setExamine("TODO")
+//                .setScript(new CitizenScript()
+//                        .walkTo(3209, 3432)
+//                        .say("First stop!")
+//                        .wait(2)
+//                        .walkTo(3216, 3432)
+//                        .say("Second stop!")
+//                        .wait(2)
+//                        .walkTo(3216, 3425)
+//                        .say("Third stop!")
+//                        .wait(2)
+//                        .walkTo(3209, 3425)
+//                        .say("I'm back at the start!")
+//                )
+//        );
 
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3191, 3425, 0))
-                .setModelIDs(new int[]{
-                        217,
-                        295,
-                        150,
-                        3779,
-                        246
-                })
-                .setIdleAnimation(AnimationID.HalfLayingDown)
-                .setName("Benny")
-                .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
-                .setBaseOrientation(CardinalDirection.East)
-                .addExtraObject(new ExtraObject(this).setLocation(new WorldPoint(3191, 3424, 0))
-                                                     .setModelIDs(new int[]{2548})));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3197, 3405, 0))
-                .setModelIDs(new int[]{
-                        9452,
-                        9619,
-                        246,
-                        9622,
-                        163,
-                        176,
-                        4226,
-                        4218
-                })
-                .setModelRecolors(new int[]{
-                                6798,
-                                43072,
-                                8741,
-                                25238,
-                                6587,
-                                7281
-                        },
-                        new int[]{
-                                4329,
-                                4550,
-                                10349,
-                                6689,
-                                5400,
-                                5301
-                        })
-                .setIdleAnimation(AnimationID.HerbloreMix)
-                .setName("Assistant Apothecary")
-                .setExamine("Chop chop chop!").setRemarks(new String[]{"Chop chop!"})
-                .setBaseOrientation(CardinalDirection.East)
-                .setRandomAnimations(new AnimationID[]{AnimationID.Grabbing, AnimationID.Eat,
-                        AnimationID.FurnaceSmelt, AnimationID.Think, AnimationID.SlapHead, AnimationID.Yawn}));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3216, 3402, 0))
-                .setModelIDs(new int[]{
-                        6364,
-                        215,
-                        244,
-                        246,
-                        292,
-                        4391,
-                        151,
-                        10218,
-                        271,
-                        185
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741,
-                                25238,
-                                4550
-                        },
-                        new int[]{
-                                6447,
-                                6932,
-                                4541
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setName("Alexander")
-                .setExamine("Looks like a nice chap.")
-                .setRemarks(new String[]{"Oi!"})
-                .setBaseOrientation(CardinalDirection.North)
-                .addExtraObject(
-                        new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3403, 0))
-                                .setModelIDs(new int[]{2491})
-                                .setTranslate(0, 0.7f, 0))
-        );
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3217, 3404, 0))
-                .setModelIDs(new int[]{
-                        26120,
-                        26130,
-                        26114,
-                        26125,
-                        26119
-                })
-                .setIdleAnimation(AnimationID.Sitting)
-                .setName("Darren")
-                .setExamine("He has a nice moustache.")
-                .setRemarks(new String[]{"We need some more beers ova ere!"})
-                .setBaseOrientation(CardinalDirection.West)
-                .addExtraObject(
-                        new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3404, 0))
-                                .setModelIDs(new int[]{2491})
-                                .setTranslate(0, 0.7f, 0)
-                ));
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3215, 3407, 0))
-                .setModelIDs(new int[]{
-                        391,
-                        364,
-                        456,
-                        348,
-                        353,
-                        431,
-                        358
-                })
-                .setModelRecolors(
-                        new int[]{
-                                4550,
-                                8741,
-                                25238,
-                                59515
-                        },
-                        new int[]{
-                                6705,
-                                127,
-                                127,
-                                127
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setName("Afrah")
-                .setExamine("She looks like she's from Al-Kharid.")
-                .setRemarks(new String[]{"We need some more beers ova ere!"})
-                .setBaseOrientation(CardinalDirection.East)
-                .addExtraObject(
-                        new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3407, 0))
-                                .setModelIDs(new int[]{2822})
-                                .setTranslate(0, 0.7f, 0)));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3217, 3408, 0))
-                .setModelIDs(new int[]{
-                        6086,
-                        249,
-                        292,
-                        170,
-                        254,
-                        185,
-                        176
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741,
-                                25238,
-                                4550
-                        },
-                        new int[]{
-                                10351,
-                                10351,
-                                5555
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setName("Ali")
-                .setExamine("She looks like she's from Al-Kharid.")
-                .setRemarks(new String[]{"We need some more beers ova ere!"})
-                .setBaseOrientation(CardinalDirection.South)
-                .addExtraObject(
-                        new ExtraObject(this)
-                                .setLocation(new WorldPoint(3216, 3407, 0))
-                                .setModelIDs(new int[]{2822})
-                                .setTranslate(0, 0.7f, 0)));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3238, 3425, 0))
-                .setModelIDs(new int[]{
-                        235,
-                        248,
-                        292,
-                        10980,
-                        8918,
-                        4045,
-                        271,
-                        181
-                })
-                .setModelRecolors(
-                        new int[]{
-                                25238,
-                                8741,
-                                6798,
-                                4550,
-                                4626,
-                                22177
-                        },
-                        new int[]{
-                                10520,
-                                8493,
-                                7081,
-                                3408,
-                                2576,
-                                908
-                        }
-                )
-                .setIdleAnimation(AnimationID.Fletching)
-                .setName("Fletching apprentice")
-                .setExamine("She looks like she's from Al-Kharid.")
-                .setRemarks(new String[]{"We need some more beers ova ere!"})
-                .setBaseOrientation(CardinalDirection.South));
-
-        // TODO: would be nice to script him to use the several things in the workshop
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3227, 3436, 0))
-                .setModelIDs(new int[]{
-                        215,
-                        246,
-                        292,
-                        4391,
-                        151,
-                        179,
-                        274,
-                        185,
-                        491
-                })
-                .setModelRecolors(
-                        new int[]{
-                                10004,
-                                8084,
-                                8741,
-                                25238,
-                                7719,
-                                4626
-                        },
-                        new int[]{
-                                41282,
-                                41271,
-                                127,
-                                41490,
-                                41418,
-                                43150
-                        }
-                )
-                .setIdleAnimation(AnimationID.AnvilBang)
-                .setName("Smithing apprentice")
-                .setExamine("She looks like she's from Al-Kharid.")
-                .setRemarks(new String[]{"Ouch!"})
-                .setBaseOrientation(CardinalDirection.East));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3228, 3407, 0))
-                .setModelIDs(new int[]{
-                        215,
-                        246,
-                        292,
-                        151,
-                        10218,
-                        254,
-                        181
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741,
-                                25238
-                        },
-                        new int[]{
-                                21541,
-                                7331
-                        }
-                )
-                .setIdleAnimation(AnimationID.HumanIdle)
-                .setName("Prisoner")
-                .setExamine("I wonder what he did wrong.")
-                .setRemarks(new String[]{"Help me!"})
-                .setBaseOrientation(CardinalDirection.North));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3230, 3407, 0))
-                .setModelIDs(new int[]{
-                        217,
-                        246,
-                        25676,
-                        14373,
-                        10218,
-                        12138,
-                        181
-                })
-                .setIdleAnimation(AnimationID.Crying)
-                .setName("Prisoner")
-                .setExamine("He's not having a good day.")
-                .setRemarks(new String[]{"Woe is me..."})
-                .setBaseOrientation(CardinalDirection.North));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3204, 3386, 0))
-                .setModelIDs(new int[]{
-                        215,
-                        228,
-                        246,
-                        292,
-                        326,
-                        170,
-                        179,
-                        254,
-                        185,
-                        317
-                })
-                .setModelRecolors(
-                        new int[]{
-                                25238,
-                                8741
-                        },
-                        new int[]{
-                                3486,
-                                8728
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setName("Thief")
-                .setExamine("TODO")
-                .setRemarks(new String[]{"TODO"})
-                .setBaseOrientation(CardinalDirection.West));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3203, 3387, 0))
-                .setModelIDs(new int[]{
-                        208,
-                        10304,
-                        25675,
-                        317,
-                        25643,
-                        25652,
-                        25668,
-                        25650
-                })
-                .setModelRecolors(
-                        new int[]{
-                                7952,
-                                8741
-                        },
-                        new int[]{
-                                38156,
-                                38160
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setName("Thief")
-                .setExamine("TODO")
-                .setRemarks(new String[]{"TODO"})
-                .setBaseOrientation(CardinalDirection.South)
-                .addExtraObject(new ExtraObject(this)
-                        .setModelIDs(new int[]{37201})
-                        .setLocation(new WorldPoint(3203, 3386, 0))
-                        .setTranslate(0, 0.7f, 0)));
-
-        citizens.add(new WanderingCitizen(this)
-                .setBoundingBox(new WorldPoint(3205, 3384, 0), new WorldPoint(3206, 3389, 0))
-                .setModelIDs(new int[]{
-                        215,
-                        246,
-                        292,
-                        151,
-                        179,
-                        254,
-                        185,
-                        320,
-                        18956
-                })
-                .setModelRecolors(
-                        new int[]{
-                                25238,
-                                8741
-                        },
-                        new int[]{
-                                47399,
-                                6930
-                        }
-                )
-                .setIdleAnimation(AnimationID.HumanIdle)
-                .setName("Master Thief")
-                .setExamine("TODO")
-                .setRemarks(new String[]{"TODO"})
-                .setBaseOrientation(CardinalDirection.North));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3216, 3388, 0))
-                .setModelIDs(new int[]{
-                        14289,
-                        25846,
-                        2915,
-                        25849
-                })
-                .setModelRecolors(
-                        new int[]{
-                                22426,
-                                22294,
-                                6550,
-                                8893
-                        },
-                        new int[]{
-                                38065,
-                                62637,
-                                9152,
-                                2983
-                        }
-                )
-                .setIdleAnimation(AnimationID.ChildPlay1)
-                .setName("Child")
-                .setExamine("TODO")
-                .setRemarks(new String[]{"TODO"})
-                .setBaseOrientation(CardinalDirection.South));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3220, 3386, 0))
-                .setModelIDs(new int[]{
-                        14289,
-                        25846,
-                        2915,
-                        25848
-                })
-                .setIdleAnimation(AnimationID.ChildPlay2)
-                .setName("Child")
-                .setExamine("TODO")
-                .setRemarks(new String[]{"TODO"})
-                .setBaseOrientation(CardinalDirection.West));
-
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3215, 3419, 0))
-                .setModelIDs(new int[]{
-                        3010,
-                        3006
-                })
-                .setIdleAnimation(AnimationID.CatSit)
-                .setName("Cat")
-                // TODO: i broke this
-                .setScale((float) 60 / 128, (float) 60 / 128, (float) 60 / 128)
-                .setExamine("Are you kitten me right meow?")
-                .setRemarks(new String[]{"Meow!"})
-                .setBaseOrientation(CardinalDirection.NorthWest)
-                .setTranslate(0, 0, -1));
-
-        // TODO: this rat renders weirdly, like its underground?
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3214, 3420, 0))
-                .setModelIDs(new int[]{
-                        9610
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741
-                        },
-                        new int[]{
-                                24
-                        }
-                )
-                .setIdleAnimation(AnimationID.RatBanging)
-                .setName("Rat")
-                .setExamine("Eek!")
-                .setBaseOrientation(CardinalDirection.NorthWest)
-                .setTranslate(0.3f, -0.8f, 0));
-
-
-        citizens.add(new WanderingCitizen(this)
-                .setBoundingBox(new WorldPoint(3218, 3387, 0), new WorldPoint(3222, 3387, 0))
-                .setModelIDs(new int[]{
-                        390,
-                        456,
-                        483,
-                        332,
-                        353,
-                        437,
-                        358
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741,
-                                25238,
-                                6798,
-                                43072
-                        },
-                        new int[]{
-                                322,
-                                5532,
-                                8099,
-                                4550
-                        }
-                )
-                .setIdleAnimation(AnimationID.HumanIdle)
-                .setName("Mary")
-                .setExamine("She has her hands full with those kids."));
-
-        citizens.add(new WanderingCitizen(this)
-                .setBoundingBox(new WorldPoint(3214, 3389, 0), new WorldPoint(3236, 3392, 0))
-                .setModelIDs(new int[]{
-                        2897,
-                        2909,
-                        2917
-                })
-                .setModelRecolors(
-                        new int[]{
-                                22424,
-                                11162,
-                                6550
-                        },
-                        new int[]{
-                                51088,
-                                4,
-                                5027
-                        }
-                )
-                .setIdleAnimation(AnimationID.ChildIdle)
-                .setMovAnimID(AnimationID.ChildWalk)
-                .setName("Child")
-                .setExamine("A child."));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3214, 3400, 0))
-                .setModelIDs(new int[]{
-                        2970,
-                        7059,
-                        2978,
-                        2981,
-                        2985
-                })
-                .setModelRecolors(
-                        new int[]{
-                                803,
-                                61,
-                                53,
-                                4292,
-                                90,
-                                2578
-                        },
-                        new int[]{
-                                7322,
-                                10646,
-                                33,
-                                16,
-                                16,
-                                10539
-                        }
-                )
-                .setIdleAnimation(AnimationID.DwarfLean)
-                .setBaseOrientation(CardinalDirection.West)
-                .setName("Dwarf")
-                .setExamine("A dwarf, possibly waiting for someone?")
-                .setTranslate(0.65f, 0, 0));
-
-
+//        Census census = new Census(0, citizens);
+//        census.SaveList();
+        //SplitIntoRegions();
         scenery.add(
                 new Scenery(this)
                         .setLocation(new WorldPoint(3214, 3387, 0))
@@ -837,22 +958,13 @@ public class CitizensPlugin extends Plugin {
                         .setModelIDs(new int[]{2830})
                         .setTranslate(-0.2f, 0, 0.25f)
         );
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3202, 3394, 0))
-                .setModelIDs(new int[]{
-                        214,
-                        246,
-                        292,
-                        162,
-                        177,
-                        18131,
-                        18128
-                })
-                .setIdleAnimation(AnimationID.CurledUp)
-                .setBaseOrientation(CardinalDirection.South)
-                .setName("Joe the tramp")
-                .setExamine("He's had better days."));
 
+        scenery.add(
+                new Scenery(this)
+                        .setLocation(new WorldPoint(3221, 3398, 0))
+                        .setModelIDs(new int[]{2468})
+                        .setTranslate(0, 0.7f, -0.2f)
+        );
 
         scenery.add(
                 new Scenery(this)
@@ -872,113 +984,6 @@ public class CitizensPlugin extends Plugin {
                                         63384
                                 }
                         )
-        );
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3221, 3397, 0))
-                .setModelIDs(new int[]{
-                        229,
-                        11811,
-                        15106,
-                        14373,
-                        180,
-                        12138,
-                        181
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741,
-                                8860,
-                                38036,
-                                33030,
-                                4550,
-                                25238
-                        },
-                        new int[]{
-                                107,
-                                90,
-                                908,
-                                532,
-                                918,
-                                902
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setBaseOrientation(CardinalDirection.North)
-                .setName("Demon butler")
-                .setExamine("He's on his day off."));
-
-        scenery.add(
-                new Scenery(this)
-                        .setLocation(new WorldPoint(3221, 3398, 0))
-                        .setModelIDs(new int[]{2468})
-                        .setTranslate(0, 0.7f, -0.2f)
-        );
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3221, 3399, 0))
-                .setModelIDs(new int[]{
-                        6848,
-                        9620,
-                        12752,
-                        10301,
-                        12138,
-                        181
-                })
-                .setModelRecolors(
-                        new int[]{
-                                8741,
-                                25238,
-                                4626,
-                                6798,
-                                10330
-                        },
-                        new int[]{
-                                920,
-                                33030,
-                                33030,
-                                8070,
-                                94
-                        }
-                )
-                .setIdleAnimation(AnimationID.Sitting)
-                .setBaseOrientation(CardinalDirection.South)
-                .setName("Butler jarvis")
-                .setExamine("He's on his day off."));
-
-        citizens.add(new StationaryCitizen(this)
-                .setLocation(new WorldPoint(3224, 3399, 0))
-                .setModelIDs(new int[]{
-                        25671,
-                        25685,
-                        25684
-                })
-                .setIdleAnimation(AnimationID.Sitting)
-                .setBaseOrientation(CardinalDirection.East)
-                .setName("Guard")
-                .setExamine("He's on a break."));
-
-
-        citizens.add(new ScriptedCitizen(this)
-                .setLocation(new WorldPoint(3209, 3425, 0))
-                .setModelIDs(new int[]{
-                        38135
-                })
-                .setIdleAnimation(AnimationID.HumanIdle)
-                .setBaseOrientation(CardinalDirection.North)
-                .setName("ScriptedEmme")
-                .setExamine("TODO")
-                .setScript(new CitizenScript()
-                        .walkTo(3209, 3432)
-                        .say("First stop!")
-                        .wait(2)
-                        .walkTo(3216, 3432)
-                        .say("Second stop!")
-                        .wait(2)
-                        .walkTo(3216, 3425)
-                        .say("Third stop!")
-                        .wait(2)
-                        .walkTo(3209, 3425)
-                        .say("I'm back at the start!")
-                )
         );
 
         entityCollection.add(citizens);
@@ -1069,6 +1074,12 @@ public class CitizensPlugin extends Plugin {
                 citizen.onClientTick();
             }
         }
+        try {
+            //TODO: Try to find a better way of checking for regions. Could not find some sort region loaded event or similiar
+            CheckRegions();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Subscribe
@@ -1120,9 +1131,45 @@ public class CitizensPlugin extends Plugin {
         }
     }
 
+    //This was used to split into the regional json files.
+    private void SplitIntoRegions()
+    {
+        HashMap<Integer, List<Citizen>> citizenMap = new HashMap<>();
+        for(Citizen c : citizens)
+        {
+            int regionId = c.location.getRegionID();
+            if(!citizenMap.containsKey(regionId))
+                citizenMap.put(regionId, new ArrayList<>());
 
+            citizenMap.get(regionId).add(c);
+        }
+
+        for(Integer i : citizenMap.keySet())
+        {
+            CitizenRegion c = new CitizenRegion(i, citizenMap.get(i));
+            try {
+                c.SaveRegion();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void CheckRegions() throws IOException {
+        List<Integer> loaded = Arrays.stream(client.getMapRegions()).boxed().collect(Collectors.toList());
+        //Check for newly loaded regions
+        for(int i : loaded)
+        {
+            if(!LoadedRegions.containsKey(i))
+            {
+                CitizenRegion region = CitizenRegion.LoadRegion(i, this);
+                if(region != null) {
+                    System.out.println(region.CitizenList.stream().count());
+                    LoadedRegions.put(i, region);
+                    citizens.addAll(region.Citizens);
+                    entityCollection.add(region.Citizens);
+                }
+            }
+        }
+    }
 }
-
-
-
-

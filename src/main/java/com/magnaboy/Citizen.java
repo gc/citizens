@@ -8,10 +8,7 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.geometry.SimplePolygon;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static com.magnaboy.Util.getRandomItem;
 
@@ -33,7 +30,8 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
     protected int targetQueueSize;
     protected final List<ExtraObject> extraObjects = new ArrayList<>();
     public AnimationID[] randomAnimations;
-    private AnimationID movingAnimationId = AnimationID.HumanWalk;
+    public AnimationID movingAnimationId = AnimationID.HumanWalk;
+    // Remember last known locations so after logging in/out, they are in the same place.
     public WorldPoint lastKnownLocation;
 
     public class Target {
