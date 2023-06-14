@@ -2,10 +2,8 @@ package com.magnaboy;
 
 import net.runelite.api.Animation;
 import net.runelite.api.ChatMessageType;
-import net.runelite.api.Perspective;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.geometry.SimplePolygon;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -20,21 +18,17 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
     public String[] remarks;
     public String name;
     public String examine;
-    private int cTargetIndex;
-    private int lastDistance;
     @Nullable
     public String activeRemark = null;
     private int remarkTimer = 0;
     public int speed = 4;
-    private SimplePolygon clickbox;
-    protected final int MAX_TARGET_QUEUE_SIZE = 10;
-    final ArrayList<Target> targetQueue = new ArrayList<Target>(MAX_TARGET_QUEUE_SIZE);
-
-    protected int targetQueueSize;
     protected final List<ExtraObject> extraObjects = new ArrayList<>();
     public AnimationID[] randomAnimations;
     private AnimationID movingAnimationId = AnimationID.HumanWalk;
-    public WorldPoint lastKnownLocation;
+
+
+    @Nullable()
+    Target currentTarget;
 
     public class Target {
         public WorldPoint worldDestinationPosition;
@@ -94,35 +88,34 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         }, 600 * 8);
     }
 
-    public T setLocation(WorldPoint location) {
-        lastKnownLocation = location;
-        return super.setLocation(location);
-    }
-
-    public void spawn() {
-        System.out.println("Spawning " + name + ", " + distanceToPlayer() + "x" +
-                " tiles away from the player");
-
-        for (int i = 0; i < MAX_TARGET_QUEUE_SIZE; i++) {
-            targetQueue.add(new Target());
+    public boolean spawn() {
+        boolean didSpawn = super.spawn();
+        if (didSpawn) {
+            Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
         }
-        this.targetQueueSize = 0;
-        super.spawn();
 
         for (ExtraObject obj : extraObjects) {
-            plugin.client.addChatMessage(ChatMessageType.GAMEMESSAGE, "",
-                    "Spawning an object for " + name + ", " + obj.distanceToPlayer() + "x tiles from player",
-                    null);
             obj.spawn();
         }
+
+        return didSpawn;
     }
 
-    public void despawn() {
-        System.out.println("Despawning " + name + ".");
-        this.targetQueueSize = 0;
-        super.despawn();
+    public boolean despawn() {
+        this.currentTarget = null;
+        boolean didDespawn = super.despawn();
         for (ExtraObject obj : extraObjects) {
             obj.despawn();
+        }
+        if (didDespawn) {
+            Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
+        }
+        return didDespawn;
+    }
+
+    public void sayRandomRemark() {
+        if (activeRemark == null && remarks != null && remarks.length > 0) {
+            say(getRandomItem(remarks));
         }
     }
 
@@ -132,27 +125,9 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         }
         this.activeRemark = message;
         this.remarkTimer = 80;
-        plugin.client.addChatMessage(ChatMessageType.PUBLICCHAT, this.name, message, null);
-    }
-
-    @Override
-    public void update() {
-        boolean inScene = shouldRender();
-        System.out.println(name + " is updating: " + (inScene ? "in scene" : "NOT in scene") + " and " + (isActive()
-                ? "active" : "inactive"));
-        super.update();
-    }
-
-    public int getOrientation() {
-        return rlObject.getOrientation();
-    }
-
-    public SimplePolygon getClickbox() {
-        return clickbox;
-    }
-
-    public boolean isRemarking() {
-        return this.activeRemark != null;
+        plugin.clientThread.invokeLater(() -> {
+            plugin.client.addChatMessage(ChatMessageType.PUBLICCHAT, this.name, message, null);
+        });
     }
 
     public void moveTo(WorldPoint worldPosition) {
@@ -162,31 +137,19 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
         LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, worldPosition);
 
-        // just clear the queue and move immediately to the destination if many ticks behind
-        if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE - 2) {
-            targetQueueSize = 0;
-        }
-
-        int prevTargetIndex = (cTargetIndex + targetQueueSize - 1) % MAX_TARGET_QUEUE_SIZE;
-        int newTargetIndex = (cTargetIndex + targetQueueSize) % MAX_TARGET_QUEUE_SIZE;
-
-        if (localPosition == null) {
-            return;
-        }
-
         WorldPoint prevWorldPosition;
-        if (targetQueueSize++ > 0) {
-            prevWorldPosition = targetQueue.get(prevTargetIndex).worldDestinationPosition;
+        if (currentTarget != null) {
+            prevWorldPosition = currentTarget.worldDestinationPosition;
         } else {
-            prevWorldPosition = WorldPoint.fromLocal(plugin.client, rlObject.getLocation());
+            prevWorldPosition = WorldPoint.fromLocal(plugin.client, getLocalLocation());
         }
 
         int distance = prevWorldPosition.distanceTo(worldPosition);
 
-        Target someTarget = this.targetQueue.get(newTargetIndex);
-        someTarget.worldDestinationPosition = worldPosition;
-        someTarget.localDestinationPosition = localPosition;
-        someTarget.currentDistance = distance;
+        currentTarget = new Target();
+        currentTarget.worldDestinationPosition = worldPosition;
+        currentTarget.localDestinationPosition = localPosition;
+        currentTarget.currentDistance = distance;
     }
 
     public void onClientTick() {
@@ -200,93 +163,61 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         if (remarkTimer == 0) {
             this.activeRemark = null;
         }
-        if (rlObject.isActive()) {
-            if (targetQueueSize > 0) {
-                Target someTarget = targetQueue.get(cTargetIndex);
-                if (someTarget == null || someTarget.worldDestinationPosition == null)
-                    return;
-                int targetPlane = someTarget.worldDestinationPosition.getPlane();
+        //        if (rlObject.isActive()) {
+        if (currentTarget != null) {
+            if (currentTarget.worldDestinationPosition == null) {
+                return;
+            }
+            LocalPoint targetPosition = currentTarget.localDestinationPosition;
 
-                LocalPoint targetPosition = someTarget.localDestinationPosition;
+            double intx = rlObject
+                    .getLocation()
+                    .getX() - targetPosition.getX();
+            double inty = rlObject
+                    .getLocation()
+                    .getY() - targetPosition.getY();
 
-                if (targetPosition == null) {
-                    despawn();
-                    return;
-                }
+            boolean rotationDone = rotateObject(intx, inty);
 
-                double intx = rlObject
-                        .getLocation()
-                        .getX() - targetPosition.getX();
-                double inty = rlObject
-                        .getLocation()
-                        .getY() - targetPosition.getY();
+            LocalPoint currentPosition = rlObject.getLocation();
+            int dx = targetPosition.getX() - currentPosition.getX();
+            int dy = targetPosition.getY() - currentPosition.getY();
 
-                boolean rotationDone = rotateObject(intx, inty);
-
-                // Citizen is no longer in a visible area on our client, so let's despawn it
-                if (plugin.client.getPlane() != targetPlane || !targetPosition.isInScene()) {
-                    despawn();
-                    return;
-                }
-
-                // Apply animation if move-speed / distance has changed
-                if (lastDistance != someTarget.currentDistance) {
+            // are we not where we need to be?
+            if (dx != 0 || dy != 0) {
+                if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
                     rlObject.setAnimation(plugin.getAnimation(movingAnimationId));
                 }
 
-                this.lastDistance = someTarget.currentDistance;
-
-                LocalPoint currentPosition = rlObject.getLocation();
-                int dx = targetPosition.getX() - currentPosition.getX();
-                int dy = targetPosition.getY() - currentPosition.getY();
-
-                // are we not where we need to be?
-                if (dx != 0 || dy != 0) {
-                    // only use the delta if it won't send up past the target
-                    if (Math.abs(dx) > speed) {
-                        dx = Integer.signum(dx) * speed;
-                    }
-
-                    if (Math.abs(dy) > speed) {
-                        dy = Integer.signum(dy) * speed;
-                    }
-
-                    LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
-
-                    rlObject.setLocation(newLocation, plane);
-
-                    int currentX = rlObject
-                            .getLocation()
-                            .getX();
-                    int currentY = rlObject
-                            .getLocation()
-                            .getY();
-                    dx = targetPosition.getX() - currentX;
-                    dy = targetPosition.getY() - currentY;
+                // only use the delta if it won't send up past the target
+                if (Math.abs(dx) > speed) {
+                    dx = Integer.signum(dx) * speed;
                 }
 
-                if (dx == 0 && dy == 0 && rotationDone) {
-                    cTargetIndex = (cTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
-                    targetQueueSize--;
-                    rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
+                if (Math.abs(dy) > speed) {
+                    dy = Integer.signum(dy) * speed;
                 }
+
+                LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
+
+                setLocation(newLocation);
+
+                int currentX = rlObject
+                        .getLocation()
+                        .getX();
+                int currentY = rlObject
+                        .getLocation()
+                        .getY();
+                dx = targetPosition.getX() - currentX;
+                dy = targetPosition.getY() - currentY;
             }
 
-            LocalPoint lp = getLocalLocation();
-            int zOff = Perspective.getTileHeight(plugin.client, lp, plugin.client.getPlane());
-            if (rlObject.getModel() == null) {
-                System.out.println("[Citizens] Model is null for " + this.name);
-                return;
+            if (dx == 0 && dy == 0 && rotationDone) {
+                currentTarget = null;
+                rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
             }
-            clickbox = calculateAABB(plugin.client,
-                    rlObject.getModel(),
-                    rlObject.getOrientation(),
-                    lp.getX(),
-                    lp.getY(),
-                    plugin.client.getPlane(),
-                    zOff);
 
-            location = WorldPoint.fromLocalInstance(plugin.client, getLocalLocation());
+            updateClickbox();
         }
 
     }

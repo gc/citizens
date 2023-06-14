@@ -2,51 +2,56 @@ package com.magnaboy;
 
 import net.runelite.api.coords.WorldPoint;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CitizenScript {
-    private ScriptedCitizen citizen;
-    private final Queue<Runnable> actions = new LinkedList<>();
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    public CitizenScript setCitizen(ScriptedCitizen _citizen) {
-        this.citizen = _citizen;
+    private ScriptedCitizen citizen;
+    private final List<Runnable> actions = new ArrayList<>();
+    private final ScheduledExecutorService executorService;
+    private Iterator<Runnable> actionIterator;
+
+    public CitizenScript() {
+        this.executorService = Executors.newSingleThreadScheduledExecutor();
+    }
+
+    public CitizenScript setCitizen(ScriptedCitizen scriptedCitizen) {
+        this.citizen = scriptedCitizen;
+        this.actionIterator = actions.iterator();
+        return this;
+    }
+
+    public CitizenScript setAnimation(AnimationID anim) {
+        actions.add(() -> {
+            citizen.rlObject.setAnimation(citizen.plugin.getAnimation(anim));
+            scheduleNextAction(0);
+        });
         return this;
     }
 
     public CitizenScript walkTo(int x, int y) {
         actions.add(() -> {
-            citizen.moveTo(new WorldPoint(x, y, citizen.plane));
-            final ScheduledFuture<?>[] locationCheckTask = new ScheduledFuture<?>[1];
-            locationCheckTask[0] = executorService.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    WorldPoint currentLocation = citizen.location;
-                    if (currentLocation.getX() == x && currentLocation.getY() == y) {
-                        locationCheckTask[0].cancel(false); // Stop the location checking
-                        scheduleNextAction(0); // Proceed with the next action
-                    }
-                }
-            }, 0, 500, TimeUnit.MILLISECONDS); // Check the location every 500 ms
+            WorldPoint wp = new WorldPoint(x, y, citizen.plane);
+            citizen.moveTo(wp);
+            scheduleNextActionWhenArrived(wp, 500);
         });
         return this;
     }
 
-
     public CitizenScript wait(int seconds) {
-        actions.add(() -> scheduleNextAction(seconds));
-        return this;
-    }
-
-    public CitizenScript playAnimation(String animationID) {
         actions.add(() -> {
-            // implement playing animation
-            System.out.println("Playing animation " + animationID);
+            try {
+                Thread.sleep(seconds * 1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             scheduleNextAction(0);
         });
         return this;
@@ -62,18 +67,31 @@ public class CitizenScript {
 
     private void scheduleNextAction(int delayInSeconds) {
         executorService.schedule(() -> {
-            if (actions.isEmpty()) {
-                // All actions have been completed. Restart from the beginning.
-                actions.addAll(actions);
+            if (!actionIterator.hasNext()) {
+                actionIterator = actions.iterator(); // Loop back to the first action
             }
-            actions.poll().run();
+            actionIterator.next().run();
         }, delayInSeconds, TimeUnit.SECONDS);
     }
 
+    private void scheduleNextActionWhenArrived(WorldPoint wp, int pollingRateMillis) {
+        AtomicReference<Future<?>> futureRef = new AtomicReference<>();
+        Future<?> future = executorService.scheduleAtFixedRate(() -> {
+            WorldPoint currentLocation = citizen.getWorldLocation();
+            int dist = currentLocation.distanceTo(wp);
+            if (dist <= 0) {
+                futureRef.get().cancel(false);
+                scheduleNextAction(0);
+            }
+        }, 0, pollingRateMillis, TimeUnit.MILLISECONDS);
+        futureRef.set(future);
+    }
+
     public void run() {
-        if (!actions.isEmpty()) {
-            actions.poll().run();
+        if (!actionIterator.hasNext()) {
+            actionIterator = actions.iterator(); // Restart from the beginning
         }
+        actionIterator.next().run();
     }
 
     public void stop() {

@@ -23,6 +23,7 @@ public enum AnimationID {
     Fletching(1248),
     AnvilBang(898),
     Crying(860),
+    Mining(823),
 
     ChildStarJump(218),
     ChildPlay1(6484),
@@ -36,7 +37,11 @@ public enum AnimationID {
     CatSit(2134),
     RatIdle(2704),
     RatBanging(2706),
+
     DwarfLean(6206),
+    DwarfWalk(98),
+    DwarfMining(99),
+    DwarfIdle(101),
 
     // ???
     FrontalGrab(897),
