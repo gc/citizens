@@ -1,0 +1,197 @@
+{
+    "version": 0.8,
+    "RegionId": 12852,
+    "CitizenList": [
+        {
+            "name": "Thief",
+            "examineText": "TODO",
+            "remarks": [
+                "TODO"
+            ],
+            "modelRecolorFind": [
+                25238,
+                8741
+            ],
+            "modelRecolorReplace": [
+                3486,
+                8728
+            ],
+            "worldPoint": {
+                "x": 3204,
+                "y": 3386,
+                "plane": 0
+            },
+            "modelIds": [
+                215,
+                228,
+                246,
+                292,
+                326,
+                170,
+                179,
+                254,
+                185,
+                317
+            ],
+            "idleAnimation": "Sitting",
+            "moveAnimation": "HumanWalk",
+            "baseOrientation": 512
+        },
+        {
+            "name": "Thief",
+            "examineText": "TODO",
+            "remarks": [
+                "TODO"
+            ],
+            "modelRecolorFind": [
+                7952,
+                8741
+            ],
+            "modelRecolorReplace": [
+                38156,
+                38160
+            ],
+            "worldPoint": {
+                "x": 3203,
+                "y": 3387,
+                "plane": 0
+            },
+            "modelIds": [
+                208,
+                10304,
+                25675,
+                317,
+                25643,
+                25652,
+                25668,
+                25650
+            ],
+            "idleAnimation": "Sitting",
+            "moveAnimation": "HumanWalk",
+            "baseOrientation": 0
+        },
+        {
+            "name": "Master Thief",
+            "examineText": "TODO",
+            "remarks": [
+                "TODO"
+            ],
+            "modelRecolorFind": [
+                25238,
+                8741
+            ],
+            "modelRecolorReplace": [
+                47399,
+                6930
+            ],
+            "worldPoint": {
+                "x": 3206,
+                "y": 3385,
+                "plane": 0
+            },
+            "modelIds": [
+                215,
+                246,
+                292,
+                151,
+                179,
+                254,
+                185,
+                320,
+                18956
+            ],
+            "idleAnimation": "HumanIdle",
+            "moveAnimation": "HumanWalk",
+            "baseOrientation": 1024
+        },
+        {
+            "name": "Child",
+            "examineText": "TODO",
+            "remarks": [
+                "TODO"
+            ],
+            "modelRecolorFind": [
+                22426,
+                22294,
+                6550,
+                8893
+            ],
+            "modelRecolorReplace": [
+                38065,
+                62637,
+                9152,
+                2983
+            ],
+            "worldPoint": {
+                "x": 3216,
+                "y": 3388,
+                "plane": 0
+            },
+            "modelIds": [
+                14289,
+                25846,
+                2915,
+                25849
+            ],
+            "idleAnimation": "ChildPlay1",
+            "moveAnimation": "HumanWalk",
+            "baseOrientation": 0
+        },
+        {
+            "name": "Child",
+            "examineText": "TODO",
+            "remarks": [
+                "TODO"
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "worldPoint": {
+                "x": 3220,
+                "y": 3386,
+                "plane": 0
+            },
+            "modelIds": [
+                14289,
+                25846,
+                2915,
+                25848
+            ],
+            "idleAnimation": "ChildPlay2",
+            "moveAnimation": "HumanWalk",
+            "baseOrientation": 512
+        },
+        {
+            "name": "Mary",
+            "examineText": "She has her hands full with those kids.",
+            "remarks": [],
+            "modelRecolorFind": [
+                8741,
+                25238,
+                6798,
+                43072
+            ],
+            "modelRecolorReplace": [
+                322,
+                5532,
+                8099,
+                4550
+            ],
+            "worldPoint": {
+                "x": 3221,
+                "y": 3387,
+                "plane": 0
+            },
+            "modelIds": [
+                390,
+                456,
+                483,
+                332,
+                353,
+                437,
+                358
+            ],
+            "idleAnimation": "HumanIdle",
+            "moveAnimation": "HumanWalk"
+        }
+    ]
+}

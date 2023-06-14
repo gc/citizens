@@ -38,8 +38,15 @@ public class Entity<T extends Entity<T>> {
         }
     }
 
+    public int[] getRecolorsToFind() {return recolorsToFind;};
+    public int[] getRecolorsToReplace() {return recolorsToReplace;};
+    public int[] getModelIDs() {return modelIDs;};
     public T setScale(float scaleX, float scaleY, float scaleZ) {
         this.scale = new float[]{scaleX, scaleY, scaleZ};
+        return (T) this;
+    }
+    public T setScale(float[] scale) {
+        this.scale = scale;
         return (T) this;
     }
 
@@ -161,6 +168,11 @@ public class Entity<T extends Entity<T>> {
 
     public T setBaseOrientation(CardinalDirection baseOrientation) {
         this.baseOrientation = baseOrientation.getAngle();
+        return (T) this;
+    }
+
+    public T setBaseOrientation(Integer integerOrientation) {
+        this.baseOrientation = integerOrientation;
         return (T) this;
     }
 
