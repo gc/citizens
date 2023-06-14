@@ -1079,6 +1079,7 @@ public class CitizensPlugin extends Plugin {
             return;
         }
         for (Citizen citizen : citizens) {
+            citizen.update();
             if (!citizen.shouldRender() || !citizen.isActive()) {
                 continue;
             }
