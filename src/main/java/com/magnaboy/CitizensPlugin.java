@@ -1060,12 +1060,10 @@ public class CitizensPlugin extends Plugin {
     public void onGameStateChanged(GameStateChanged gameStateChanged) {
         if (gameStateChanged.getGameState() == GameState.LOGIN_SCREEN) {
             despawnAll();
+            return;
         }
 
-        if (gameStateChanged.getGameState() == GameState.LOGGED_IN) {
-            updateAll();
-        }
-
+        updateAll();
         panel.update();
     }
 
@@ -1078,26 +1076,28 @@ public class CitizensPlugin extends Plugin {
         if (!isReady()) {
             return;
         }
-        for (Citizen citizen : citizens) {
-            citizen.update();
-            if (!citizen.shouldRender() || !citizen.isActive()) {
-                continue;
-            }
-            int random = getRandom(1, 10);
-            if (random < 4) {
-                if (citizen instanceof WanderingCitizen) {
-                    ((WanderingCitizen) citizen).wander();
+        clientThread.invokeLater(() -> {
+            for (Citizen citizen : citizens) {
+                citizen.update();
+                if (!citizen.shouldRender() || !citizen.isActive()) {
+                    continue;
+                }
+                int random = getRandom(1, 10);
+                if (random < 4) {
+                    if (citizen instanceof WanderingCitizen) {
+                        ((WanderingCitizen) citizen).wander();
+                    }
+                }
+
+                if (random == 7 || random == 8 || random == 9) {
+                    citizen.triggerIdleAnimation();
+                }
+
+                if (random == 10) {
+                    citizen.sayRandomRemark();
                 }
             }
-
-            if (random == 7 || random == 8 || random == 9) {
-                citizen.triggerIdleAnimation();
-            }
-
-            if (random == 10) {
-                citizen.sayRandomRemark();
-            }
-        }
+        });
     }
 
     @Subscribe

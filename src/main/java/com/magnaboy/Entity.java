@@ -222,8 +222,14 @@ public class Entity<T extends Entity<T>> {
         if (plane != plugin.client.getPlane()) {
             return false;
         }
+
         float distanceFromPlayer = distanceToPlayer();
-        return distanceFromPlayer < 50;
+        if (distanceFromPlayer > 50) {
+            return false;
+        }
+
+        LocalPoint lp = LocalPoint.fromWorld(plugin.client, worldLocation);
+        return lp != null;
     }
 
     public float distanceToPlayer() {
@@ -290,10 +296,19 @@ public class Entity<T extends Entity<T>> {
         rlObject.setShouldLoop(true);
     }
 
+    private String resolveIdentifier() {
+        if (this instanceof Citizen) {
+            Citizen citizen = (Citizen) this;
+            return citizen.name;
+        }
+
+        return this.modelIDs.toString();
+    }
+
     private void initLocation() {
         LocalPoint initializedLocation = LocalPoint.fromWorld(plugin.client, worldLocation);
         if (initializedLocation == null) {
-            throw new IllegalStateException("Tried to spawn entity with no initializedLocation");
+            throw new IllegalStateException("Tried to spawn entity with no initializedLocation: " + resolveIdentifier());
         }
         setLocation(initializedLocation);
     }
@@ -305,7 +320,6 @@ public class Entity<T extends Entity<T>> {
 
         initModel();
         initLocation();
-
         rlObject.setActive(true);
         return true;
     }
