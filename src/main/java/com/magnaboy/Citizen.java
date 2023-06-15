@@ -165,7 +165,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
         if (remarkTimer == 0) {
             this.activeRemark = null;
         }
-        //        if (rlObject.isActive()) {
+
         if (currentTarget != null) {
             if (currentTarget.worldDestinationPosition == null) {
                 return;
