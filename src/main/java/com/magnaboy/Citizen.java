@@ -218,10 +218,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
                 currentTarget = null;
                 rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
             }
-
-            updateClickbox();
         }
-
     }
-
 }

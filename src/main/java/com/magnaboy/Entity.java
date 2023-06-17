@@ -31,13 +31,9 @@ public class Entity<T extends Entity<T>> {
     protected UUID uuid;
 
     public SimplePolygon getClickbox() {
-        return clickbox;
-    }
-
-    public void updateClickbox() {
         LocalPoint location = getLocalLocation();
         int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
-        clickbox = calculateAABB(plugin.client,
+        return calculateAABB(plugin.client,
                 rlObject.getModel(),
                 rlObject.getOrientation(),
                 location.getX(),
