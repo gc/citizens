@@ -1,4 +1,6 @@
 {
+  "version": 0.8,
+  "regionId": 12853,
   "citizenRoster": [
     {
       "name": "Fletching apprentice",
@@ -271,28 +273,6 @@
         16,
         10539
       ]
-    },
-    {
-      "name": "Emme",
-      "examineText": "Gmme!",
-      "remarks": [
-        "Good morning!"
-      ],
-      "idleAnimation": "HumanIdle",
-      "moveAnimation": "HumanWalk",
-      "uuid": "08d321b1-629d-48bf-8804-b78f3be43e95",
-      "regionId": 12853,
-      "entityType": "StationaryCitizen",
-      "worldLocation": {
-        "x": 3215,
-        "y": 3435,
-        "plane": 0
-      },
-      "modelIds": [
-        38135
-      ],
-      "modelRecolorFind": [],
-      "modelRecolorReplace": []
     },
     {
       "name": "Darren",
@@ -618,6 +598,39 @@
       "baseOrientation": 1024,
       "modelRecolorFind": [],
       "modelRecolorReplace": []
+    },
+    {
+      "name": "Emme",
+      "examineText": "Gmme!",
+      "remarks": [
+        "Good morning!"
+      ],
+      "idleAnimation": "HumanIdle",
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3212,
+        "y": 3432,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3218,
+        "y": 3435,
+        "plane": 0
+      },
+      "uuid": "228f5b98-cd16-4d37-a6c9-dbfa421b2e75",
+      "regionId": 12853,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3215,
+        "y": 3435,
+        "plane": 0
+      },
+      "modelIds": [
+        38135
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     }
   ],
   "sceneryRoster": [
@@ -633,7 +646,9 @@
       "modelIds": [
         1569
       ],
-      "baseOrientation": 1536
+      "baseOrientation": 1536,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     },
     {
       "uuid": "64b836cb-db1c-4d0d-84e4-63130fea1f89",
@@ -647,7 +662,9 @@
       "modelIds": [
         1569
       ],
-      "baseOrientation": 1536
+      "baseOrientation": 1536,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     },
     {
       "uuid": "cc6717ab-c795-49b5-a850-f0204b14f35b",
@@ -662,7 +679,9 @@
         2260,
         3818
       ],
-      "baseOrientation": 1536
+      "baseOrientation": 1536,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     },
     {
       "uuid": "7626c213-78d5-486e-b207-ae3d345aac36",
@@ -686,7 +705,9 @@
         0.0,
         0.0,
         -0.4
-      ]
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     },
     {
       "uuid": "148d6809-0af6-4ba0-8b6f-bbab6eda49cf",
@@ -704,7 +725,9 @@
         -0.2,
         0.0,
         0.25
-      ]
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     },
     {
       "uuid": "2671fede-d194-4176-b01a-56285de55699",
@@ -750,9 +773,9 @@
         0.0,
         0.7,
         -0.2
-      ]
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
     }
-  ],
-  "regionId": 12853,
-  "version": 0.8
+  ]
 }

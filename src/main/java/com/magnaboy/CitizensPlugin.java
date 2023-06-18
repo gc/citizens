@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Animation;
 import net.runelite.api.ChatMessageType;
@@ -22,6 +23,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
+import net.runelite.api.events.*;
 import net.runelite.api.Tile;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.GameStateChanged;
@@ -46,6 +48,19 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.magnaboy.Util.getRandom;
+
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
 public class CitizensPlugin extends Plugin {
@@ -53,6 +68,7 @@ public class CitizensPlugin extends Plugin {
 	public Client client;
 
 	@Inject
+	@Getter
 	private CitizensConfig config;
 
 	@Provides
@@ -153,6 +169,12 @@ public class CitizensPlugin extends Plugin {
 	protected void shutDown() {
 		overlayManager.remove(citizensOverlay);
 		CitizenRegion.cleanUp();
+		//TODO make a Citizenpanel.cleanup()
+		CitizenPanel.selectedPosition = null;
+		CitizenPanel.selectedEntity = null;
+		entityCollection.clear();
+		citizens.clear();
+		scenery.clear();
 		despawnAll();
 		if (IS_DEVELOPMENT) {
 			panel.cleanup();
@@ -249,7 +271,7 @@ public class CitizensPlugin extends Plugin {
 		int firstMenuIndex = 1;
 
 		Point mousePos = client.getMouseCanvasPosition();
-
+		boolean clickedCitizen = false;
 		for (Citizen citizen : citizens) {
 			if (citizen.isActive()) {
 				SimplePolygon clickbox = citizen.getClickbox();
@@ -258,6 +280,7 @@ public class CitizensPlugin extends Plugin {
 				}
 				boolean doesClickBoxContainMousePos = clickbox.contains(mousePos.getX(), mousePos.getY());
 				if (doesClickBoxContainMousePos) {
+
 					client.createMenuEntry(firstMenuIndex)
 						.setOption("Examine")
 						.setTarget("<col=fffe00>" + citizen.name + "</col>")
@@ -265,8 +288,53 @@ public class CitizensPlugin extends Plugin {
 						.setParam0(0)
 						.setParam1(0)
 						.setDeprioritized(true);
+
+					if (IS_DEVELOPMENT) {
+						String action = "Select";
+						if (CitizenPanel.selectedEntity == citizen) {
+							action = "Deselect";
+							clickedCitizen = true;
+						}
+
+						client.createMenuEntry(firstMenuIndex++)
+							.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
+							.setTarget(action + " <col=fffe00>" + citizen.name + "</col>")
+							.setType(MenuAction.RUNELITE)
+							.setDeprioritized(true)
+							.onClick(e -> {
+								panel.setSelectedEntity(citizen);
+								panel.update();
+							});
+					}
 					break;
 				}
+			}
+		}
+		if (IS_DEVELOPMENT) {
+			final Tile selectedSceneTile = client.getSelectedSceneTile();
+			client.createMenuEntry(firstMenuIndex++)
+				.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
+				.setTarget("Select <col=fffe00>Tile</col>")
+				.setType(MenuAction.RUNELITE)
+				.setDeprioritized(true)
+				.onClick(e -> {
+					CitizenPanel.selectedPosition = selectedSceneTile.getWorldLocation();
+					panel.update();
+				});
+			if (CitizenPanel.selectedEntity != null && !clickedCitizen) {
+				String name = "Scenery Object";
+				if (CitizenPanel.selectedEntity instanceof Citizen) {
+					name = ((Citizen) CitizenPanel.selectedEntity).name;
+				}
+				client.createMenuEntry(firstMenuIndex - 1)
+					.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
+					.setTarget("Deselect <col=fffe00>" + name + "</col>")
+					.setType(MenuAction.RUNELITE)
+					.setDeprioritized(true)
+					.onClick(e -> {
+						panel.setSelectedEntity(CitizenPanel.selectedEntity);
+						panel.update();
+					});
 			}
 		}
 	}
@@ -294,13 +362,11 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	public int countActiveEntities() {
-		return getAllEntities().filter(Entity::isActive).toArray().length;
+		return getAllEntities().filter(ent -> ent.isActive() && ent != null).toArray().length;
 	}
 
 	public int countInactiveEntities() {
-		return getAllEntities().filter(ent -> {
-			return !ent.isActive() && ent != null;
-		}).toArray().length;
+		return getAllEntities().filter(ent -> !ent.isActive() && ent != null).toArray().length;
 	}
 
 	public void refreshEntityCollection() {
@@ -333,12 +399,10 @@ public class CitizensPlugin extends Plugin {
 	public static void reloadCitizens(CitizensPlugin plugin) {
 		Util.log("Reloading Citizens");
 		//Just clearing the hashmap should trigger a complete reload on the next 'CheckRegions()' call
-		if (!plugin.entityCollection.removeAll(new ArrayList<>(plugin.citizens))) {
-			Util.log("ReloadCitizens(): Did not remove any citizens from list");
-		}
-
 		plugin.despawnAll();
+		plugin.entityCollection.clear();
 		plugin.citizens.clear();
+		plugin.scenery.clear();
 		activeRegions.clear();
 		CitizenRegion.clearDirtyRegions();
 		try {
@@ -347,27 +411,6 @@ public class CitizensPlugin extends Plugin {
 			throw new RuntimeException(e);
 		}
 		Util.log("Reloaded Citizens");
-	}
-
-	@Subscribe
-	public void onMenuEntryAdded(MenuEntryAdded event) {
-		if (!IS_DEVELOPMENT) {
-			return;
-		}
-
-		if (event.getOption().equals("Walk here")) {
-			final Tile selectedSceneTile = client.getSelectedSceneTile();
-
-			client.createMenuEntry(-1)
-				.setOption(ColorUtil.wrapWithColorTag("Citizens", Color.cyan))
-				.setTarget("Select Starting Tile")
-				.setType(MenuAction.RUNELITE)
-				.onClick(e ->
-				{
-					CitizenPanel.selectedPosition = selectedSceneTile.getWorldLocation();
-					panel.update();
-				});
-		}
 	}
 }
 

@@ -7,6 +7,9 @@ import net.runelite.api.coords.WorldPoint;
 public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WorldArea boundingBox;
 
+	public WorldPoint wanderRegionBL;
+	public WorldPoint wanderRegionTR;
+
 	public WanderingCitizen(CitizensPlugin plugin) {
 		super(plugin);
 		entityType = EntityType.WanderingCitizen;
@@ -15,6 +18,16 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
 		this.boundingBox = new WorldArea(bottomLeft, Math.abs(bottomLeft.getX() - topRight.getX()), Math.abs(bottomLeft.getY() - topRight.getY()));
 		worldLocation = getRandomInBoundingBox();
+		return this;
+	}
+
+	public WanderingCitizen setWanderRegionBL(WorldPoint wp) {
+		wanderRegionBL = wp;
+		return this;
+	}
+
+	public WanderingCitizen setWanderRegionTR(WorldPoint wp) {
+		wanderRegionTR = wp;
 		return this;
 	}
 
