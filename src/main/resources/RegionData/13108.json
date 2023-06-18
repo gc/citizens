@@ -1,1 +1,34 @@
-{"version":0.8,"regionId":13108,"citizenRoster":[{"name":"Dwarf miner","examineText":"I dare not get in his way.","remarks":[],"idleAnimation":"DwarfIdle","moveAnimation":"DwarfWalk","uuid":"049ed16e-2ae8-4720-842f-e63deb02cefd","regionId":13108,"entityType":"StationaryCitizen","worldLocation":{"x":3288,"y":3371,"plane":0},"modelIds":[2971,6019,7059,2979,2990,2980,2985,7053],"baseOrientation":0,"modelRecolorFind":[],"modelRecolorReplace":[]}]}
+{
+  "version": 0.8,
+  "regionId": 13108,
+  "citizenRoster": [
+    {
+      "name": "Dwarf miner",
+      "examineText": "I dare not get in his way.",
+      "remarks": [],
+      "idleAnimation": "DwarfIdle",
+      "moveAnimation": "DwarfWalk",
+      "uuid": "049ed16e-2ae8-4720-842f-e63deb02cefd",
+      "regionId": 13108,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3288,
+        "y": 3371,
+        "plane": 0
+      },
+      "modelIds": [
+        2971,
+        6019,
+        7059,
+        2979,
+        2990,
+        2980,
+        2985,
+        7053
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
+    }
+  ]
+}

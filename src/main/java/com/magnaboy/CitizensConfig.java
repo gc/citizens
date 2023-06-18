@@ -6,12 +6,12 @@ import net.runelite.client.config.ConfigItem;
 
 @ConfigGroup("citizens")
 public interface CitizensConfig extends Config {
-    @ConfigItem(
-            keyName = "autostartQuests",
-            name = "Auto start helper",
-            description = "Automatically start the quest helper when you start a quest"
-    )
-    default boolean autoStartQuests() {
-        return true;
-    }
+	@ConfigItem(
+		keyName = "autostartQuests",
+		name = "Auto start helper",
+		description = "Automatically start the quest helper when you start a quest"
+	)
+	default boolean autoStartQuests() {
+		return true;
+	}
 }

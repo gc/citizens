@@ -1,1 +1,52 @@
-{"version":0.8,"regionId":12854,"citizenRoster":[{"name":"Lily","examineText":"Farming... such a peaceful life.","remarks":["I thought I saw a Tangleroot..."],"idleAnimation":"FireCook","moveAnimation":"HumanWalk","uuid":"8622dc92-f780-4b96-9642-2d9ba33663bd","regionId":12854,"entityType":"StationaryCitizen","worldLocation":{"x":3227,"y":3459,"plane":0},"modelIds":[217,8798,390,7366,471,4392,348,353,46747,437],"baseOrientation":1536,"modelRecolorFind":[4550,25238,6798,9096,54397,8741],"modelRecolorReplace":[4562,5400,7465,5400,8497,12700]}]}
+{
+  "version": 0.8,
+  "regionId": 12854,
+  "citizenRoster": [
+    {
+      "name": "Lily",
+      "examineText": "Farming... such a peaceful life.",
+      "remarks": [
+        "I thought I saw a Tangleroot..."
+      ],
+      "idleAnimation": "FireCook",
+      "moveAnimation": "HumanWalk",
+      "uuid": "8622dc92-f780-4b96-9642-2d9ba33663bd",
+      "regionId": 12854,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3227,
+        "y": 3459,
+        "plane": 0
+      },
+      "modelIds": [
+        217,
+        8798,
+        390,
+        7366,
+        471,
+        4392,
+        348,
+        353,
+        46747,
+        437
+      ],
+      "baseOrientation": 1536,
+      "modelRecolorFind": [
+        4550,
+        25238,
+        6798,
+        9096,
+        54397,
+        8741
+      ],
+      "modelRecolorReplace": [
+        4562,
+        5400,
+        7465,
+        5400,
+        8497,
+        12700
+      ]
+    }
+  ]
+}
