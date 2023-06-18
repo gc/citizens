@@ -13,17 +13,33 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	}
 
 	public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
-		this.boundingBox = new WorldArea(bottomLeft, Math.abs(bottomLeft.getX() - topRight.getX()), Math.abs(bottomLeft.getY() - topRight.getY()));
+		int width = Math.abs(bottomLeft.getX() - topRight.getX());
+		int height = Math.abs(bottomLeft.getY() - topRight.getY());
+		String debugString = "BottomLeft[" + bottomLeft + "] TopRight[" + topRight + "] Width[" + width + "] Height[" + height + "]";
+
+		if (bottomLeft.getX() > topRight.getX() || bottomLeft.getY() > topRight.getY()) {
+			throw new IllegalArgumentException("BottomLeft must be to the bottom/left of topRight. " + debugString);
+		}
+
+		if (width <= 1 && height <= 1) {
+			throw new IllegalArgumentException("The size of the bounding box must be greater than 1x1. " + debugString);
+		}
+
+		this.boundingBox = new WorldArea(bottomLeft, width, height);
 		worldLocation = getRandomInBoundingBox();
 		return this;
 	}
 
 	private WorldPoint getRandomInBoundingBox() {
-		final int x = getRandom(this.boundingBox.getX(), this.boundingBox.getX() + this.boundingBox.getWidth());
-		final int y = getRandom(this.boundingBox.getY(), this.boundingBox.getY() + this.boundingBox.getHeight());
-		return new WorldPoint(x, y, plane);
-	}
+		WorldPoint randomPoint;
+		do {
+			final int x = getRandom(this.boundingBox.getX(), this.boundingBox.getX() + this.boundingBox.getWidth());
+			final int y = getRandom(this.boundingBox.getY(), this.boundingBox.getY() + this.boundingBox.getHeight());
+			randomPoint = new WorldPoint(x, y, plane);
+		} while (randomPoint.equals(worldLocation));
 
+		return randomPoint;
+	}
 
 	public void wander() {
 		WorldPoint randomSpot = getRandomInBoundingBox();
