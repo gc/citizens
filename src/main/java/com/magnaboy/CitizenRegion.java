@@ -149,6 +149,8 @@ public class CitizenRegion {
 	private static WanderingCitizen loadWanderingCitizen(CitizensPlugin plugin, CitizenInfo info) {
 		info.entityType = EntityType.WanderingCitizen;
 		return new WanderingCitizen(plugin)
+			.setWanderRegionBL(info.wanderBoxBL)
+			.setWanderRegionTR(info.wanderBoxTR)
 			.setBoundingBox(info.wanderBoxBL, info.wanderBoxTR);
 	}
 
@@ -170,13 +172,20 @@ public class CitizenRegion {
 	}
 
 	public static void cleanUp() {
+		for (CitizenRegion r : regionCache.values()) {
+			r.citizenRoster.clear();
+			r.sceneryRoster.clear();
+
+			r.citizens.clear();
+			r.scenery.clear();
+		}
 		regionCache.clear();
 		dirtyRegions.clear();
 	}
 
 	//DEV ONLY
 	//Spawns citizens from the editor panel
-	public static void spawnCitizen(CitizenInfo info) {
+	public static Citizen spawnCitizen(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
 		CitizenRegion region = regionCache.get(info.regionId);
 		region.citizens.put(info.uuid, citizen);
@@ -185,9 +194,10 @@ public class CitizenRegion {
 		dirtyRegion(region);
 		plugin.refreshEntityCollection();
 		plugin.updateAll();
+		return citizen;
 	}
 
-	public static void spawnScenery(SceneryInfo info) {
+	public static Scenery spawnScenery(SceneryInfo info) {
 		Scenery scenery = loadScenery(plugin, info);
 		CitizenRegion region = regionCache.get(info.regionId);
 		region.scenery.put(info.uuid, scenery);
@@ -196,6 +206,25 @@ public class CitizenRegion {
 		dirtyRegion(region);
 		plugin.refreshEntityCollection();
 		plugin.updateAll();
+		return scenery;
+	}
+
+	public static void saveEntity(EntityInfo info) {
+		if (info.entityType == EntityType.Scenery) {
+			//TODO
+		} else {
+			Citizen citizen = loadCitizen(plugin, (CitizenInfo) info);
+			CitizenRegion region = loadRegion(info.regionId, plugin);
+			region.citizens.get(info.uuid).despawn();
+			region.citizens.put(info.uuid, citizen);
+			CitizenInfo oldInfo = region.citizenRoster.stream().filter(i -> i.uuid == info.uuid).findFirst().orElse(null);
+			if (oldInfo != null) {
+				region.citizenRoster.remove(oldInfo);
+				region.citizenRoster.add((CitizenInfo) info);
+			}
+			CitizensPlugin.reloadCitizens(plugin);
+			dirtyRegion(region);
+		}
 	}
 
 	//DEV ONLY
@@ -207,6 +236,32 @@ public class CitizenRegion {
 		dirtyRegions.clear();
 	}
 
+	public static void clearCache() {
+		regionCache.clear();
+	}
+
+	public static void deleteEntity(Citizen citizen) {
+		CitizenRegion region = loadRegion(citizen.regionId, plugin);
+		CitizenInfo info = region.citizenRoster.stream()
+			.filter(c -> c.uuid == citizen.uuid)
+			.findFirst()
+			.orElse(null);
+		plugin.citizens.remove(citizen);
+		region.citizenRoster.remove(info);
+		dirtyRegion(region);
+	}
+
+	public static void deleteEntity(Scenery scenery) {
+		CitizenRegion region = loadRegion(scenery.regionId, plugin);
+		SceneryInfo info = region.sceneryRoster.stream()
+			.filter(c -> c.uuid == scenery.uuid)
+			.findFirst()
+			.orElse(null);
+		plugin.scenery.remove(scenery);
+		region.sceneryRoster.remove(info);
+		dirtyRegion(region);
+	}
+
 	public static int dirtyRegionCount() {
 		return dirtyRegions.size();
 	}
@@ -214,7 +269,7 @@ public class CitizenRegion {
 	public static void saveDirtyRegions() {
 		for (Map.Entry<Integer, CitizenRegion> region : dirtyRegions.entrySet()) {
 			try {
-				region.getValue().saveRegion();
+				region.getValue().saveRegion(true);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

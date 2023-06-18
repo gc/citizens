@@ -22,7 +22,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public int speed = 4;
 	protected final List<ExtraObject> extraObjects = new ArrayList<>();
 	public AnimationID[] randomAnimations;
-	private AnimationID movingAnimationId = AnimationID.HumanWalk;
+	public AnimationID movingAnimationId = AnimationID.HumanWalk;
 
 
 	@Nullable()
@@ -218,4 +218,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			}
 		}
 	}
+
+
 }
