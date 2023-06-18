@@ -11,6 +11,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
     public ScriptedCitizen setScript(CitizenScript script) {
         this.script = script;
         script.setCitizen(this);
+        entityType = EntityType.ScriptedCitizen;
         return this;
     }
 

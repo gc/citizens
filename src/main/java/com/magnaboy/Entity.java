@@ -7,17 +7,20 @@ import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.api.model.Jarvis;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static net.runelite.api.Perspective.COSINE;
 import static net.runelite.api.Perspective.SINE;
 
 public class Entity<T extends Entity<T>> {
     public final int plane = 0;
+    public int regionId;
     public WorldPoint worldLocation;
     public CitizensPlugin plugin;
     public AnimationID idleAnimationId;
     protected RuneLiteObject rlObject;
-    Integer baseOrientation;
+    protected EntityType entityType;
+    protected Integer baseOrientation;
     private int[] modelIDs;
     private int[] recolorsToFind;
     private int[] recolorsToReplace;
@@ -25,15 +28,12 @@ public class Entity<T extends Entity<T>> {
     public float[] translate;
 
     private SimplePolygon clickbox;
+    protected UUID uuid;
 
     public SimplePolygon getClickbox() {
-        return clickbox;
-    }
-
-    public void updateClickbox() {
         LocalPoint location = getLocalLocation();
         int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
-        clickbox = calculateAABB(plugin.client,
+        return calculateAABB(plugin.client,
                 rlObject.getModel(),
                 rlObject.getOrientation(),
                 location.getX(),
@@ -72,8 +72,18 @@ public class Entity<T extends Entity<T>> {
         return (T) this;
     }
 
+    public T setScale(float[] scale) {
+        this.scale = scale;
+        return (T) this;
+    }
+
     public T setTranslate(float translateX, float translateY, float translateZ) {
         this.translate = new float[]{translateX, translateY, translateZ};
+        return (T) this;
+    }
+
+    public T setTranslate(float[] translate) {
+        this.translate = translate;
         return (T) this;
     }
 
@@ -190,6 +200,11 @@ public class Entity<T extends Entity<T>> {
 
     public T setBaseOrientation(CardinalDirection baseOrientation) {
         this.baseOrientation = baseOrientation.getAngle();
+        return (T) this;
+    }
+
+    public T setBaseOrientation(Integer baseOrientation) {
+        this.baseOrientation = baseOrientation;
         return (T) this;
     }
 
@@ -369,5 +384,31 @@ public class Entity<T extends Entity<T>> {
         return (T) this;
     }
 
+    public T setUUID(UUID uuid) {
+        if (this.uuid == null)
+            this.uuid = uuid;
+        return (T) this;
+    }
+
+    public T setRegion(int regionId) {
+        this.regionId = regionId;
+        return (T) this;
+    }
+
+    public EntityType getEntityType() {
+        return this.entityType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof Entity))
+            return false;
+
+        Entity compare = (Entity) o;
+        return this.uuid == compare.uuid;
+    }
 
 }

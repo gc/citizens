@@ -1,6 +1,7 @@
 package com.magnaboy;
 
 import net.runelite.api.Perspective;
+import net.runelite.api.coords.WorldPoint;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -55,5 +56,10 @@ public final class Util {
         BigDecimal bd = new BigDecimal(Float.toString(number));
         bd = bd.setScale(digits, RoundingMode.DOWN);
         return bd.floatValue();
+    }
+
+    public static String worldPointToShortCoord(WorldPoint point)
+    {
+        return String.format("%d, %d, %d", point.getX(), point.getY(), point.getPlane());
     }
 }
