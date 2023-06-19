@@ -181,13 +181,11 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			int dx = targetPosition.getX() - currentPosition.getX();
 			int dy = targetPosition.getY() - currentPosition.getY();
 
-			// are we not where we need to be?
 			if (dx != 0 || dy != 0) {
 				if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
 					rlObject.setAnimation(plugin.getAnimation(movingAnimationId));
 				}
 
-				// only use the delta if it won't send up past the target
 				if (Math.abs(dx) > speed) {
 					dx = Integer.signum(dx) * speed;
 				}

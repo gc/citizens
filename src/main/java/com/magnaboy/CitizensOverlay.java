@@ -27,7 +27,7 @@ public class CitizensOverlay extends Overlay {
 	@Inject
 	public CitizensOverlay(CitizensPlugin plugin, ModelOutlineRenderer modelOutlineRenderer) {
 		this.modelOutlineRenderer = modelOutlineRenderer;
-		setPosition(OverlayPosition.DYNAMIC); //Fixes the slight offset the overlay had.
+		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		this.plugin = plugin;
 	}

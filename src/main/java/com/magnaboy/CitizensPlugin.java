@@ -107,7 +107,7 @@ public class CitizensPlugin extends Plugin {
 		CitizenRegion.init(this);
 		activeRegions = new HashMap<>();
 
-		//For now, the only thing in the panel is dev stuff
+		// For now, the only thing in the panel is dev stuff
 		if (IS_DEVELOPMENT) {
 			panel = injector.getInstance(CitizenPanel.class);
 			panel.init(this, citizensOverlay);
@@ -155,7 +155,7 @@ public class CitizensPlugin extends Plugin {
 		despawnAll();
 		overlayManager.remove(citizensOverlay);
 		CitizenRegion.cleanUp();
-		//TODO make a Citizenpanel.cleanup()
+		// TODO: make a Citizenpanel.cleanup()
 		CitizenPanel.selectedPosition = null;
 		CitizenPanel.selectedEntity = null;
 		entityCollection.clear();
@@ -230,7 +230,7 @@ public class CitizensPlugin extends Plugin {
 
 	@Subscribe
 	public void onGameTick(GameTick tick) {
-		updateAll();    //Doing this in State Changed caused a lot of delays
+		updateAll();
 	}
 
 	@Subscribe
@@ -364,7 +364,7 @@ public class CitizensPlugin extends Plugin {
 
 	private void checkRegions() throws IOException {
 		List<Integer> loaded = Arrays.stream(client.getMapRegions()).boxed().collect(Collectors.toList());
-		//Check for newly loaded regions
+		// Check for newly loaded regions
 		for (int i : loaded) {
 			if (!activeRegions.containsKey(i)) {
 				CitizenRegion region = CitizenRegion.loadRegion(i, this);
@@ -383,7 +383,7 @@ public class CitizensPlugin extends Plugin {
 
 	public static void reloadCitizens(CitizensPlugin plugin) {
 		Util.log("Reloading Citizens");
-		//Just clearing the hashmap should trigger a complete reload on the next 'CheckRegions()' call
+		// Just clearing the hashmap should trigger a complete reload on the next 'CheckRegions()' call
 		plugin.despawnAll();
 		plugin.entityCollection.clear();
 		plugin.citizens.clear();

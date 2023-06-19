@@ -29,7 +29,7 @@ class CitizenPanel extends PluginPanel {
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
 	public static WorldPoint selectedPosition;
 	private CitizensOverlay overlay;
-	//Editor Panel Fields
+	// Editor Panel Fields
 	private HashSet<JComponent> allElements;
 	private JButton reloadButton;
 	private JButton saveChangesButton;
@@ -64,7 +64,7 @@ class CitizenPanel extends PluginPanel {
 	private JTextField manualAnimIdMoveSelect;
 	public static Entity selectedEntity;
 
-	//End Editor Fields
+	// End Editor Fields
 
 	public void init(CitizensPlugin plugin, CitizensOverlay overlay) {
 		this.plugin = plugin;
@@ -169,7 +169,7 @@ class CitizenPanel extends PluginPanel {
 		return f.getText() == null || f.getText().trim().isEmpty();
 	}
 
-	//DEV ONLY
+	// DEV ONLY
 	private void addEditorComponents(JPanel layoutPanel) {
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -178,14 +178,14 @@ class CitizenPanel extends PluginPanel {
 		gbc.weightx = 0.5;
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 
-		//Active Entities
+		// Active Entities
 		{
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			layoutPanel.add(label, gbc);
 		}
 
-		//Reload Entities
+		// Reload Entities
 		{
 			gbc.gridy++;
 
@@ -215,7 +215,7 @@ class CitizenPanel extends PluginPanel {
 
 		}
 
-		//Editing Target
+		// Editing Target
 		{
 			gbc.gridy++;
 			editingTargetLabel = new JLabel();
@@ -225,7 +225,7 @@ class CitizenPanel extends PluginPanel {
 			layoutPanel.add(editingTargetLabel, gbc);
 		}
 
-		//Selected Position Label
+		// Selected Position Label
 		{
 			gbc.gridy++;
 
@@ -233,7 +233,7 @@ class CitizenPanel extends PluginPanel {
 			selectedPositionLbl = createLabeledComponent(new JLabel(), "Selected Position", layoutPanel, gbc);
 		}
 
-		//Name Field
+		// Name Field
 		{
 			gbc.gridy++;
 
@@ -241,7 +241,7 @@ class CitizenPanel extends PluginPanel {
 			entityNameField = createLabeledComponent(new JTextField(), "Entity Name", layoutPanel, gbc);
 		}
 
-		//Examine Text
+		// Examine Text
 		{
 			gbc.gridy++;
 
@@ -250,7 +250,7 @@ class CitizenPanel extends PluginPanel {
 			examineTextField.setText("A Citizen of Gielinor");
 		}
 
-		//Entity Type
+		// Entity Type
 		{
 			gbc.gridy++;
 
@@ -264,7 +264,7 @@ class CitizenPanel extends PluginPanel {
 			});
 		}
 
-		//Cardinal Direction
+		// Cardinal Direction
 		{
 			gbc.gridy++;
 
@@ -274,7 +274,7 @@ class CitizenPanel extends PluginPanel {
 			orientationField.setFocusable(false);
 		}
 
-		//Animations
+		// Animations
 		{
 			gbc.gridy++;
 			gbc.gridwidth = 2;
@@ -305,7 +305,7 @@ class CitizenPanel extends PluginPanel {
 
 			gbc.gridy++;
 			gbc.gridx = 0;
-			gbc.gridwidth = 2;  //Set grid with to 1 so the next element gets placed next to this one
+			gbc.gridwidth = 2;
 			gbc.insets = new Insets(0, 0, 7, 2);
 			animIdIdleSelect = createLabeledComponent(new JComboBox<>(animIds), "Idle Animation", layoutPanel, gbc);
 			animIdIdleSelect.setSelectedItem(AnimationID.HumanIdle);
@@ -330,7 +330,7 @@ class CitizenPanel extends PluginPanel {
 			manualAnimIdMoveSelect.getParent().setVisible(false);
 		}
 
-		//Models
+		// Models
 		{
 			gbc.gridy++;
 			gbc.gridx = 0;
@@ -338,7 +338,7 @@ class CitizenPanel extends PluginPanel {
 			modelIdsField.setToolTipText("Integers only, separated by commas");
 		}
 
-		//Remarks
+		// Remarks
 		{
 			gbc.gridy++;
 			gbc.gridx = 0;
@@ -347,7 +347,7 @@ class CitizenPanel extends PluginPanel {
 			remarksField.setToolTipText("Phrases, separated by commas");
 		}
 
-		//Model Recolors
+		// Model Recolors
 		{
 			gbc.gridy++;
 			gbc.gridwidth = 1;
@@ -359,7 +359,7 @@ class CitizenPanel extends PluginPanel {
 			recolorReplaceField.setToolTipText("Integers only, separated by commas");
 		}
 
-		//Scale
+		// Scale
 		{
 			gbc.gridy++;
 			gbc.gridwidth = 2;
@@ -370,7 +370,7 @@ class CitizenPanel extends PluginPanel {
 			createLabeledMultiComponent("Scale", layoutPanel, gbc, scaleFieldX, scaleFieldY, scaleFieldZ);
 		}
 
-		//Translation
+		// Translation
 		{
 			gbc.gridy++;
 			gbc.gridwidth = 2;
@@ -381,7 +381,7 @@ class CitizenPanel extends PluginPanel {
 			createLabeledMultiComponent("Translation", layoutPanel, gbc, translateFieldX, translateFieldY, translateFieldZ);
 		}
 
-		//Wander Region
+		// Wander Region
 		{
 			gbc.gridy++;
 			gbc.gridwidth = 2;
@@ -408,7 +408,7 @@ class CitizenPanel extends PluginPanel {
 			createLabeledMultiComponent("Wander Region", layoutPanel, gbc, selectWanderBL, selectWanderTR);
 		}
 
-		//Spawn/Save Button
+		// Spawn/Save Button
 		{
 			gbc.gridy++;
 			gbc.gridx = 0;
@@ -449,7 +449,7 @@ class CitizenPanel extends PluginPanel {
 			layoutPanel.add(updateButton, gbc);
 		}
 
-		//Delete Button
+		// Delete Button
 		{
 			gbc.gridy++;
 			gbc.gridx = 0;
@@ -470,7 +470,7 @@ class CitizenPanel extends PluginPanel {
 			layoutPanel.add(deleteButton, gbc);
 		}
 
-		//Last ROW
+		// Last ROW
 		{
 			gbc.gridy++;
 
@@ -650,9 +650,9 @@ class CitizenPanel extends PluginPanel {
 		EntityType type = (EntityType) entityTypeSelection.getSelectedItem();
 
 		boolean checked = manualFieldsToggle.isSelected();
-		//Turn off irrelevant components
+		// Turn off irrelevant components
 		switch (type) {
-			//We get the parents because they are each in individual containers with their labels
+			// We get the parents because they are each in individual containers with their labels
 			case StationaryCitizen:
 			case ScriptedCitizen:
 				selectWanderTR.getParent().setVisible(false);
