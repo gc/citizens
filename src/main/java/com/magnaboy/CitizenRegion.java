@@ -43,17 +43,11 @@ public class CitizenRegion {
 	}
 
 	public void saveRegion() throws IOException {
-		saveRegion(false);
-	}
-
-	public void saveRegion(boolean prettyPrint) throws IOException {
 		try {
 			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
 			Writer wr = new BufferedWriter(new FileWriter(path.toString()));
 			GsonBuilder gb = new GsonBuilder();
-			if (prettyPrint) {
-				gb.setPrettyPrinting();
-			}
+			gb.setPrettyPrinting();
 			Gson gson = gb.create();
 			gson.toJson(this, wr);
 			wr.flush();
@@ -63,8 +57,11 @@ public class CitizenRegion {
 		}
 	}
 
-	public static CitizenRegion loadRegion(int regionId, CitizensPlugin plugin) {
+	public static CitizenRegion loadRegion(int regionId) {
+		return loadRegion(regionId, false);
+	}
 
+	public static CitizenRegion loadRegion(int regionId, Boolean createIfNotExists) {
 		if (regionCache.containsKey(regionId)) {
 			Util.log("Loaded Region: " + regionId + " from cache");
 			return regionCache.get(regionId);
@@ -74,7 +71,19 @@ public class CitizenRegion {
 		try {
 			inputStream = new FileInputStream(REGIONDATA_DIRECTORY + File.separator + regionId + ".json");
 		} catch (FileNotFoundException e) {
-			//No need to do anything special here. Probably just a region without citizens
+			// No region file was found.
+			// If in development, create one, save it and then try to load it.
+			if (plugin.IS_DEVELOPMENT && createIfNotExists) {
+				CitizenRegion region = new CitizenRegion();
+				region.regionId = regionId;
+				region.version = VALID_REGION_VERSION;
+				try {
+					region.saveRegion();
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
+				return loadRegion(regionId, false);
+			}
 			return null;
 		}
 		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -108,7 +117,7 @@ public class CitizenRegion {
 		Citizen citizen;
 		if (info.entityType == null) {
 			citizen = loadStationaryCitizen(plugin, info);
-		} else {                //Specific
+		} else {
 			switch (info.entityType) {
 				case WanderingCitizen:
 					citizen = loadWanderingCitizen(plugin, info);
@@ -184,7 +193,7 @@ public class CitizenRegion {
 
 	public static Citizen spawnCitizenFromPanel(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
-		CitizenRegion region = regionCache.get(info.regionId);
+		CitizenRegion region = loadRegion(info.regionId, true);
 		region.citizens.put(info.uuid, citizen);
 		region.citizenRoster.add(info);
 		plugin.citizens.add(citizen);
@@ -211,7 +220,7 @@ public class CitizenRegion {
 			// TODO
 		} else {
 			Citizen citizen = loadCitizen(plugin, (CitizenInfo) info);
-			CitizenRegion region = loadRegion(info.regionId, plugin);
+			CitizenRegion region = loadRegion(info.regionId);
 			region.citizens.get(info.uuid).despawn();
 			region.citizens.put(info.uuid, citizen);
 			CitizenInfo oldInfo = region.citizenRoster.stream().filter(i -> i.uuid == info.uuid).findFirst().orElse(null);
@@ -238,7 +247,7 @@ public class CitizenRegion {
 	}
 
 	public static void deleteEntity(Citizen citizen) {
-		CitizenRegion region = loadRegion(citizen.regionId, plugin);
+		CitizenRegion region = loadRegion(citizen.regionId);
 		CitizenInfo info = region.citizenRoster.stream()
 			.filter(c -> c.uuid == citizen.uuid)
 			.findFirst()
@@ -249,7 +258,7 @@ public class CitizenRegion {
 	}
 
 	public static void deleteEntity(Scenery scenery) {
-		CitizenRegion region = loadRegion(scenery.regionId, plugin);
+		CitizenRegion region = loadRegion(scenery.regionId);
 		SceneryInfo info = region.sceneryRoster.stream()
 			.filter(c -> c.uuid == scenery.uuid)
 			.findFirst()
@@ -266,7 +275,7 @@ public class CitizenRegion {
 	public static void saveDirtyRegions() {
 		for (Map.Entry<Integer, CitizenRegion> region : dirtyRegions.entrySet()) {
 			try {
-				region.getValue().saveRegion(true);
+				region.getValue().saveRegion();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

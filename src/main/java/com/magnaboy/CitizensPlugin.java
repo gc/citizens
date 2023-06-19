@@ -167,7 +167,9 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	protected void updateAll() {
-		getAllEntities().forEach(Entity::update);
+		clientThread.invokeLater(() -> {
+			getAllEntities().forEach(Entity::update);
+		});
 	}
 
 	protected void despawnAll() {
@@ -367,7 +369,7 @@ public class CitizensPlugin extends Plugin {
 		// Check for newly loaded regions
 		for (int i : loaded) {
 			if (!activeRegions.containsKey(i)) {
-				CitizenRegion region = CitizenRegion.loadRegion(i, this);
+				CitizenRegion region = CitizenRegion.loadRegion(i);
 				if (region != null) {
 					activeRegions.put(i, region);
 					citizens.addAll(region.citizens.values());
