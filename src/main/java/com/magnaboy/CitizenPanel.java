@@ -667,7 +667,6 @@ class CitizenPanel extends PluginPanel {
 			case Scenery:
 				entityNameField.getParent().setVisible(false);
 				examineTextField.getParent().setVisible(false);
-				animIdMoveSelect.getParent().setVisible(false);
 				manualAnimIdMoveSelect.getParent().setVisible(false);
 				animIdIdleSelect.getParent().setVisible(!checked);
 				manualAnimIdIdleSelect.getParent().setVisible(checked);
@@ -675,6 +674,10 @@ class CitizenPanel extends PluginPanel {
 				selectWanderTR.getParent().setVisible(false);
 				selectWanderBL.getParent().setVisible(false);
 				break;
+		}
+
+		if (type == EntityType.StationaryCitizen || type == EntityType.Scenery) {
+			animIdMoveSelect.getParent().setVisible(false);
 		}
 	}
 
