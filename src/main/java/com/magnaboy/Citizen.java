@@ -7,7 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.annotation.Nullable;
 import net.runelite.api.Animation;
-import net.runelite.api.ChatMessageType;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
@@ -123,9 +122,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 		this.activeRemark = message;
 		this.remarkTimer = 80;
-		plugin.clientThread.invokeLater(() -> {
-			plugin.client.addChatMessage(ChatMessageType.PUBLICCHAT, this.name, message, null);
-		});
 	}
 
 	public void moveTo(WorldPoint worldPosition) {
