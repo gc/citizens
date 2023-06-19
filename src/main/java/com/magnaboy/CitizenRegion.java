@@ -121,12 +121,12 @@ public class CitizenRegion {
 					break;
 			}
 		}
-		//Citizen
+		// Citizen
 		citizen.setName(info.name)
 			.setExamine(info.examineText)
 			.setRemarks(info.remarks);
 
-		//Entity
+		// Entity
 		citizen.setModelIDs(info.modelIds)
 			.setModelRecolors(info.modelRecolorFind, info.modelRecolorReplace)
 			.setIdleAnimation(info.idleAnimation)
@@ -208,7 +208,7 @@ public class CitizenRegion {
 
 	public static void saveEntity(EntityInfo info) {
 		if (info.entityType == EntityType.Scenery) {
-			//TODO
+			// TODO
 		} else {
 			Citizen citizen = loadCitizen(plugin, (CitizenInfo) info);
 			CitizenRegion region = loadRegion(info.regionId, plugin);
@@ -224,7 +224,7 @@ public class CitizenRegion {
 		}
 	}
 
-	//DEV ONLY
+	// DEV ONLY
 	public static void dirtyRegion(CitizenRegion region) {
 		dirtyRegions.put(region.regionId, region);
 	}
