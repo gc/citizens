@@ -81,19 +81,17 @@ public class CitizensOverlay extends Overlay {
 		}
 	}
 
-	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, Color color)
-	{
+	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, int plane, Color color) {
 		WorldArea boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
-		highlightRegion(graphics, boundingBox, color);
+		highlightRegion(graphics, boundingBox, plane, color);
 	}
 
-	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, Color color)
-	{
+	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, int plane, Color color) {
 		int x = boundingBox.getX();
 		int y = boundingBox.getY();
 		for (int i = y; i <= y + boundingBox.getHeight(); i++) {
 			for (int t = 0; t <= boundingBox.getWidth(); t++) {
-				highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
+				highlightTile(graphics, new WorldPoint(x + t, i, plane), color);
 			}
 		}
 	}
@@ -111,9 +109,8 @@ public class CitizensOverlay extends Overlay {
 
 		WorldPoint bl = plugin.panel.wanderRegionBL;
 		WorldPoint tr = plugin.panel.wanderRegionTR;
-		if(bl != null && tr != null)
-		{
-			highlightRegion(graphics,bl, tr, new Color(0,255,255,20));
+		if (bl != null && tr != null) {
+			highlightRegion(graphics, bl, tr, bl.getPlane(), new Color(0, 255, 255, 20));
 		}
 
 		if (CitizenPanel.selectedEntity != null) {
@@ -155,7 +152,7 @@ public class CitizensOverlay extends Overlay {
 			if (citizen instanceof WanderingCitizen) {
 				WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
 				Color color = new Color(0, 0, 255, 20);
-				highlightRegion(graphics, boundingBox, color);
+				highlightRegion(graphics, boundingBox, citizen.getPlane(), color);
 			}
 
 			// If the citizen has a walking target, mark it.

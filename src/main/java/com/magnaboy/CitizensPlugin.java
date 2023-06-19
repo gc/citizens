@@ -290,7 +290,7 @@ public class CitizensPlugin extends Plugin {
 		if (IS_DEVELOPMENT) {
 			//Tile Selection
 			final Tile selectedSceneTile = client.getSelectedSceneTile();
-			final boolean same = CitizenPanel.selectedPosition != null && Util.samePosition(CitizenPanel.selectedPosition, selectedSceneTile.getWorldLocation());
+			final boolean same = CitizenPanel.selectedPosition != null && CitizenPanel.selectedPosition.equals(selectedSceneTile.getWorldLocation());
 			final String action = same ? "Deselect" : "Select";
 			client.createMenuEntry(firstMenuIndex++)
 				.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
@@ -394,27 +394,24 @@ public class CitizensPlugin extends Plugin {
 		Util.log("Reloaded Citizens");
 	}
 
-	public void despawnEntity(Entity e)
-	{
-		if(e instanceof Citizen) {
+	public void despawnEntity(Entity e) {
+		if (e instanceof Citizen) {
 			citizens.remove((Citizen) e);
 		}
-		if(e instanceof Scenery) {
+		if (e instanceof Scenery) {
 			scenery.remove((Scenery) e);
 		}
 		e.despawn();
 	}
 
-	private void cleanup()
-	{
+	private void cleanup() {
 		entityCollection.clear();
 		citizens.clear();
 		scenery.clear();
 		activeRegions.clear();
 	}
 
-	private void cleanupAll()
-	{
+	private void cleanupAll() {
 		overlayManager.remove(citizensOverlay);
 		entityCollection.clear();
 		citizens.clear();
