@@ -17,7 +17,6 @@ import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.api.model.Jarvis;
 
 public class Entity<T extends Entity<T>> {
-	public final int plane = 0;
 	public int regionId;
 	public WorldPoint worldLocation;
 	public CitizensPlugin plugin;
@@ -232,13 +231,17 @@ public class Entity<T extends Entity<T>> {
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
-		rlObject.setLocation(location, plane);
+		rlObject.setLocation(location, getPlane());
 		setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
 		return (T) this;
 	}
 
+	public int getPlane() {
+		return this.worldLocation.getPlane();
+	}
+
 	public boolean shouldRender() {
-		if (plane != plugin.client.getPlane()) {
+		if (getPlane() != plugin.client.getPlane()) {
 			return false;
 		}
 
