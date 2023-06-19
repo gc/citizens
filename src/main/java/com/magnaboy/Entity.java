@@ -417,26 +417,16 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public String getModelIDsString() {
-		return intArrayToString(modelIDs);
+		return Util.intArrayToString(modelIDs);
 	}
 
 	public String getRecolorFindString() {
-		return intArrayToString(recolorsToFind);
+		return Util.intArrayToString(recolorsToFind);
 	}
 
 	public String getRecolorReplaceString() {
-		return intArrayToString(recolorsToReplace);
+		return Util.intArrayToString(recolorsToReplace);
 	}
 
-	private String intArrayToString(int[] array) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < array.length; i++) {
-			sb.append(array[i]);
-			if (i < array.length - 1) {
-				sb.append(",");
-			}
-		}
-		return sb.toString();
-	}
 
 }
