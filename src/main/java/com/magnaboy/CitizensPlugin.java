@@ -394,27 +394,24 @@ public class CitizensPlugin extends Plugin {
 		Util.log("Reloaded Citizens");
 	}
 
-	public void despawnEntity(Entity e)
-	{
-		if(e instanceof Citizen) {
+	public void despawnEntity(Entity e) {
+		if (e instanceof Citizen) {
 			citizens.remove((Citizen) e);
 		}
-		if(e instanceof Scenery) {
+		if (e instanceof Scenery) {
 			scenery.remove((Scenery) e);
 		}
 		e.despawn();
 	}
 
-	private void cleanup()
-	{
+	private void cleanup() {
 		entityCollection.clear();
 		citizens.clear();
 		scenery.clear();
 		activeRegions.clear();
 	}
 
-	private void cleanupAll()
-	{
+	private void cleanupAll() {
 		overlayManager.remove(citizensOverlay);
 		entityCollection.clear();
 		citizens.clear();

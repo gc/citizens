@@ -81,14 +81,12 @@ public class CitizensOverlay extends Overlay {
 		}
 	}
 
-	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, Color color)
-	{
+	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, Color color) {
 		WorldArea boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
 		highlightRegion(graphics, boundingBox, color);
 	}
 
-	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, Color color)
-	{
+	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, Color color) {
 		int x = boundingBox.getX();
 		int y = boundingBox.getY();
 		for (int i = y; i <= y + boundingBox.getHeight(); i++) {
@@ -111,9 +109,8 @@ public class CitizensOverlay extends Overlay {
 
 		WorldPoint bl = plugin.panel.wanderRegionBL;
 		WorldPoint tr = plugin.panel.wanderRegionTR;
-		if(bl != null && tr != null)
-		{
-			highlightRegion(graphics,bl, tr, new Color(0,255,255,20));
+		if (bl != null && tr != null) {
+			highlightRegion(graphics, bl, tr, new Color(0, 255, 255, 20));
 		}
 
 		if (CitizenPanel.selectedEntity != null) {

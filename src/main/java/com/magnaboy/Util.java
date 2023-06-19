@@ -73,8 +73,7 @@ public final class Util {
 		return sb.toString().replaceAll("\\s+", "");
 	}
 
-	public static boolean samePosition(WorldPoint p1, WorldPoint p2)
-	{
+	public static boolean samePosition(WorldPoint p1, WorldPoint p2) {
 		return p1.getX() == p2.getX() &&
 			p1.getY() == p2.getY() &&
 			p1.getPlane() == p2.getPlane();
