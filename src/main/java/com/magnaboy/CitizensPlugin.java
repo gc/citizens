@@ -152,6 +152,7 @@ public class CitizensPlugin extends Plugin {
 
 	@Override
 	protected void shutDown() {
+		despawnAll();
 		overlayManager.remove(citizensOverlay);
 		CitizenRegion.cleanUp();
 		//TODO make a Citizenpanel.cleanup()
@@ -160,7 +161,6 @@ public class CitizensPlugin extends Plugin {
 		entityCollection.clear();
 		citizens.clear();
 		scenery.clear();
-		despawnAll();
 		if (IS_DEVELOPMENT) {
 			panel.cleanup();
 		}
