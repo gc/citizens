@@ -6,7 +6,6 @@ import net.runelite.api.coords.WorldPoint;
 
 public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WorldArea boundingBox;
-
 	public WorldPoint wanderRegionBL;
 	public WorldPoint wanderRegionTR;
 
@@ -16,19 +15,7 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	}
 
 	public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
-		int width = Math.abs(bottomLeft.getX() - topRight.getX());
-		int height = Math.abs(bottomLeft.getY() - topRight.getY());
-		String debugString = "BottomLeft[" + bottomLeft + "] TopRight[" + topRight + "] Width[" + width + "] Height[" + height + "]";
-
-		if (bottomLeft.getX() > topRight.getX() || bottomLeft.getY() > topRight.getY()) {
-			throw new IllegalArgumentException("BottomLeft must be to the bottom/left of topRight. " + debugString);
-		}
-
-		if (width <= 1 && height <= 1) {
-			throw new IllegalArgumentException("The size of the bounding box must be greater than 1x1. " + debugString);
-		}
-
-		this.boundingBox = new WorldArea(bottomLeft, width, height);
+		this.boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
 		worldLocation = getRandomInBoundingBox();
 		return this;
 	}

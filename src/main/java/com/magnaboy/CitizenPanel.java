@@ -9,14 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.UUID;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
@@ -86,6 +79,10 @@ class CitizenPanel extends PluginPanel {
 	}
 
 	public void update() {
+        if (!plugin.IS_DEVELOPMENT) {
+            return;
+        }
+
 		int activeEntities = plugin.countActiveEntities();
 		int inactiveEntities = plugin.countInactiveEntities();
 		int totalEntities = activeEntities + inactiveEntities;
@@ -120,7 +117,7 @@ class CitizenPanel extends PluginPanel {
 		updateButton.setVisible(selectedEntity != null);
 
 		if (selectedEntity instanceof Citizen) {
-			editingTargetLabel.setText("Editing: " + ((Citizen) selectedEntity).name);
+			editingTargetLabel.setText("Editing: " + selectedEntity.name);
 		} else {
 			editingTargetLabel.setText("Editing: Scenery Object");
 		}
@@ -198,7 +195,6 @@ class CitizenPanel extends PluginPanel {
 			reloadButton.addActionListener(e ->
 			{
 				selectedEntity = null;
-				CitizenRegion.clearCache();
 				CitizensPlugin.reloadCitizens(plugin);
 			});
 			layoutPanel.add(reloadButton, gbc);
@@ -422,7 +418,7 @@ class CitizenPanel extends PluginPanel {
 					Scenery scenery = CitizenRegion.spawnSceneryFromPanel(info);
 					selectedEntity = scenery;
 				} else {
-					CitizenInfo info = buildCitizenInfo();
+                    CitizenInfo info = buildCitizenInfo(selectedPosition.getRegionID());
 					Citizen citizen = CitizenRegion.spawnCitizenFromPanel(info);
 					selectedEntity = citizen;
 				}
@@ -438,39 +434,36 @@ class CitizenPanel extends PluginPanel {
 			updateButton.setFocusable(false);
 			updateButton.addActionListener(e ->
 			{
-				CitizenInfo info = buildCitizenInfo();
-				if (selectedEntity != null) {
-					info.uuid = selectedEntity.uuid;
-					CitizenRegion.saveEntity(info);
-				}
+                CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
+                if (selectedEntity != null) {
+                    info.uuid = selectedEntity.uuid;
+                    CitizenRegion.updateEntity(info);
+                }
 
 				update();
 			});
 			layoutPanel.add(updateButton, gbc);
 		}
 
-		// Delete Button
-		{
-			gbc.gridy++;
-			gbc.gridx = 0;
-			deleteButton = new JButton();
-			deleteButton.setText("Delete Entity");
-			deleteButton.setFocusable(false);
-			deleteButton.setVisible(false);
-			deleteButton.setBackground(new Color(135, 58, 58));
-			deleteButton.addActionListener(e ->
-			{
-				if (selectedEntity instanceof Citizen) {
-					CitizenRegion.deleteEntity((Citizen) selectedEntity);
-				} else {
-					CitizenRegion.deleteEntity((Scenery) selectedEntity);
-				}
-				selectedEntity.despawn();
-			});
-			layoutPanel.add(deleteButton, gbc);
-		}
+        // Delete Button
+        {
+            gbc.gridy++;
+            gbc.gridx = 0;
+            deleteButton = new JButton();
+            deleteButton.setText("Delete Entity");
+            deleteButton.setFocusable(false);
+            deleteButton.setVisible(false);
+            deleteButton.setBackground(new Color(135, 58, 58));
+            deleteButton.addActionListener(e ->
+            {
+                CitizenRegion.removeEntityFromRegion(selectedEntity);
+                plugin.despawnEntity(selectedEntity);
 
-		// Last ROW
+            });
+            layoutPanel.add(deleteButton, gbc);
+        }
+
+        // Save Changes
 		{
 			gbc.gridy++;
 
@@ -517,10 +510,10 @@ class CitizenPanel extends PluginPanel {
 		return result;
 	}
 
-	private CitizenInfo buildCitizenInfo() {
-		CitizenInfo info = new CitizenInfo();
-		info.uuid = UUID.randomUUID();
-		info.regionId = selectedPosition.getRegionID();
+    private CitizenInfo buildCitizenInfo(int regionId) {
+        CitizenInfo info = new CitizenInfo();
+        info.uuid = UUID.randomUUID();
+        info.regionId = regionId;
 		info.name = entityNameField.getText();
 		info.examineText = examineTextField.getText();
 		info.worldLocation = selectedPosition;
@@ -531,7 +524,7 @@ class CitizenPanel extends PluginPanel {
 		info.modelRecolorFind = csvToIntArray(recolorFindField.getText());
 		info.modelRecolorReplace = csvToIntArray(recolorReplaceField.getText());
 		info.baseOrientation = ((CardinalDirection) orientationField.getSelectedItem()).getAngle();
-		info.remarks = remarksField.getText().split(",", -1);
+        info.remarks = remarksField.getText().length() > 0 ? remarksField.getText().split(",", -1) : null;
 
 		if (fieldEmpty(scaleFieldX) && fieldEmpty(scaleFieldY) && fieldEmpty(scaleFieldZ)) {
 			info.scale = null;
@@ -687,6 +680,7 @@ class CitizenPanel extends PluginPanel {
 			selectedEntity = null;
 		} else {
 			selectedEntity = e;
+            selectedPosition = e.getWorldLocation();
 		}
 
 		entityTypeSelection.setSelectedItem(e.entityType);
@@ -713,5 +707,6 @@ class CitizenPanel extends PluginPanel {
 
 	public void cleanup() {
 		selectedPosition = null;
+        selectedEntity = null;
 	}
 }
