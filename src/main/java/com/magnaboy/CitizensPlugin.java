@@ -299,13 +299,19 @@ public class CitizensPlugin extends Plugin {
 		}
 		if (IS_DEVELOPMENT) {
 			final Tile selectedSceneTile = client.getSelectedSceneTile();
+			final boolean same = CitizenPanel.selectedPosition != null && Util.samePosition(CitizenPanel.selectedPosition, selectedSceneTile.getWorldLocation());
+			final String action = same ? "Deselect" : "Select";
 			client.createMenuEntry(firstMenuIndex++)
 				.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
-				.setTarget("Select <col=fffe00>Tile</col>")
+				.setTarget(action + " <col=fffe00>Tile</col>")
 				.setType(MenuAction.RUNELITE)
 				.setDeprioritized(true)
 				.onClick(e -> {
-					CitizenPanel.selectedPosition = selectedSceneTile.getWorldLocation();
+					if (same) {
+						CitizenPanel.selectedPosition = null;
+					} else {
+						CitizenPanel.selectedPosition = selectedSceneTile.getWorldLocation();
+					}
 					panel.update();
 				});
 			if (CitizenPanel.selectedEntity != null && !clickedCitizen) {

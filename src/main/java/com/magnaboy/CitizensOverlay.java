@@ -133,7 +133,7 @@ public class CitizensOverlay extends Overlay {
 				Color color = new Color(0, 0, 255, 20);
 				for (int i = y; i <= y + boundingBox.getHeight(); i++) {
 					for (int t = 0; t < boundingBox.getWidth(); t++) {
-						highlightTile(graphics, new WorldPoint(x + t, i, citizen.getPlane()), color);
+						highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
 					}
 				}
 			}
