@@ -119,6 +119,10 @@ public class CitizensOverlay extends Overlay {
 		}
 
 		for (Citizen citizen : plugin.citizens) {
+			if(citizen == null) {
+				continue;
+			}
+
 			LocalPoint localLocation = citizen.getLocalLocation();
 
 			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
