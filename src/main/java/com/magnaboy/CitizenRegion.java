@@ -29,7 +29,6 @@ public class CitizenRegion {
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
 	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
 
-
 	//TODO Make hashmaps private and make getters/setters
 	public transient HashMap<UUID, Scenery> scenery = new HashMap<>();
 	public transient HashMap<UUID, Citizen> citizens = new HashMap<>();

@@ -303,7 +303,6 @@ public class Entity<T extends Entity<T>> {
 			rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
 		}
 
-
 		if (baseOrientation != null && rlObject.getOrientation() == 0) {
 			rlObject.setOrientation(baseOrientation);
 		}
@@ -366,7 +365,6 @@ public class Entity<T extends Entity<T>> {
 			{
 				dJau = dJauCW;
 			}
-
 
 			// only use the delta if it won't send up past the target
 			if (Math.abs(dJau) > JAU_TURN_SPEED) {

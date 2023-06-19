@@ -11,7 +11,6 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
-
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String[] remarks;
 	public String name;
@@ -23,7 +22,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	protected final List<ExtraObject> extraObjects = new ArrayList<>();
 	public AnimationID[] randomAnimations;
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
-
 
 	@Nullable()
 	Target currentTarget;

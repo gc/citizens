@@ -7,7 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.HashSet;
 import java.util.UUID;
 import javax.swing.JButton;
@@ -19,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.FontManager;
@@ -81,7 +78,7 @@ class CitizenPanel extends PluginPanel {
 
 		// DEV ONLY
 		allElements = new HashSet<>();
-		if(plugin.IS_DEVELOPMENT) {
+		if (plugin.IS_DEVELOPMENT) {
 			addEditorComponents(layoutPanel);
 			entityTypeChanged();
 		}
@@ -270,7 +267,6 @@ class CitizenPanel extends PluginPanel {
 		//Cardinal Direction
 		{
 			gbc.gridy++;
-
 
 			gbc.gridx = 0;
 			orientationField = createLabeledComponent(new JComboBox<>(CardinalDirection.values()), "Base Orientation", layoutPanel, gbc);
@@ -661,7 +657,6 @@ class CitizenPanel extends PluginPanel {
 			case ScriptedCitizen:
 				selectWanderTR.getParent().setVisible(false);
 				selectWanderBL.getParent().setVisible(false);
-
 
 				animIdIdleSelect.getParent().setVisible(!checked);
 				animIdMoveSelect.getParent().setVisible(!checked);
