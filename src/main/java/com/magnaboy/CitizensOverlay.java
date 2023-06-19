@@ -1,12 +1,5 @@
 package com.magnaboy;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import javax.inject.Inject;
 import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
@@ -19,17 +12,26 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
+import javax.inject.Inject;
+import java.awt.*;
+import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
+
 public class CitizensOverlay extends Overlay {
 	private final CitizensPlugin plugin;
+	private final ModelOutlineRenderer modelOutlineRenderer;
 
 	@Inject
-	public CitizensOverlay(CitizensPlugin plugin) {
-		setPosition(OverlayPosition.DYNAMIC);
+	public CitizensOverlay(CitizensPlugin plugin, ModelOutlineRenderer modelOutlineRenderer) {
+		this.modelOutlineRenderer = modelOutlineRenderer;
+		setPosition(OverlayPosition.DYNAMIC); //Fixes the slight offset the overlay had.
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		this.plugin = plugin;
 	}
 
 	private void renderText(Graphics2D graphics, LocalPoint lp, String text) {
+		if (!plugin.getConfig().showOverlay()) {
+			return;
+		}
 		renderText(graphics, lp, text, new Color(0, 255, 3));
 	}
 
@@ -52,6 +54,9 @@ public class CitizensOverlay extends Overlay {
 		if (lp == null) {
 			return;
 		}
+		if (!plugin.getConfig().showOverlay()) {
+			return;
+		}
 		final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
 		if (poly != null) {
 			OverlayUtil.renderPolygon(graphics, poly, color);
@@ -59,6 +64,9 @@ public class CitizensOverlay extends Overlay {
 	}
 
 	private void highlightTile(Graphics2D graphics, WorldPoint wp, Color color) {
+		if (!plugin.getConfig().showOverlay()) {
+			return;
+		}
 		LocalPoint lp = LocalPoint.fromWorld(plugin.client, wp);
 		if (lp == null) {
 			return;
@@ -71,10 +79,16 @@ public class CitizensOverlay extends Overlay {
 
 	@Override
 	public Dimension render(Graphics2D graphics) {
+
 		if (CitizenPanel.selectedPosition != null) {
-			Color selectedColor = new Color(255, 255, 0, 255 / 2);
+			Color selectedColor = new Color(0, 255, 255, 200);
 			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
 			renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+		}
+
+		if (CitizenPanel.selectedEntity != null) {
+			final int outlineWidth = 4;
+			modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
 		}
 
 		for (Citizen citizen : plugin.citizens) {
@@ -113,7 +127,7 @@ public class CitizensOverlay extends Overlay {
 				int x = boundingBox.getX();
 				int y = boundingBox.getY();
 				Color color = new Color(0, 0, 255, 20);
-				for (int i = y; i < y + boundingBox.getHeight(); i++) {
+				for (int i = y; i <= y + boundingBox.getHeight(); i++) {
 					for (int t = 0; t < boundingBox.getWidth(); t++) {
 						highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
 					}

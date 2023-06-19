@@ -6,9 +6,12 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.HashSet;
 import java.util.UUID;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -16,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.FontManager;
@@ -27,7 +32,7 @@ class CitizenPanel extends PluginPanel {
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
 	public static WorldPoint selectedPosition;
 	private CitizensOverlay overlay;
-	// Editor Panel Fields
+	//Editor Panel Fields
 	private HashSet<JComponent> allElements;
 	private JButton reloadButton;
 	private JButton saveChangesButton;
@@ -53,7 +58,16 @@ class CitizenPanel extends PluginPanel {
 	private JButton selectWanderTR;
 	public WorldPoint wanderRegionBL;
 	public WorldPoint wanderRegionTR;
-	// End Editor Fields
+	public JLabel editingTargetLabel;
+	public JButton updateButton;
+	public JButton deleteButton;
+	public JLabel reloadWarning;
+	public JCheckBox manualFieldsToggle;
+	private JTextField manualAnimIdIdleSelect;
+	private JTextField manualAnimIdMoveSelect;
+	public static Entity selectedEntity;
+
+	//End Editor Fields
 
 	public void init(CitizensPlugin plugin, CitizensOverlay overlay) {
 		this.plugin = plugin;
@@ -67,8 +81,10 @@ class CitizenPanel extends PluginPanel {
 
 		// DEV ONLY
 		allElements = new HashSet<>();
-		addEditorComponents(layoutPanel);
-		entityTypeChanged();
+		if(plugin.IS_DEVELOPMENT) {
+			addEditorComponents(layoutPanel);
+			entityTypeChanged();
+		}
 		update();
 	}
 
@@ -78,11 +94,16 @@ class CitizenPanel extends PluginPanel {
 		int totalEntities = activeEntities + inactiveEntities;
 		label.setText(activeEntities + "/" + totalEntities + " entities are active");
 
+		UpdateEditorFields();
+	}
+
+	private void UpdateEditorFields() {
 		GameState state = plugin.client.getGameState();
 
 		if (state == GameState.LOGIN_SCREEN || state == GameState.LOGIN_SCREEN_AUTHENTICATOR) {
 			selectedPosition = null;
 		}
+		int dirtySize = CitizenRegion.dirtyRegionCount();
 
 		reloadButton.setEnabled(state == GameState.LOGGED_IN);
 		selectedPositionLbl.setText(selectedPosition == null ? "N/A" : worldPointToShortCoord(selectedPosition));
@@ -92,9 +113,27 @@ class CitizenPanel extends PluginPanel {
 		spawnButton.setEnabled(state == GameState.LOGGED_IN && valid);
 		spawnButton.setText(spawnButton.isEnabled() ? "Spawn Entity" : "Can't Spawn: " + errorMessage);
 
-		int dirtySize = CitizenRegion.dirtyRegionCount();
 		saveChangesButton.setEnabled(dirtySize > 0);
 		saveChangesButton.setText(dirtySize > 0 ? "Save Changes" : "Nothing To Save");
+
+		if (selectedEntity != null && !CitizenPanel.selectedEntity.isActive()) {
+			selectedEntity = null;
+		}
+
+		updateButton.setVisible(selectedEntity != null);
+
+		if (selectedEntity instanceof Citizen) {
+			editingTargetLabel.setText("Editing: " + ((Citizen) selectedEntity).name);
+		} else {
+			editingTargetLabel.setText("Editing: Scenery Object");
+		}
+		editingTargetLabel.setVisible(selectedEntity != null);
+		deleteButton.setVisible(selectedEntity != null);
+
+		reloadWarning.setVisible(dirtySize > 0);
+
+		selectWanderBL.setText(wanderRegionBL == null ? "Select BL" : Util.worldPointToShortCoord(wanderRegionBL));
+		selectWanderTR.setText(wanderRegionTR == null ? "Select TR" : Util.worldPointToShortCoord(wanderRegionTR));
 	}
 
 	private String validateFields() {
@@ -138,7 +177,7 @@ class CitizenPanel extends PluginPanel {
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = new Insets(0, 0, 10, 2);
+		gbc.insets = new Insets(0, 0, 7, 2);
 		gbc.weightx = 0.5;
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 
@@ -161,27 +200,32 @@ class CitizenPanel extends PluginPanel {
 
 			reloadButton.addActionListener(e ->
 			{
+				selectedEntity = null;
+				CitizenRegion.clearCache();
 				CitizensPlugin.reloadCitizens(plugin);
 			});
 			layoutPanel.add(reloadButton, gbc);
+
+			gbc.gridy++;
+			reloadWarning = new JLabel("Unsaved Changes Will Be Lost");
+			reloadWarning.setFont(FontManager.getRunescapeSmallFont());
+			reloadWarning.setBorder(new EmptyBorder(0, 0, 0, 0));
+			reloadWarning.setForeground(Color.ORANGE);
+			reloadWarning.setVerticalAlignment(SwingConstants.NORTH);
+			reloadWarning.setHorizontalAlignment(SwingConstants.CENTER);
+			reloadWarning.setVisible(false);
+			layoutPanel.add(reloadWarning, gbc);
+
 		}
 
-		//Reload Entities
+		//Editing Target
 		{
 			gbc.gridy++;
-
-			gbc.gridx = 0;
-			JButton clearCacheButton = new JButton();
-			clearCacheButton.setText("Clear Region Cache");
-			clearCacheButton.setHorizontalAlignment(SwingConstants.CENTER);
-			clearCacheButton.setFocusable(false);
-
-			clearCacheButton.addActionListener(e ->
-			{
-				CitizensPlugin.reloadCitizens(plugin);
-			});
-
-			layoutPanel.add(reloadButton, gbc);
+			editingTargetLabel = new JLabel();
+			editingTargetLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			editingTargetLabel.setForeground(Color.orange);
+			editingTargetLabel.setVisible(false);
+			layoutPanel.add(editingTargetLabel, gbc);
 		}
 
 		//Selected Position Label
@@ -227,6 +271,7 @@ class CitizenPanel extends PluginPanel {
 		{
 			gbc.gridy++;
 
+
 			gbc.gridx = 0;
 			orientationField = createLabeledComponent(new JComboBox<>(CardinalDirection.values()), "Base Orientation", layoutPanel, gbc);
 			orientationField.setSelectedItem(CardinalDirection.South);
@@ -236,20 +281,57 @@ class CitizenPanel extends PluginPanel {
 		//Animations
 		{
 			gbc.gridy++;
+			gbc.gridwidth = 2;
+
+			gbc.insets = new Insets(15, 0, 0, 2);
+			manualFieldsToggle = new JCheckBox("Manual Animation IDs");
+			manualFieldsToggle.setFont(FontManager.getRunescapeSmallFont());
+			manualFieldsToggle.setHorizontalAlignment(SwingConstants.RIGHT);
+			layoutPanel.add(manualFieldsToggle, gbc);
+
+			manualFieldsToggle.addItemListener(e -> {
+				if (e.getStateChange() == ItemEvent.SELECTED || e.getStateChange() == ItemEvent.DESELECTED) {
+					boolean checked = manualFieldsToggle.isSelected();
+
+					animIdIdleSelect.getParent().setVisible(!checked);
+					if (entityTypeSelection.getSelectedItem() != EntityType.Scenery) {
+						animIdMoveSelect.getParent().setVisible(!checked);
+					}
+
+					manualAnimIdIdleSelect.getParent().setVisible(checked);
+					if (entityTypeSelection.getSelectedItem() != EntityType.Scenery) {
+						manualAnimIdMoveSelect.getParent().setVisible(checked);
+					}
+				}
+			});
 
 			AnimationID[] animIds = AnimationID.values();
 
+			gbc.gridy++;
 			gbc.gridx = 0;
 			gbc.gridwidth = 2;  //Set grid with to 1 so the next element gets placed next to this one
+			gbc.insets = new Insets(0, 0, 7, 2);
 			animIdIdleSelect = createLabeledComponent(new JComboBox<>(animIds), "Idle Animation", layoutPanel, gbc);
 			animIdIdleSelect.setSelectedItem(AnimationID.HumanIdle);
 			animIdIdleSelect.setFocusable(false);
 
+			gbc.gridy++;
 			gbc.gridwidth = 2;
 			animIdMoveSelect = createLabeledComponent(new JComboBox<>(animIds), "Move Animation", layoutPanel, gbc);
 			animIdMoveSelect.setSelectedItem(AnimationID.HumanWalk);
 			animIdMoveSelect.setFocusable(false);
-			gbc.gridwidth = GridBagConstraints.REMAINDER;
+
+			gbc.gridy++;
+			gbc.gridwidth = 2;
+			manualAnimIdIdleSelect = createLabeledComponent(new JTextField(), "Idle Animation", layoutPanel, gbc);
+			manualAnimIdIdleSelect.setText("Not Yet Implemented");
+			manualAnimIdIdleSelect.getParent().setVisible(false);
+
+			gbc.gridy++;
+			gbc.gridwidth = 2;
+			manualAnimIdMoveSelect = createLabeledComponent(new JTextField(), "Move Animation", layoutPanel, gbc);
+			manualAnimIdMoveSelect.setText("Not Yet Implemented");
+			manualAnimIdMoveSelect.getParent().setVisible(false);
 		}
 
 		//Models
@@ -330,7 +412,7 @@ class CitizenPanel extends PluginPanel {
 			createLabeledMultiComponent("Wander Region", layoutPanel, gbc, selectWanderBL, selectWanderTR);
 		}
 
-		//Spawn Button
+		//Spawn/Save Button
 		{
 			gbc.gridy++;
 			gbc.gridx = 0;
@@ -339,18 +421,57 @@ class CitizenPanel extends PluginPanel {
 			spawnButton.setFocusable(false);
 			spawnButton.addActionListener(e ->
 			{
-
 				if (entityTypeSelection.getSelectedItem() == EntityType.Scenery) {
 					SceneryInfo info = buildSceneryInfo();
-					CitizenRegion.spawnScenery(info);
+					Scenery scenery = CitizenRegion.spawnScenery(info);
+					selectedEntity = scenery;
 				} else {
 					CitizenInfo info = buildCitizenInfo();
-					CitizenRegion.spawnCitizen(info);
+					Citizen citizen = CitizenRegion.spawnCitizen(info);
+					selectedEntity = citizen;
 				}
 				selectedPosition = null;
 				update();
 			});
 			layoutPanel.add(spawnButton, gbc);
+
+			gbc.gridy++;
+			gbc.gridx = 0;
+			updateButton = new JButton();
+			updateButton.setText("Update Entity");
+			updateButton.setFocusable(false);
+			updateButton.addActionListener(e ->
+			{
+				CitizenInfo info = buildCitizenInfo();
+				if (selectedEntity != null) {
+					info.uuid = selectedEntity.uuid;
+					CitizenRegion.saveEntity(info);
+				}
+
+				update();
+			});
+			layoutPanel.add(updateButton, gbc);
+		}
+
+		//Delete Button
+		{
+			gbc.gridy++;
+			gbc.gridx = 0;
+			deleteButton = new JButton();
+			deleteButton.setText("Delete Entity");
+			deleteButton.setFocusable(false);
+			deleteButton.setVisible(false);
+			deleteButton.setBackground(new Color(135, 58, 58));
+			deleteButton.addActionListener(e ->
+			{
+				if (selectedEntity instanceof Citizen) {
+					CitizenRegion.deleteEntity((Citizen) selectedEntity);
+				} else {
+					CitizenRegion.deleteEntity((Scenery) selectedEntity);
+				}
+				selectedEntity.despawn();
+			});
+			layoutPanel.add(deleteButton, gbc);
 		}
 
 		//Last ROW
@@ -532,22 +653,62 @@ class CitizenPanel extends PluginPanel {
 
 		EntityType type = (EntityType) entityTypeSelection.getSelectedItem();
 
+		boolean checked = manualFieldsToggle.isSelected();
 		//Turn off irrelevant components
 		switch (type) {
 			//We get the parents because they are each in individual containers with their labels
-			case ScriptedCitizen:
 			case StationaryCitizen:
+			case ScriptedCitizen:
 				selectWanderTR.getParent().setVisible(false);
 				selectWanderBL.getParent().setVisible(false);
+
+
+				animIdIdleSelect.getParent().setVisible(!checked);
+				animIdMoveSelect.getParent().setVisible(!checked);
+				manualAnimIdIdleSelect.getParent().setVisible(checked);
+				manualAnimIdMoveSelect.getParent().setVisible(checked);
 				break;
+
 			case Scenery:
 				entityNameField.getParent().setVisible(false);
 				examineTextField.getParent().setVisible(false);
 				animIdMoveSelect.getParent().setVisible(false);
+				manualAnimIdMoveSelect.getParent().setVisible(false);
+				animIdIdleSelect.getParent().setVisible(!checked);
+				manualAnimIdIdleSelect.getParent().setVisible(checked);
 				remarksField.getParent().setVisible(false);
 				selectWanderTR.getParent().setVisible(false);
 				selectWanderBL.getParent().setVisible(false);
 				break;
+		}
+	}
+
+	public void setSelectedEntity(Entity e) {
+		if (selectedEntity == e) {
+			selectedEntity = null;
+		} else {
+			selectedEntity = e;
+		}
+
+		entityTypeSelection.setSelectedItem(e.entityType);
+		orientationField.setSelectedItem(CardinalDirection.fromInteger(e.baseOrientation));
+		animIdIdleSelect.setSelectedItem(e.idleAnimationId);
+		modelIdsField.setText(e.getModelIDsString());
+		recolorFindField.setText(e.getRecolorFindString());
+		recolorReplaceField.setText(e.getRecolorReplaceString());
+
+		if (e instanceof Citizen) {
+			Citizen c = (Citizen) e;
+			entityNameField.setText(c.name);
+			examineTextField.setText(c.examine);
+			animIdMoveSelect.setSelectedItem(c.movingAnimationId);
+			remarksField.setText(String.join(",", c.remarks));
+		}
+
+		if (e instanceof WanderingCitizen) {
+			WanderingCitizen w = (WanderingCitizen) e;
+			wanderRegionBL = w.wanderRegionBL;
+			wanderRegionTR = w.wanderRegionTR;
 		}
 	}
 

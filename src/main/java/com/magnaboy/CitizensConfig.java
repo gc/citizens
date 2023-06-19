@@ -14,4 +14,13 @@ public interface CitizensConfig extends Config {
 	default boolean autoStartQuests() {
 		return true;
 	}
+
+	@ConfigItem(
+		keyName = "showOverlay",
+		name = "Show Overlay",
+		description = "Toggles the overlay showing citizen tiles and wander regions"
+	)
+	default boolean showOverlay() {
+		return true;
+	}
 }
