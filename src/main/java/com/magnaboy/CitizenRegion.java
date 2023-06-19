@@ -182,9 +182,7 @@ public class CitizenRegion {
 		dirtyRegions.clear();
 	}
 
-	//DEV ONLY
-	//Spawns citizens from the editor panel
-	public static Citizen spawnCitizen(CitizenInfo info) {
+	public static Citizen spawnCitizenFromPanel(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
 		CitizenRegion region = regionCache.get(info.regionId);
 		region.citizens.put(info.uuid, citizen);

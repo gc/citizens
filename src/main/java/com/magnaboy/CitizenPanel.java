@@ -423,7 +423,7 @@ class CitizenPanel extends PluginPanel {
 					selectedEntity = scenery;
 				} else {
 					CitizenInfo info = buildCitizenInfo();
-					Citizen citizen = CitizenRegion.spawnCitizen(info);
+					Citizen citizen = CitizenRegion.spawnCitizenFromPanel(info);
 					selectedEntity = citizen;
 				}
 				selectedPosition = null;
