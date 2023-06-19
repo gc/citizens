@@ -153,17 +153,7 @@ public class CitizensPlugin extends Plugin {
 	@Override
 	protected void shutDown() {
 		despawnAll();
-		overlayManager.remove(citizensOverlay);
-		CitizenRegion.cleanUp();
-		// TODO: make a Citizenpanel.cleanup()
-		CitizenPanel.selectedPosition = null;
-		CitizenPanel.selectedEntity = null;
-		entityCollection.clear();
-		citizens.clear();
-		scenery.clear();
-		if (IS_DEVELOPMENT) {
-			panel.cleanup();
-		}
+		cleanupAll();
 	}
 
 	protected void updateAll() {
@@ -298,6 +288,7 @@ public class CitizensPlugin extends Plugin {
 			}
 		}
 		if (IS_DEVELOPMENT) {
+			//Tile Selection
 			final Tile selectedSceneTile = client.getSelectedSceneTile();
 			final boolean same = CitizenPanel.selectedPosition != null && Util.samePosition(CitizenPanel.selectedPosition, selectedSceneTile.getWorldLocation());
 			final String action = same ? "Deselect" : "Select";
@@ -314,6 +305,7 @@ public class CitizensPlugin extends Plugin {
 					}
 					panel.update();
 				});
+			//Entity Deselect (from anywhere)
 			if (CitizenPanel.selectedEntity != null && !clickedCitizen) {
 				String name = "Scenery Object";
 				if (CitizenPanel.selectedEntity instanceof Citizen) {
@@ -391,12 +383,8 @@ public class CitizensPlugin extends Plugin {
 
 	public static void reloadCitizens(CitizensPlugin plugin) {
 		Util.log("Reloading Citizens");
-		// Just clearing the hashmap should trigger a complete reload on the next 'CheckRegions()' call
 		plugin.despawnAll();
-		plugin.entityCollection.clear();
-		plugin.citizens.clear();
-		plugin.scenery.clear();
-		activeRegions.clear();
+		plugin.cleanup();
 		CitizenRegion.clearDirtyRegions();
 		try {
 			plugin.checkRegions();
@@ -404,6 +392,38 @@ public class CitizensPlugin extends Plugin {
 			throw new RuntimeException(e);
 		}
 		Util.log("Reloaded Citizens");
+	}
+
+	public void despawnEntity(Entity e)
+	{
+		if(e instanceof Citizen) {
+			citizens.remove((Citizen) e);
+		}
+		if(e instanceof Scenery) {
+			scenery.remove((Scenery) e);
+		}
+		e.despawn();
+	}
+
+	private void cleanup()
+	{
+		entityCollection.clear();
+		citizens.clear();
+		scenery.clear();
+		activeRegions.clear();
+	}
+
+	private void cleanupAll()
+	{
+		overlayManager.remove(citizensOverlay);
+		entityCollection.clear();
+		citizens.clear();
+		scenery.clear();
+		activeRegions.clear();
+		CitizenRegion.cleanUp();
+		if (IS_DEVELOPMENT) {
+			panel.cleanup();
+		}
 	}
 }
 

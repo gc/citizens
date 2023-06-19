@@ -465,7 +465,8 @@ class CitizenPanel extends PluginPanel {
 				} else {
 					CitizenRegion.deleteEntity((Scenery) selectedEntity);
 				}
-				selectedEntity.despawn();
+				plugin.despawnEntity(selectedEntity);
+
 			});
 			layoutPanel.add(deleteButton, gbc);
 		}
@@ -712,5 +713,6 @@ class CitizenPanel extends PluginPanel {
 
 	public void cleanup() {
 		selectedPosition = null;
+		selectedEntity = null;
 	}
 }

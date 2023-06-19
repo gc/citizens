@@ -254,7 +254,6 @@ public class CitizenRegion {
 			.filter(c -> c.uuid == citizen.uuid)
 			.findFirst()
 			.orElse(null);
-		plugin.citizens.remove(citizen);
 		region.citizenRoster.remove(info);
 		dirtyRegion(region);
 	}
@@ -265,7 +264,6 @@ public class CitizenRegion {
 			.filter(c -> c.uuid == scenery.uuid)
 			.findFirst()
 			.orElse(null);
-		plugin.scenery.remove(scenery);
 		region.sceneryRoster.remove(info);
 		dirtyRegion(region);
 	}

@@ -81,13 +81,39 @@ public class CitizensOverlay extends Overlay {
 		}
 	}
 
+	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, Color color)
+	{
+		WorldArea boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
+		highlightRegion(graphics, boundingBox, color);
+	}
+
+	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, Color color)
+	{
+		int x = boundingBox.getX();
+		int y = boundingBox.getY();
+		for (int i = y; i <= y + boundingBox.getHeight(); i++) {
+			for (int t = 0; t <= boundingBox.getWidth(); t++) {
+				highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
+			}
+		}
+	}
+
 	@Override
 	public Dimension render(Graphics2D graphics) {
 
 		if (CitizenPanel.selectedPosition != null) {
 			Color selectedColor = new Color(0, 255, 255, 200);
 			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
-			renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+			if (plugin.getConfig().showOverlay()) {
+				renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+			}
+		}
+
+		WorldPoint bl = plugin.panel.wanderRegionBL;
+		WorldPoint tr = plugin.panel.wanderRegionTR;
+		if(bl != null && tr != null)
+		{
+			highlightRegion(graphics,bl, tr, new Color(0,255,255,20));
 		}
 
 		if (CitizenPanel.selectedEntity != null) {
@@ -128,14 +154,8 @@ public class CitizensOverlay extends Overlay {
 			// For wandering citizens, highlight their wandering area.
 			if (citizen instanceof WanderingCitizen) {
 				WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
-				int x = boundingBox.getX();
-				int y = boundingBox.getY();
 				Color color = new Color(0, 0, 255, 20);
-				for (int i = y; i <= y + boundingBox.getHeight(); i++) {
-					for (int t = 0; t < boundingBox.getWidth(); t++) {
-						highlightTile(graphics, new WorldPoint(x + t, i, 0), color);
-					}
-				}
+				highlightRegion(graphics, boundingBox, color);
 			}
 
 			// If the citizen has a walking target, mark it.
