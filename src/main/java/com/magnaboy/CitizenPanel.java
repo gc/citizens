@@ -419,7 +419,7 @@ class CitizenPanel extends PluginPanel {
 			{
 				if (entityTypeSelection.getSelectedItem() == EntityType.Scenery) {
 					SceneryInfo info = buildSceneryInfo();
-					Scenery scenery = CitizenRegion.spawnScenery(info);
+					Scenery scenery = CitizenRegion.spawnSceneryFromPanel(info);
 					selectedEntity = scenery;
 				} else {
 					CitizenInfo info = buildCitizenInfo();

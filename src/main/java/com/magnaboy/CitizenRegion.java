@@ -194,7 +194,7 @@ public class CitizenRegion {
 		return citizen;
 	}
 
-	public static Scenery spawnScenery(SceneryInfo info) {
+	public static Scenery spawnSceneryFromPanel(SceneryInfo info) {
 		Scenery scenery = loadScenery(plugin, info);
 		CitizenRegion region = regionCache.get(info.regionId);
 		region.scenery.put(info.uuid, scenery);
