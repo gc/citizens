@@ -43,6 +43,8 @@ public enum AnimationID {
 	DwarfMining(99),
 	DwarfIdle(101),
 
+	GoblinPull(3387),
+
 	// ???
 	FrontalGrab(897),
 	ChestRub(190);

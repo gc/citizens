@@ -1,0 +1,36 @@
+{
+    "version": 0.8,
+    "regionId": 12697,
+    "citizenRoster": [
+        {
+            "name": "Goblin",
+            "examineText": "A desperate goblin.",
+            "remarks": [
+                "Arghh!",
+                "All mine!",
+                "Let me in!!"
+            ],
+            "idleAnimation": "GoblinPull",
+            "uuid": "05f77cb7-5101-4878-bbb9-e8e441417f85",
+            "regionId": 12697,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3191,
+                "y": 9825,
+                "plane": 0
+            },
+            "modelIds": [
+                24456,
+                24484,
+                24433,
+                24476,
+                24443,
+                24450
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": []
+        }
+    ],
+    "sceneryRoster": []
+}
