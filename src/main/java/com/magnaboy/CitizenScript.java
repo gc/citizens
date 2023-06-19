@@ -37,7 +37,7 @@ public class CitizenScript {
 
 	public CitizenScript walkTo(int x, int y) {
 		actions.add(() -> {
-			WorldPoint wp = new WorldPoint(x, y, citizen.plane);
+			WorldPoint wp = new WorldPoint(x, y, citizen.getPlane());
 			citizen.moveTo(wp);
 			scheduleNextActionWhenArrived(wp, 500);
 		});

@@ -48,7 +48,7 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 		do {
 			final int x = getRandom(this.boundingBox.getX(), this.boundingBox.getX() + this.boundingBox.getWidth());
 			final int y = getRandom(this.boundingBox.getY(), this.boundingBox.getY() + this.boundingBox.getHeight());
-			randomPoint = new WorldPoint(x, y, plane);
+			randomPoint = new WorldPoint(x, y, getPlane());
 		} while (randomPoint.equals(worldLocation));
 
 		return randomPoint;
