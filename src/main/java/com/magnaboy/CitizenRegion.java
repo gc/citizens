@@ -151,7 +151,8 @@ public class CitizenRegion {
 
 	private static StationaryCitizen loadStationaryCitizen(CitizensPlugin plugin, CitizenInfo info) {
 		info.entityType = EntityType.StationaryCitizen;
-		return new StationaryCitizen(plugin);
+		return new StationaryCitizen(plugin)
+			.setWorldLocation(info.worldLocation);
 	}
 
 	private static WanderingCitizen loadWanderingCitizen(CitizensPlugin plugin, CitizenInfo info) {
@@ -159,12 +160,13 @@ public class CitizenRegion {
 		return new WanderingCitizen(plugin)
 			.setWanderRegionBL(info.wanderBoxBL)
 			.setWanderRegionTR(info.wanderBoxTR)
+			.setWorldLocation(info.worldLocation)
 			.setBoundingBox(info.wanderBoxBL, info.wanderBoxTR);
 	}
 
 	private static ScriptedCitizen loadScriptedCitizen(CitizensPlugin plugin, CitizenInfo info) {
 		info.entityType = EntityType.StationaryCitizen;
-		return new ScriptedCitizen(plugin);
+		return new ScriptedCitizen(plugin).setWorldLocation(info.worldLocation);
 	}
 
 	public static Scenery loadScenery(CitizensPlugin plugin, SceneryInfo info) {
