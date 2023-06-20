@@ -761,7 +761,8 @@
             ],
             "baseOrientation": 1536,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "FireIdle"
         },
         {
             "uuid": "7626c213-78d5-486e-b207-ae3d345aac36",
