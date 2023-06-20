@@ -1,10 +1,11 @@
 {
+    "version": 0.8,
+    "regionId": 12852,
     "citizenRoster": [
         {
             "name": "Child",
             "examineText": "A child.",
             "remarks": [],
-            "idleAnimation": "ChildIdle",
             "moveAnimation": "ChildWalk",
             "uuid": "6310e2d1-493c-45e2-aa06-6396d35b6fb1",
             "regionId": 12852,
@@ -28,13 +29,13 @@
                 51088,
                 4,
                 5027
-            ]
+            ],
+            "idleAnimation": "ChildIdle"
         },
         {
             "name": "Mary",
             "examineText": "She has her hands full with those kids.",
             "remarks": [],
-            "idleAnimation": "HumanIdle",
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
                 "x": 3218,
@@ -74,7 +75,8 @@
                 5532,
                 8099,
                 4550
-            ]
+            ],
+            "idleAnimation": "HumanIdle"
         },
         {
             "name": "Child",
@@ -82,7 +84,6 @@
             "remarks": [
                 "TODO"
             ],
-            "idleAnimation": "ChildPlay1",
             "moveAnimation": "HumanWalk",
             "uuid": "bc8fc6f7-6312-43ab-8742-b163b3c2eec7",
             "regionId": 12852,
@@ -110,7 +111,8 @@
                 62637,
                 9152,
                 2983
-            ]
+            ],
+            "idleAnimation": "ChildPlay1"
         },
         {
             "name": "Master Thief",
@@ -118,7 +120,6 @@
             "remarks": [
                 "TODO"
             ],
-            "idleAnimation": "HumanIdle",
             "moveAnimation": "HumanWalk",
             "uuid": "b7b58305-0904-41ec-b2e8-5ce2ba9b6a19",
             "regionId": 12852,
@@ -147,7 +148,8 @@
             "modelRecolorReplace": [
                 47399,
                 6930
-            ]
+            ],
+            "idleAnimation": "HumanIdle"
         },
         {
             "name": "Thief",
@@ -155,7 +157,6 @@
             "remarks": [
                 "TODO"
             ],
-            "idleAnimation": "Sitting",
             "moveAnimation": "HumanWalk",
             "uuid": "025d8c03-09f9-491d-9c7f-5b98ad9e2035",
             "regionId": 12852,
@@ -183,7 +184,8 @@
             "modelRecolorReplace": [
                 38156,
                 38160
-            ]
+            ],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Child",
@@ -191,7 +193,6 @@
             "remarks": [
                 "TODO"
             ],
-            "idleAnimation": "ChildPlay2",
             "moveAnimation": "HumanWalk",
             "uuid": "a7a69ec0-68cc-457e-98b9-68b4ef23daad",
             "regionId": 12852,
@@ -209,7 +210,8 @@
             ],
             "baseOrientation": 512,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "ChildPlay2"
         },
         {
             "name": "Thief",
@@ -217,7 +219,6 @@
             "remarks": [
                 "TODO"
             ],
-            "idleAnimation": "Sitting",
             "moveAnimation": "HumanWalk",
             "uuid": "cdbcb720-96a2-44db-b176-fc9a41990a10",
             "regionId": 12852,
@@ -247,6 +248,43 @@
             "modelRecolorReplace": [
                 3486,
                 8728
+            ],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Chicken",
+            "examineText": "Yep. Definitely a chicken.",
+            "remarks": [],
+            "moveAnimation": "ChickenWalk",
+            "wanderBoxBL": {
+                "x": 3227,
+                "y": 3385,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3229,
+                "y": 3388,
+                "plane": 0
+            },
+            "uuid": "f6be496a-3336-48bf-8960-1ea226642c6b",
+            "regionId": 12852,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3229,
+                "y": 3388,
+                "plane": 0
+            },
+            "modelIds": [
+                23905
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "ChickenIdle",
+            "scale": [
+                -0.7,
+                -0.7,
+                -0.7
             ]
         }
     ],
@@ -382,8 +420,33 @@
             "baseOrientation": 1536,
             "modelRecolorFind": [],
             "modelRecolorReplace": []
+        },
+        {
+            "uuid": "61c03c1a-8997-4b95-bd30-42f10db76be1",
+            "regionId": 12852,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3225,
+                "y": 3384,
+                "plane": 0
+            },
+            "modelIds": [
+                36449
+            ],
+            "baseOrientation": 1536,
+            "scale": [
+                -0.8,
+                -0.8,
+                -0.8
+            ],
+            "translate": [
+                -0.5,
+                0.0,
+                0.0
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
         }
-    ],
-    "regionId": 12852,
-    "version": 0.8
+    ]
 }

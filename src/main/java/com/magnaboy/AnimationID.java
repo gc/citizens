@@ -44,6 +44,9 @@ public enum AnimationID {
 	DwarfMining2(4021),
 	DwarfIdle(101),
 
+	ChickenIdle(5386),
+	ChickenWalk(5385),
+
 	GoblinPull(3387),
 
 	PigeonIdle(4133),
