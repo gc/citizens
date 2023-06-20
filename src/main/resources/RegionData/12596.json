@@ -29,5 +29,44 @@
             "idleAnimation": "DwarfMining2"
         }
     ],
-    "sceneryRoster": []
+    "sceneryRoster": [
+        {
+            "uuid": "4baf837d-fc68-42b1-b215-02308fd3187d",
+            "regionId": 12596,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3196,
+                "y": 3387,
+                "plane": 0
+            },
+            "modelIds": [
+                1239
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "258d7139-6381-41a0-91f5-ba123a459fce",
+            "regionId": 12596,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3197,
+                "y": 3389,
+                "plane": 0
+            },
+            "modelIds": [
+                20040
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                44859
+            ],
+            "modelRecolorReplace": [
+                8720
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ]
 }
