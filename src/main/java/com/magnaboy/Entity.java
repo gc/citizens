@@ -70,11 +70,6 @@ public class Entity<T extends Entity<T>> {
 		plugin.panel.update();
 	}
 
-	public T setScale(float scaleX, float scaleY, float scaleZ) {
-		this.scale = new float[]{scaleX, scaleY, scaleZ};
-		return (T) this;
-	}
-
 	public T setScale(float[] scale) {
 		this.scale = scale;
 		return (T) this;
