@@ -856,6 +856,28 @@
             ],
             "modelRecolorFind": [],
             "modelRecolorReplace": []
+        },
+        {
+            "uuid": "70462971-8d11-4be8-9fc4-e1448c433bc8",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3212,
+                "y": 3426,
+                "plane": 0
+            },
+            "modelIds": [
+                25858
+            ],
+            "baseOrientation": 256,
+            "translate": [
+                0.0,
+                0.8,
+                0.5
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "PigeonIdle"
         }
     ]
 }

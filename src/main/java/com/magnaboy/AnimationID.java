@@ -45,6 +45,8 @@ public enum AnimationID {
 
 	GoblinPull(3387),
 
+	PigeonIdle(4133),
+
 	// ???
 	FrontalGrab(897),
 	ChestRub(190);
