@@ -1,8 +1,6 @@
 package com.magnaboy;
 
 import static com.magnaboy.Util.getRandomItem;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.annotation.Nullable;
@@ -18,7 +16,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String activeRemark = null;
 	private int remarkTimer = 0;
 	public int speed = 4;
-	protected final List<ExtraObject> extraObjects = new ArrayList<>();
 	public AnimationID[] randomAnimations;
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
 
@@ -55,12 +52,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		return (T) this;
 	}
 
-	public T addExtraObject(ExtraObject obj) {
-		obj.setCitizen(this);
-		this.extraObjects.add(obj);
-		return (T) this;
-	}
-
 	public T setRandomAnimations(AnimationID[] randomAnimations) {
 		this.randomAnimations = randomAnimations;
 		return (T) this;
@@ -89,10 +80,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
 		}
 
-		for (ExtraObject obj : extraObjects) {
-			obj.spawn();
-		}
-
 		return didSpawn;
 	}
 
@@ -101,9 +88,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		this.activeRemark = null;
 		this.remarkTimer = 0;
 		boolean didDespawn = super.despawn();
-		for (ExtraObject obj : extraObjects) {
-			obj.despawn();
-		}
+
 		if (didDespawn) {
 			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
 		}
