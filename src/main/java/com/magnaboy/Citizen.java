@@ -133,14 +133,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 	public void onClientTick() {
 		movementTick();
-
-		// Update if LP/WP are out of sync.
-		WorldPoint wpFromLocal = WorldPoint.fromLocal(plugin.client, getLocalLocation());
-		int distBetweenLocations = wpFromLocal.distanceTo(worldLocation);
-		if (distBetweenLocations >= 1) {
-			Util.log("Updating " + name + " because they are " + distBetweenLocations + "x tiles out of sync.");
-			update();
-		}
 	}
 
 	public void movementTick() {
