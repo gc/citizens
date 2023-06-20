@@ -1,0 +1,33 @@
+{
+    "version": 0.8,
+    "regionId": 12596,
+    "citizenRoster": [
+        {
+            "name": "Dwarf miner",
+            "examineText": "He is a dwarf and he\u0027s mining some clay.",
+            "remarks": [],
+            "uuid": "f49ddd7c-6122-4d88-8267-91f9bd5b229e",
+            "regionId": 12596,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3184,
+                "y": 3377,
+                "plane": 0
+            },
+            "modelIds": [
+                2973,
+                2986,
+                7061,
+                2978,
+                2990,
+                2981,
+                2985
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "DwarfMining2"
+        }
+    ],
+    "sceneryRoster": []
+}

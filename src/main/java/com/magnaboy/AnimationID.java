@@ -41,6 +41,7 @@ public enum AnimationID {
 	DwarfLean(6206),
 	DwarfWalk(98),
 	DwarfMining(99),
+	DwarfMining2(4021),
 	DwarfIdle(101),
 
 	GoblinPull(3387),
