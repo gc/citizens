@@ -543,7 +543,7 @@ class CitizenPanel extends PluginPanel {
 			};
 		}
 		if (fieldEmpty(translateFieldX) && fieldEmpty(translateFieldY) && fieldEmpty(translateFieldZ)) {
-			info.scale = null;
+			info.translate = null;
 		} else {
 			info.translate = new float[]{
 				parseOrDefault(translateFieldX, 0),
