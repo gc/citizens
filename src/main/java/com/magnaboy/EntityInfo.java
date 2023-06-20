@@ -14,4 +14,5 @@ public class EntityInfo {
 	public float[] translate;
 	public int[] modelRecolorFind = {};
 	public int[] modelRecolorReplace = {};
+	public AnimationID idleAnimation;
 }

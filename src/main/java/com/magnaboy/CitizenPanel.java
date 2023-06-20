@@ -570,6 +570,7 @@ class CitizenPanel extends PluginPanel {
 		info.modelRecolorFind = csvToIntArray(recolorFindField.getText());
 		info.modelRecolorReplace = csvToIntArray(recolorReplaceField.getText());
 		info.baseOrientation = ((CardinalDirection) orientationField.getSelectedItem()).getAngle();
+		info.idleAnimation = (AnimationID) animIdIdleSelect.getSelectedItem();
 
 		if (fieldEmpty(scaleFieldX) && fieldEmpty(scaleFieldY) && fieldEmpty(scaleFieldZ)) {
 			info.scale = null;

@@ -172,7 +172,7 @@ public class CitizenRegion {
 	public static Scenery loadScenery(CitizensPlugin plugin, SceneryInfo info) {
 		return new Scenery(plugin).setModelIDs(info.modelIds)
 			.setModelRecolors(info.modelRecolorFind, info.modelRecolorReplace)
-			//.setIdleAnimation(info.idleAnimation)     //Will Scenery objects have this?
+			.setIdleAnimation(info.idleAnimation)
 			.setScale(info.scale)
 			.setTranslate(info.translate)
 			.setBaseOrientation(info.baseOrientation)
