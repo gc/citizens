@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -49,39 +47,43 @@ import net.runelite.client.util.ImageUtil;
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
 public class CitizensPlugin extends Plugin {
+	public static HashMap<Integer, CitizenRegion> activeRegions;
+	public static boolean shuttingDown;
 	@Inject
 	public Client client;
-
+	@Inject
+	public ClientThread clientThread;
+	public CitizenPanel panel;
+	public AnimationID[] randomIdleActionAnimationIds = {AnimationID.Flex};
+	public List<Animation> animationPoses = new ArrayList<Animation>();
+	@Inject
+	@Named("developerMode")
+	public boolean IS_DEVELOPMENT;
+	public boolean entitiesAreReady = false;
+	@Inject
+	ChatMessageManager chatMessageManager;
 	@Inject
 	@Getter
 	private CitizensConfig config;
+	@Inject
+	private OverlayManager overlayManager;
+	@Inject
+	private CitizensOverlay citizensOverlay;
+	@Inject
+	private ClientToolbar clientToolbar;
+
+	public static void reloadCitizens(CitizensPlugin plugin) {
+		for (CitizenRegion region : activeRegions.values()) {
+			region.despawnRegion();
+		}
+		CitizenRegion.cleanUp();
+		plugin.cleanup();
+	}
 
 	@Provides
 	CitizensConfig getConfig(ConfigManager configManager) {
 		return configManager.getConfig(CitizensConfig.class);
 	}
-
-	@Inject
-	private OverlayManager overlayManager;
-
-	@Inject
-	ChatMessageManager chatMessageManager;
-
-	@Inject
-	private CitizensOverlay citizensOverlay;
-
-	@Inject
-	public ClientThread clientThread;
-
-	public CitizenPanel panel;
-	public AnimationID[] randomIdleActionAnimationIds = {AnimationID.Flex};
-	public List<Animation> animationPoses = new ArrayList<Animation>();
-	public static HashMap<Integer, CitizenRegion> activeRegions;
-
-	public static boolean shuttingDown;
-	@Inject
-	@Named("developerMode")
-	public boolean IS_DEVELOPMENT;
 
 	public Animation getAnimation(AnimationID animID) {
 		Animation anim = animationPoses.stream().filter(c -> c.getId() == animID.getId()).findFirst().orElse(null);
@@ -91,14 +93,9 @@ public class CitizensPlugin extends Plugin {
 		return anim;
 	}
 
-	public boolean entitiesAreReady = false;
-
 	public boolean isReady() {
 		return entitiesAreReady && client.getLocalPlayer() != null;
 	}
-
-	@Inject
-	private ClientToolbar clientToolbar;
 
 	@Override
 	protected void startUp() {
@@ -131,6 +128,11 @@ public class CitizensPlugin extends Plugin {
 		}
 	}
 
+	@Override
+	protected void shutDown() {
+		cleanupAll();
+	}
+
 	public void loadAnimation(AnimationID animId) {
 		clientThread.invoke(() -> {
 			Animation anim = client.loadAnimation(animId.getId());
@@ -141,15 +143,9 @@ public class CitizensPlugin extends Plugin {
 		});
 	}
 
-	@Override
-	protected void shutDown() {
-		cleanupAll();
-	}
-
 	protected void updateAll() {
 		clientThread.invokeLater(() -> {
-			for(CitizenRegion r : activeRegions.values())
-			{
+			for (CitizenRegion r : activeRegions.values()) {
 				r.updateEntities();
 			}
 		});
@@ -190,14 +186,14 @@ public class CitizensPlugin extends Plugin {
 				}
 
 				if (random == 7 || random == 8 || random == 9) {
-					if(entity instanceof Citizen) {
-						((Citizen)entity).triggerIdleAnimation();
+					if (entity instanceof Citizen) {
+						((Citizen) entity).triggerIdleAnimation();
 					}
 				}
 
 				if (random == 10) {
-					if(entity instanceof Citizen) {
-						((Citizen)entity).sayRandomRemark();
+					if (entity instanceof Citizen) {
+						((Citizen) entity).sayRandomRemark();
 					}
 				}
 			}
@@ -213,8 +209,8 @@ public class CitizensPlugin extends Plugin {
 	public void onClientTick(ClientTick ignored) {
 		for (Entity entity : CitizenRegion.getAllEntities()) {
 			if (entity.isActive()) {
-				if(entity instanceof Citizen) {
-					((Citizen)entity).onClientTick();
+				if (entity instanceof Citizen) {
+					((Citizen) entity).onClientTick();
 				}
 			}
 		}
@@ -353,15 +349,6 @@ public class CitizensPlugin extends Plugin {
 		}
 	}
 
-	public static void reloadCitizens(CitizensPlugin plugin) {
-		for (CitizenRegion region : activeRegions.values())
-		{
-			region.despawnRegion();
-		}
-		CitizenRegion.cleanUp();
-		plugin.cleanup();
-	}
-
 	public void despawnEntity(Entity e) {
 		e.despawn();
 	}
@@ -381,7 +368,6 @@ public class CitizensPlugin extends Plugin {
 		shuttingDown = false;
 	}
 }
-
 
 
 

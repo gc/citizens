@@ -12,19 +12,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String[] remarks;
 	@Nullable
 	public String activeRemark = null;
-	private int remarkTimer = 0;
 	public int speed = 4;
 	public AnimationID[] randomAnimations;
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
-
 	@Nullable()
 	Target currentTarget;
-
-	public class Target {
-		public WorldPoint worldDestinationPosition;
-		public LocalPoint localDestinationPosition;
-		public int currentDistance;
-	}
+	private int remarkTimer = 0;
 
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);
@@ -72,15 +65,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}, 600 * 8);
 	}
 
-	public boolean spawn() {
-		boolean didSpawn = super.spawn();
-		if (didSpawn) {
-			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
-		}
-
-		return didSpawn;
-	}
-
 	public boolean despawn() {
 		this.currentTarget = null;
 		this.activeRemark = null;
@@ -91,6 +75,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
 		}
 		return didDespawn;
+	}
+
+	public boolean spawn() {
+		boolean didSpawn = super.spawn();
+		if (didSpawn) {
+			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
+		}
+
+		return didSpawn;
 	}
 
 	public void sayRandomRemark() {
@@ -192,6 +185,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
 			}
 		}
+	}
+
+	public class Target {
+		public WorldPoint worldDestinationPosition;
+		public LocalPoint localDestinationPosition;
+		public int currentDistance;
 	}
 
 

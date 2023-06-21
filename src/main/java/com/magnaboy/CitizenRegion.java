@@ -15,41 +15,29 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-///The main list of all the citizens
 public class CitizenRegion {
 
+	private static final float VALID_REGION_VERSION = 0.8f;
+	private static final HashMap<Integer, CitizenRegion> dirtyRegions = new HashMap<>();
+	private static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
+	private static final HashSet<Entity> allEntities = new HashSet<>();
+	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
+	private static CitizensPlugin plugin;
+	private final transient HashMap<UUID, Entity> entities = new HashMap<>();
 	public float version;
 	public int regionId;
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
 	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
 
-	private final transient HashMap<UUID, Entity> entities = new HashMap<>();
-	private static CitizensPlugin plugin;
-	private static final float VALID_REGION_VERSION = 0.8f;        //This is just in case we want to make any major changes to the files
-	private static final HashMap<Integer, CitizenRegion> dirtyRegions = new HashMap<>();
-	private static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
-	private static final HashSet<Entity> allEntities = new HashSet<>();
-	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
-
 	public static void init(CitizensPlugin p) {
 		plugin = p;
-	}
-
-	public void saveRegion() throws IOException {
-		try {
-			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
-			Writer wr = new BufferedWriter(new FileWriter(path.toString()));
-			GsonBuilder gb = new GsonBuilder();
-			gb.setPrettyPrinting();
-			Gson gson = gb.create();
-			gson.toJson(this, wr);
-			wr.flush();
-			wr.close();
-		} catch (IOException e) {
-			throw new IOException(e);
-		}
 	}
 
 	public static CitizenRegion loadRegion(int regionId) {
@@ -177,19 +165,7 @@ public class CitizenRegion {
 			.setRegion(info.regionId);
 	}
 
-	public void despawnRegion()
-	{
-		allEntities.removeAll(entities.values());
-		entities.values().forEach(Entity::despawn);
-	}
-
-	public void updateEntities()
-	{
-		entities.values().forEach(Entity::update);
-	}
-
-	public static HashSet<Entity> getAllEntities()
-	{
+	public static HashSet<Entity> getAllEntities() {
 		return allEntities;
 	}
 
@@ -203,8 +179,7 @@ public class CitizenRegion {
 		dirtyRegions.clear();
 	}
 
-	//DEVELOPMENT SECTION
-
+	// DEVELOPMENT SECTION
 	public static Citizen spawnCitizenFromPanel(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
 		CitizenRegion region = loadRegion(info.regionId, true);
@@ -246,15 +221,16 @@ public class CitizenRegion {
 		dirtyRegions.clear();
 	}
 
-	public static void addEntityToRegion(Entity e, EntityInfo info)
-	{
+	public static void addEntityToRegion(Entity e, EntityInfo info) {
 		CitizenRegion region = regionCache.get(e.regionId);
 		region.entities.put(e.uuid, e);
 		allEntities.add(e);
-		if(info instanceof CitizenInfo)
+		if (info instanceof CitizenInfo) {
 			region.citizenRoster.add((CitizenInfo) info);
-		if(info instanceof SceneryInfo)
+		}
+		if (info instanceof SceneryInfo) {
 			region.sceneryRoster.add((SceneryInfo) info);
+		}
 	}
 
 	private static void removeEntityFromRegion(Citizen citizen, CitizenRegion region) {
@@ -273,13 +249,14 @@ public class CitizenRegion {
 		region.sceneryRoster.remove(info);
 	}
 
-	public static void removeEntityFromRegion(Entity e)
-	{
+	public static void removeEntityFromRegion(Entity e) {
 		CitizenRegion region = regionCache.get(e.regionId);
-		if(e instanceof Citizen)
+		if (e instanceof Citizen) {
 			removeEntityFromRegion((Citizen) e, region);
-		if(e instanceof Scenery)
+		}
+		if (e instanceof Scenery) {
 			removeEntityFromRegion((Scenery) e, region);
+		}
 
 		region.entities.remove(e);
 		allEntities.remove(e);
@@ -301,5 +278,29 @@ public class CitizenRegion {
 		}
 		Util.log("Saved " + dirtyRegions.size() + " dirty regions");
 		clearDirtyRegions();
+	}
+
+	public void saveRegion() throws IOException {
+		try {
+			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
+			Writer wr = new BufferedWriter(new FileWriter(path.toString()));
+			GsonBuilder gb = new GsonBuilder();
+			gb.setPrettyPrinting();
+			Gson gson = gb.create();
+			gson.toJson(this, wr);
+			wr.flush();
+			wr.close();
+		} catch (IOException e) {
+			throw new IOException(e);
+		}
+	}
+
+	public void despawnRegion() {
+		allEntities.removeAll(entities.values());
+		entities.values().forEach(Entity::despawn);
+	}
+
+	public void updateEntities() {
+		entities.values().forEach(Entity::update);
 	}
 }

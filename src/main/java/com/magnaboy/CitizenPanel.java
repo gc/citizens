@@ -9,7 +9,14 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.UUID;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
@@ -17,10 +24,18 @@ import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
 
 class CitizenPanel extends PluginPanel {
-	private CitizensPlugin plugin;
-	private JLabel label;
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
 	public static WorldPoint selectedPosition;
+	public static Entity selectedEntity;
+	public WorldPoint wanderRegionBL;
+	public WorldPoint wanderRegionTR;
+	public JLabel editingTargetLabel;
+	public JButton updateButton;
+	public JButton deleteButton;
+	public JLabel reloadWarning;
+	public JCheckBox manualFieldsToggle;
+	private CitizensPlugin plugin;
+	private JLabel label;
 	private CitizensOverlay overlay;
 	// Editor Panel Fields
 	private HashSet<JComponent> allElements;
@@ -46,16 +61,8 @@ class CitizenPanel extends PluginPanel {
 	private JTextField translateFieldZ;
 	private JButton selectWanderBL;
 	private JButton selectWanderTR;
-	public WorldPoint wanderRegionBL;
-	public WorldPoint wanderRegionTR;
-	public JLabel editingTargetLabel;
-	public JButton updateButton;
-	public JButton deleteButton;
-	public JLabel reloadWarning;
-	public JCheckBox manualFieldsToggle;
 	private JTextField manualAnimIdIdleSelect;
 	private JTextField manualAnimIdMoveSelect;
-	public static Entity selectedEntity;
 
 	// End Editor Fields
 
@@ -79,9 +86,9 @@ class CitizenPanel extends PluginPanel {
 	}
 
 	public void update() {
-        if (!plugin.IS_DEVELOPMENT) {
-            return;
-        }
+		if (!plugin.IS_DEVELOPMENT) {
+			return;
+		}
 
 		int activeEntities = plugin.countActiveEntities();
 		int inactiveEntities = plugin.countInactiveEntities();
@@ -192,8 +199,7 @@ class CitizenPanel extends PluginPanel {
 			reloadButton.setHorizontalAlignment(SwingConstants.CENTER);
 			reloadButton.setFocusable(false);
 
-			reloadButton.addActionListener(e ->
-			{
+			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
 				CitizensPlugin.reloadCitizens(plugin);
 			});
@@ -254,8 +260,7 @@ class CitizenPanel extends PluginPanel {
 
 			entityTypeSelection = createLabeledComponent(new JComboBox<>(EntityType.values()), "Entity Type", layoutPanel, gbc);
 			entityTypeSelection.setFocusable(false);
-			entityTypeSelection.addActionListener(e ->
-			{
+			entityTypeSelection.addActionListener(e -> {
 				entityTypeChanged();
 			});
 		}
@@ -386,8 +391,7 @@ class CitizenPanel extends PluginPanel {
 			selectWanderBL = new JButton();
 			selectWanderBL.setText("Select BL");
 			selectWanderBL.setFocusable(false);
-			selectWanderBL.addActionListener(e ->
-			{
+			selectWanderBL.addActionListener(e -> {
 				wanderRegionBL = selectedPosition;
 				selectWanderBL.setText(Util.worldPointToShortCoord(selectedPosition));
 			});
@@ -395,8 +399,7 @@ class CitizenPanel extends PluginPanel {
 			selectWanderTR = new JButton();
 			selectWanderTR.setText("Select TR");
 			selectWanderTR.setFocusable(false);
-			selectWanderTR.addActionListener(e ->
-			{
+			selectWanderTR.addActionListener(e -> {
 				wanderRegionTR = selectedPosition;
 				selectWanderTR.setText(Util.worldPointToShortCoord(selectedPosition));
 			});
@@ -411,14 +414,13 @@ class CitizenPanel extends PluginPanel {
 			spawnButton = new JButton();
 			spawnButton.setText("Spawn Entity");
 			spawnButton.setFocusable(false);
-			spawnButton.addActionListener(e ->
-			{
+			spawnButton.addActionListener(e -> {
 				if (entityTypeSelection.getSelectedItem() == EntityType.Scenery) {
 					SceneryInfo info = buildSceneryInfo();
 					Scenery scenery = CitizenRegion.spawnSceneryFromPanel(info);
 					selectedEntity = scenery;
 				} else {
-                    CitizenInfo info = buildCitizenInfo(selectedPosition.getRegionID());
+					CitizenInfo info = buildCitizenInfo(selectedPosition.getRegionID());
 					Citizen citizen = CitizenRegion.spawnCitizenFromPanel(info);
 					selectedEntity = citizen;
 				}
@@ -432,46 +434,42 @@ class CitizenPanel extends PluginPanel {
 			updateButton = new JButton();
 			updateButton.setText("Update Entity");
 			updateButton.setFocusable(false);
-			updateButton.addActionListener(e ->
-			{
-                CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
-                if (selectedEntity != null) {
-                    info.uuid = selectedEntity.uuid;
-                    CitizenRegion.updateEntity(info);
-                }
+			updateButton.addActionListener(e -> {
+				CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
+				if (selectedEntity != null) {
+					info.uuid = selectedEntity.uuid;
+					CitizenRegion.updateEntity(info);
+				}
 
 				update();
 			});
 			layoutPanel.add(updateButton, gbc);
 		}
 
-        // Delete Button
-        {
-            gbc.gridy++;
-            gbc.gridx = 0;
-            deleteButton = new JButton();
-            deleteButton.setText("Delete Entity");
-            deleteButton.setFocusable(false);
-            deleteButton.setVisible(false);
-            deleteButton.setBackground(new Color(135, 58, 58));
-            deleteButton.addActionListener(e ->
-            {
-                CitizenRegion.removeEntityFromRegion(selectedEntity);
-                plugin.despawnEntity(selectedEntity);
+		// Delete Button
+		{
+			gbc.gridy++;
+			gbc.gridx = 0;
+			deleteButton = new JButton();
+			deleteButton.setText("Delete Entity");
+			deleteButton.setFocusable(false);
+			deleteButton.setVisible(false);
+			deleteButton.setBackground(new Color(135, 58, 58));
+			deleteButton.addActionListener(e -> {
+				CitizenRegion.removeEntityFromRegion(selectedEntity);
+				plugin.despawnEntity(selectedEntity);
+			});
+			layoutPanel.add(deleteButton, gbc);
+		}
 
-            });
-            layoutPanel.add(deleteButton, gbc);
-        }
-
-        // Save Changes
+		// Save Changes
 		{
 			gbc.gridy++;
 
 			saveChangesButton = new JButton();
 			saveChangesButton.setText("Save Changes");
 			saveChangesButton.setFocusable(false);
-			saveChangesButton.addActionListener(e ->
-			{
+			saveChangesButton.addActionListener(e -> {
 				CitizenRegion.saveDirtyRegions();
 			});
 
@@ -510,10 +508,10 @@ class CitizenPanel extends PluginPanel {
 		return result;
 	}
 
-    private CitizenInfo buildCitizenInfo(int regionId) {
-        CitizenInfo info = new CitizenInfo();
-        info.uuid = UUID.randomUUID();
-        info.regionId = regionId;
+	private CitizenInfo buildCitizenInfo(int regionId) {
+		CitizenInfo info = new CitizenInfo();
+		info.uuid = UUID.randomUUID();
+		info.regionId = regionId;
 		info.name = entityNameField.getText();
 		info.examineText = examineTextField.getText();
 		info.worldLocation = selectedPosition;
@@ -524,7 +522,7 @@ class CitizenPanel extends PluginPanel {
 		info.modelRecolorFind = csvToIntArray(recolorFindField.getText());
 		info.modelRecolorReplace = csvToIntArray(recolorReplaceField.getText());
 		info.baseOrientation = ((CardinalDirection) orientationField.getSelectedItem()).getAngle();
-        info.remarks = remarksField.getText().length() > 0 ? remarksField.getText().split(",", -1) : null;
+		info.remarks = remarksField.getText().length() > 0 ? remarksField.getText().split(",", -1) : null;
 
 		if (fieldEmpty(scaleFieldX) && fieldEmpty(scaleFieldY) && fieldEmpty(scaleFieldZ)) {
 			info.scale = null;
@@ -680,7 +678,7 @@ class CitizenPanel extends PluginPanel {
 			selectedEntity = null;
 		} else {
 			selectedEntity = e;
-            selectedPosition = e.getWorldLocation();
+			selectedPosition = e.getWorldLocation();
 		}
 
 		entityTypeSelection.setSelectedItem(e.entityType);
@@ -707,6 +705,6 @@ class CitizenPanel extends PluginPanel {
 
 	public void cleanup() {
 		selectedPosition = null;
-        selectedEntity = null;
+		selectedEntity = null;
 	}
 }

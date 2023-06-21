@@ -12,9 +12,9 @@ import net.runelite.api.coords.WorldPoint;
 
 public class CitizenScript {
 
-	private ScriptedCitizen citizen;
 	private final List<Runnable> actions = new ArrayList<>();
 	private final ScheduledExecutorService executorService;
+	private ScriptedCitizen citizen;
 	private Iterator<Runnable> actionIterator;
 
 	public CitizenScript() {

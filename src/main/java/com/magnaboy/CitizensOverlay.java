@@ -98,7 +98,7 @@ public class CitizensOverlay extends Overlay {
 
 	@Override
 	public Dimension render(Graphics2D graphics) {
-		if(CitizensPlugin.shuttingDown) {
+		if (CitizensPlugin.shuttingDown) {
 			return null;
 		}
 
@@ -122,11 +122,11 @@ public class CitizensOverlay extends Overlay {
 		}
 
 		for (Entity entity : CitizenRegion.getAllEntities()) {
-			if(entity == null || !(entity instanceof Citizen)) {
+			if (entity == null || !(entity instanceof Citizen)) {
 				continue;
 			}
 
-			Citizen citizen = (Citizen)entity;
+			Citizen citizen = (Citizen) entity;
 			LocalPoint localLocation = citizen.getLocalLocation();
 
 			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {

@@ -23,33 +23,111 @@ public class Entity<T extends Entity<T>> {
 	public String examine;
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
+	public float[] scale;
+	public float[] translate;
 	protected RuneLiteObject rlObject;
 	protected EntityType entityType;
 	protected Integer baseOrientation;
+	protected UUID uuid;
 	private int[] modelIDs;
 	private int[] recolorsToFind;
 	private int[] recolorsToReplace;
-	public float[] scale;
-	public float[] translate;
-
 	private SimplePolygon clickbox;
-	protected UUID uuid;
-
-	public SimplePolygon getClickbox() {
-		LocalPoint location = getLocalLocation();
-		int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
-		return calculateAABB(plugin.client,
-			rlObject.getModel(),
-			rlObject.getOrientation(),
-			location.getX(),
-			location.getY(),
-			plugin.client.getPlane(),
-			zOff);
-	}
 
 	public Entity(CitizensPlugin plugin) {
 		this.plugin = plugin;
 		this.rlObject = plugin.client.createRuneLiteObject();
+	}
+
+	static int radToJau(double a) {
+		int j = (int) Math.round(a / Perspective.UNIT);
+		return j & 2047;
+	}
+
+	protected static SimplePolygon calculateAABB(Client client, Model m, Integer jauOrient, int x, int y, int z, int zOff) {
+		if (m == null) {
+			throw new IllegalStateException("model is null");
+		}
+		if (jauOrient == null) {
+			throw new IllegalStateException("jauOrient is null");
+		}
+		AABB aabb = m.getAABB(jauOrient);
+
+		int x1 = aabb.getCenterX();
+		int y1 = aabb.getCenterZ();
+		int z1 = aabb.getCenterY() + zOff;
+
+		int ex = aabb.getExtremeX();
+		int ey = aabb.getExtremeZ();
+		int ez = aabb.getExtremeY();
+
+		int x2 = x1 + ex;
+		int y2 = y1 + ey;
+		int z2 = z1 + ez;
+
+		x1 -= ex;
+		y1 -= ey;
+		z1 -= ez;
+
+		int[] xa = new int[]{x1, x2, x1, x2, x1, x2, x1, x2};
+		int[] ya = new int[]{y1, y1, y2, y2, y1, y1, y2, y2};
+		int[] za = new int[]{z1, z1, z1, z1, z2, z2, z2, z2};
+
+		int[] x2d = new int[8];
+		int[] y2d = new int[8];
+
+		Entity.modelToCanvasCpu(client, 8, x, y, z, 0, xa, ya, za, x2d, y2d);
+
+		return Jarvis.convexHull(x2d, y2d);
+	}
+
+	private static void modelToCanvasCpu(Client client, int end, int x3dCenter, int y3dCenter, int z3dCenter, int rotate, int[] x3d, int[] y3d, int[] z3d, int[] x2d, int[] y2d) {
+		final int cameraPitch = client.getCameraPitch(), cameraYaw = client.getCameraYaw(),
+
+			pitchSin = SINE[cameraPitch], pitchCos = COSINE[cameraPitch], yawSin = SINE[cameraYaw], yawCos = COSINE[cameraYaw], rotateSin = SINE[rotate], rotateCos = COSINE[rotate],
+
+			cx = x3dCenter - client.getCameraX(), cy = y3dCenter - client.getCameraY(), cz = z3dCenter - client.getCameraZ(),
+
+			viewportXMiddle = client.getViewportWidth() / 2, viewportYMiddle = client.getViewportHeight() / 2, viewportXOffset = client.getViewportXOffset(), viewportYOffset = client.getViewportYOffset(),
+
+			zoom3d = client.getScale();
+
+		for (int i = 0; i < end; i++) {
+			int x = x3d[i];
+			int y = y3d[i];
+			int z = z3d[i];
+
+			if (rotate != 0) {
+				int x0 = x;
+				x = x0 * rotateCos + y * rotateSin >> 16;
+				y = y * rotateCos - x0 * rotateSin >> 16;
+			}
+
+			x += cx;
+			y += cy;
+			z += cz;
+
+			final int x1 = x * yawCos + y * yawSin >> 16, y1 = y * yawCos - x * yawSin >> 16, y2 = z * pitchCos - y1 * pitchSin >> 16, z1 = y1 * pitchCos + z * pitchSin >> 16;
+
+			int viewX, viewY;
+
+			if (z1 < 50) {
+				viewX = Integer.MIN_VALUE;
+				viewY = Integer.MIN_VALUE;
+			} else {
+				viewX = (viewportXMiddle + x1 * zoom3d / z1) + viewportXOffset;
+				viewY = (viewportYMiddle + y2 * zoom3d / z1) + viewportYOffset;
+			}
+
+			x2d[i] = viewX;
+			y2d[i] = viewY;
+		}
+	}
+
+	public SimplePolygon getClickbox() {
+		LocalPoint location = getLocalLocation();
+		int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
+		return calculateAABB(plugin.client, rlObject.getModel(), rlObject.getOrientation(), location.getX(), location.getY(), plugin.client.getPlane(), zOff);
 	}
 
 	public LocalPoint getLocalLocation() {
@@ -58,6 +136,11 @@ public class Entity<T extends Entity<T>> {
 
 	public WorldPoint getWorldLocation() {
 		return this.worldLocation;
+	}
+
+	public T setWorldLocation(WorldPoint location) {
+		this.worldLocation = location;
+		return (T) this;
 	}
 
 	public void update() {
@@ -87,117 +170,6 @@ public class Entity<T extends Entity<T>> {
 		return (T) this;
 	}
 
-	static int radToJau(double a) {
-		int j = (int) Math.round(a / Perspective.UNIT);
-		return j & 2047;
-	}
-
-	protected static SimplePolygon calculateAABB(Client client, Model m, Integer jauOrient, int x, int y, int z,
-												 int zOff) {
-		if (m == null) {
-			throw new IllegalStateException("model is null");
-		}
-		if (jauOrient == null) {
-			throw new IllegalStateException("jauOrient is null");
-		}
-		AABB aabb = m.getAABB(jauOrient);
-
-		int x1 = aabb.getCenterX();
-		int y1 = aabb.getCenterZ();
-		int z1 = aabb.getCenterY() + zOff;
-
-		int ex = aabb.getExtremeX();
-		int ey = aabb.getExtremeZ();
-		int ez = aabb.getExtremeY();
-
-		int x2 = x1 + ex;
-		int y2 = y1 + ey;
-		int z2 = z1 + ez;
-
-		x1 -= ex;
-		y1 -= ey;
-		z1 -= ez;
-
-		int[] xa = new int[]{
-			x1, x2, x1, x2,
-			x1, x2, x1, x2
-		};
-		int[] ya = new int[]{
-			y1, y1, y2, y2,
-			y1, y1, y2, y2
-		};
-		int[] za = new int[]{
-			z1, z1, z1, z1,
-			z2, z2, z2, z2
-		};
-
-		int[] x2d = new int[8];
-		int[] y2d = new int[8];
-
-		Entity.modelToCanvasCpu(client, 8, x, y, z, 0, xa, ya, za, x2d, y2d);
-
-		return Jarvis.convexHull(x2d, y2d);
-	}
-
-	private static void modelToCanvasCpu(Client client, int end, int x3dCenter, int y3dCenter, int z3dCenter, int rotate, int[] x3d, int[] y3d, int[] z3d, int[] x2d, int[] y2d) {
-		final int
-			cameraPitch = client.getCameraPitch(),
-			cameraYaw = client.getCameraYaw(),
-
-			pitchSin = SINE[cameraPitch],
-			pitchCos = COSINE[cameraPitch],
-			yawSin = SINE[cameraYaw],
-			yawCos = COSINE[cameraYaw],
-			rotateSin = SINE[rotate],
-			rotateCos = COSINE[rotate],
-
-			cx = x3dCenter - client.getCameraX(),
-			cy = y3dCenter - client.getCameraY(),
-			cz = z3dCenter - client.getCameraZ(),
-
-			viewportXMiddle = client.getViewportWidth() / 2,
-			viewportYMiddle = client.getViewportHeight() / 2,
-			viewportXOffset = client.getViewportXOffset(),
-			viewportYOffset = client.getViewportYOffset(),
-
-			zoom3d = client.getScale();
-
-		for (int i = 0; i < end; i++) {
-			int x = x3d[i];
-			int y = y3d[i];
-			int z = z3d[i];
-
-			if (rotate != 0) {
-				int x0 = x;
-				x = x0 * rotateCos + y * rotateSin >> 16;
-				y = y * rotateCos - x0 * rotateSin >> 16;
-			}
-
-			x += cx;
-			y += cy;
-			z += cz;
-
-			final int
-				x1 = x * yawCos + y * yawSin >> 16,
-				y1 = y * yawCos - x * yawSin >> 16,
-				y2 = z * pitchCos - y1 * pitchSin >> 16,
-				z1 = y1 * pitchCos + z * pitchSin >> 16;
-
-			int viewX, viewY;
-
-			if (z1 < 50) {
-				viewX = Integer.MIN_VALUE;
-				viewY = Integer.MIN_VALUE;
-			} else {
-				viewX = (viewportXMiddle + x1 * zoom3d / z1) + viewportXOffset;
-				viewY = (viewportYMiddle + y2 * zoom3d / z1) + viewportYOffset;
-			}
-
-			x2d[i] = viewX;
-			y2d[i] = viewY;
-		}
-	}
-
 	public T setBaseOrientation(CardinalDirection baseOrientation) {
 		this.baseOrientation = baseOrientation.getAngle();
 		return (T) this;
@@ -216,11 +188,6 @@ public class Entity<T extends Entity<T>> {
 	public T setModelRecolors(int[] recolorsToFind, int[] recolorsToReplace) {
 		this.recolorsToFind = recolorsToFind;
 		this.recolorsToReplace = recolorsToReplace;
-		return (T) this;
-	}
-
-	public T setWorldLocation(WorldPoint location) {
-		this.worldLocation = location;
 		return (T) this;
 	}
 
@@ -285,20 +252,12 @@ public class Entity<T extends Entity<T>> {
 			}
 			if (scale != null) {
 				finalModel.cloneVertices();
-				finalModel.scale(
-					-(Math.round(scale[0] * 128)),
-					-(Math.round(scale[1] * 128)),
-					-(Math.round(scale[2] * 128))
-				);
+				finalModel.scale(-(Math.round(scale[0] * 128)), -(Math.round(scale[1] * 128)), -(Math.round(scale[2] * 128)));
 			}
 
 			if (translate != null) {
 				finalModel.cloneVertices();
-				finalModel.translate(
-					-(Math.round(translate[0] * 128)),
-					-(Math.round(translate[1] * 128)),
-					-(Math.round(translate[2] * 128))
-				);
+				finalModel.translate(-(Math.round(translate[0] * 128)), -(Math.round(translate[1] * 128)), -(Math.round(translate[2] * 128)));
 			}
 			rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
 		}
@@ -358,11 +317,9 @@ public class Entity<T extends Entity<T>> {
 			final int JAU_TURN_SPEED = 32;
 			int dJauCW = Math.abs(dJau);
 
-			if (dJauCW > JAU_HALF_ROTATION)// use the shortest turn
-			{
+			if (dJauCW > JAU_HALF_ROTATION) {
 				dJau = (currentOrientation - targetOrientation) % JAU_FULL_ROTATION;
-			} else if (dJauCW == JAU_HALF_ROTATION)// always turn right when turning around
-			{
+			} else if (dJauCW == JAU_HALF_ROTATION) {
 				dJau = dJauCW;
 			}
 
