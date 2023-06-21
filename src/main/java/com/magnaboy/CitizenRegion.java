@@ -2,11 +2,25 @@ package com.magnaboy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class CitizenRegion {
 
@@ -211,10 +225,12 @@ public class CitizenRegion {
 		CitizenRegion region = regionCache.get(e.regionId);
 		region.entities.put(e.uuid, e);
 		allEntities.add(e);
-		if (info instanceof CitizenInfo)
+		if (info instanceof CitizenInfo) {
 			region.citizenRoster.add((CitizenInfo) info);
-		if (info instanceof SceneryInfo)
+		}
+		if (info instanceof SceneryInfo) {
 			region.sceneryRoster.add((SceneryInfo) info);
+		}
 	}
 
 	private static void removeEntityFromRegion(Citizen citizen, CitizenRegion region) {

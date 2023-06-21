@@ -1,8 +1,7 @@
 package com.magnaboy;
 
-import net.runelite.api.coords.WorldPoint;
-
 import java.util.UUID;
+import net.runelite.api.coords.WorldPoint;
 
 public class EntityInfo {
 	public UUID uuid;

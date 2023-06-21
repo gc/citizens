@@ -1,9 +1,8 @@
 package com.magnaboy;
 
+import static com.magnaboy.Util.getRandom;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-
-import static com.magnaboy.Util.getRandom;
 
 public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WorldArea boundingBox;

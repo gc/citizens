@@ -1,18 +1,27 @@
 package com.magnaboy;
 
+import static com.magnaboy.Util.worldPointToShortCoord;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.util.HashSet;
+import java.util.UUID;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.util.HashSet;
-import java.util.UUID;
-
-import static com.magnaboy.Util.worldPointToShortCoord;
 
 class CitizenPanel extends PluginPanel {
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
@@ -190,8 +199,7 @@ class CitizenPanel extends PluginPanel {
 			reloadButton.setHorizontalAlignment(SwingConstants.CENTER);
 			reloadButton.setFocusable(false);
 
-			reloadButton.addActionListener(e ->
-			{
+			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
 				CitizensPlugin.reloadCitizens(plugin);
 			});
@@ -252,8 +260,7 @@ class CitizenPanel extends PluginPanel {
 
 			entityTypeSelection = createLabeledComponent(new JComboBox<>(EntityType.values()), "Entity Type", layoutPanel, gbc);
 			entityTypeSelection.setFocusable(false);
-			entityTypeSelection.addActionListener(e ->
-			{
+			entityTypeSelection.addActionListener(e -> {
 				entityTypeChanged();
 			});
 		}
@@ -384,8 +391,7 @@ class CitizenPanel extends PluginPanel {
 			selectWanderBL = new JButton();
 			selectWanderBL.setText("Select BL");
 			selectWanderBL.setFocusable(false);
-			selectWanderBL.addActionListener(e ->
-			{
+			selectWanderBL.addActionListener(e -> {
 				wanderRegionBL = selectedPosition;
 				selectWanderBL.setText(Util.worldPointToShortCoord(selectedPosition));
 			});
@@ -393,8 +399,7 @@ class CitizenPanel extends PluginPanel {
 			selectWanderTR = new JButton();
 			selectWanderTR.setText("Select TR");
 			selectWanderTR.setFocusable(false);
-			selectWanderTR.addActionListener(e ->
-			{
+			selectWanderTR.addActionListener(e -> {
 				wanderRegionTR = selectedPosition;
 				selectWanderTR.setText(Util.worldPointToShortCoord(selectedPosition));
 			});
@@ -409,8 +414,7 @@ class CitizenPanel extends PluginPanel {
 			spawnButton = new JButton();
 			spawnButton.setText("Spawn Entity");
 			spawnButton.setFocusable(false);
-			spawnButton.addActionListener(e ->
-			{
+			spawnButton.addActionListener(e -> {
 				if (entityTypeSelection.getSelectedItem() == EntityType.Scenery) {
 					SceneryInfo info = buildSceneryInfo();
 					Scenery scenery = CitizenRegion.spawnSceneryFromPanel(info);
@@ -430,8 +434,7 @@ class CitizenPanel extends PluginPanel {
 			updateButton = new JButton();
 			updateButton.setText("Update Entity");
 			updateButton.setFocusable(false);
-			updateButton.addActionListener(e ->
-			{
+			updateButton.addActionListener(e -> {
 				CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
 				if (selectedEntity != null) {
 					info.uuid = selectedEntity.uuid;
@@ -452,11 +455,9 @@ class CitizenPanel extends PluginPanel {
 			deleteButton.setFocusable(false);
 			deleteButton.setVisible(false);
 			deleteButton.setBackground(new Color(135, 58, 58));
-			deleteButton.addActionListener(e ->
-			{
+			deleteButton.addActionListener(e -> {
 				CitizenRegion.removeEntityFromRegion(selectedEntity);
 				plugin.despawnEntity(selectedEntity);
-
 			});
 			layoutPanel.add(deleteButton, gbc);
 		}
@@ -468,8 +469,7 @@ class CitizenPanel extends PluginPanel {
 			saveChangesButton = new JButton();
 			saveChangesButton.setText("Save Changes");
 			saveChangesButton.setFocusable(false);
-			saveChangesButton.addActionListener(e ->
-			{
+			saveChangesButton.addActionListener(e -> {
 				CitizenRegion.saveDirtyRegions();
 			});
 

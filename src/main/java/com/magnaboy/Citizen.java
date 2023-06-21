@@ -1,14 +1,12 @@
 package com.magnaboy;
 
+import static com.magnaboy.Util.getRandomItem;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.annotation.Nullable;
 import net.runelite.api.Animation;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-
-import javax.annotation.Nullable;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static com.magnaboy.Util.getRandomItem;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String[] remarks;
@@ -67,15 +65,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}, 600 * 8);
 	}
 
-	public boolean spawn() {
-		boolean didSpawn = super.spawn();
-		if (didSpawn) {
-			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
-		}
-
-		return didSpawn;
-	}
-
 	public boolean despawn() {
 		this.currentTarget = null;
 		this.activeRemark = null;
@@ -86,6 +75,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
 		}
 		return didDespawn;
+	}
+
+	public boolean spawn() {
+		boolean didSpawn = super.spawn();
+		if (didSpawn) {
+			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
+		}
+
+		return didSpawn;
 	}
 
 	public void sayRandomRemark() {

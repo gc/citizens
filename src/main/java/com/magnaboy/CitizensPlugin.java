@@ -1,11 +1,32 @@
 package com.magnaboy;
 
 import com.google.inject.Provides;
+import static com.magnaboy.Util.getRandom;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Animation;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
-import net.runelite.api.*;
-import net.runelite.api.events.*;
+import net.runelite.api.Tile;
+import net.runelite.api.events.ClientTick;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOpened;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
@@ -22,20 +43,6 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.magnaboy.Util.getRandom;
 
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
@@ -121,6 +128,11 @@ public class CitizensPlugin extends Plugin {
 		}
 	}
 
+	@Override
+	protected void shutDown() {
+		cleanupAll();
+	}
+
 	public void loadAnimation(AnimationID animId) {
 		clientThread.invoke(() -> {
 			Animation anim = client.loadAnimation(animId.getId());
@@ -129,11 +141,6 @@ public class CitizensPlugin extends Plugin {
 			}
 			animationPoses.add(anim);
 		});
-	}
-
-	@Override
-	protected void shutDown() {
-		cleanupAll();
 	}
 
 	protected void updateAll() {
