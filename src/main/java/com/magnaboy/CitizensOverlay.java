@@ -81,13 +81,39 @@ public class CitizensOverlay extends Overlay {
 		}
 	}
 
+	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, int plane, Color color) {
+		WorldArea boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
+		highlightRegion(graphics, boundingBox, plane, color);
+	}
+
+	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, int plane, Color color) {
+		int x = boundingBox.getX();
+		int y = boundingBox.getY();
+		for (int i = y; i <= y + boundingBox.getHeight(); i++) {
+			for (int t = 0; t <= boundingBox.getWidth(); t++) {
+				highlightTile(graphics, new WorldPoint(x + t, i, plane), color);
+			}
+		}
+	}
+
 	@Override
 	public Dimension render(Graphics2D graphics) {
+		if(CitizensPlugin.shuttingDown) {
+			return null;
+		}
 
 		if (CitizenPanel.selectedPosition != null) {
 			Color selectedColor = new Color(0, 255, 255, 200);
 			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
-			renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+			if (plugin.getConfig().showOverlay()) {
+				renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+			}
+		}
+
+		WorldPoint bl = plugin.panel.wanderRegionBL;
+		WorldPoint tr = plugin.panel.wanderRegionTR;
+		if (bl != null && tr != null) {
+			highlightRegion(graphics, bl, tr, bl.getPlane(), new Color(0, 255, 255, 20));
 		}
 
 		if (CitizenPanel.selectedEntity != null) {
@@ -95,7 +121,12 @@ public class CitizensOverlay extends Overlay {
 			modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
 		}
 
-		for (Citizen citizen : plugin.citizens) {
+		for (Entity entity : CitizenRegion.getAllEntities()) {
+			if(entity == null || !(entity instanceof Citizen)) {
+				continue;
+			}
+
+			Citizen citizen = (Citizen)entity;
 			LocalPoint localLocation = citizen.getLocalLocation();
 
 			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
@@ -128,14 +159,8 @@ public class CitizensOverlay extends Overlay {
 			// For wandering citizens, highlight their wandering area.
 			if (citizen instanceof WanderingCitizen) {
 				WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
-				int x = boundingBox.getX();
-				int y = boundingBox.getY();
 				Color color = new Color(0, 0, 255, 20);
-				for (int i = y; i <= y + boundingBox.getHeight(); i++) {
-					for (int t = 0; t < boundingBox.getWidth(); t++) {
-						highlightTile(graphics, new WorldPoint(x + t, i, citizen.getPlane()), color);
-					}
-				}
+				highlightRegion(graphics, boundingBox, citizen.getPlane(), color);
 			}
 
 			// If the citizen has a walking target, mark it.

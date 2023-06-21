@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import java.util.Random;
 import java.util.logging.Logger;
 import net.runelite.api.Perspective;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 
 public final class Util {
@@ -70,5 +71,21 @@ public final class Util {
 			}
 		}
 		return sb.toString().replaceAll("\\s+", "");
+	}
+
+	public static WorldArea calculateBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
+		int width = Math.abs(bottomLeft.getX() - topRight.getX());
+		int height = Math.abs(bottomLeft.getY() - topRight.getY());
+		String debugString = "BottomLeft[" + bottomLeft + "] TopRight[" + topRight + "] Width[" + width + "] Height[" + height + "]";
+
+		if (bottomLeft.getX() > topRight.getX() || bottomLeft.getY() > topRight.getY()) {
+			throw new IllegalArgumentException("BottomLeft must be to the bottom/left of topRight. " + debugString);
+		}
+
+		if (width <= 1 && height <= 1) {
+			throw new IllegalArgumentException("The size of the bounding box must be greater than 1x1. " + debugString);
+		}
+
+		return new WorldArea(bottomLeft, width, height);
 	}
 }

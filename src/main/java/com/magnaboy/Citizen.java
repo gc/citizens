@@ -10,8 +10,6 @@ import net.runelite.api.coords.WorldPoint;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String[] remarks;
-	public String name;
-	public String examine;
 	@Nullable
 	public String activeRemark = null;
 	private int remarkTimer = 0;
