@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'checkstyle'
 }
 
 repositories {
@@ -30,3 +31,21 @@ sourceCompatibility = '1.8'
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
+// Checkstyle configuration
+checkstyle {
+    toolVersion = '8.36.1'
+    configFile = file("${project.rootDir}/.idea/codeStyles/checkstyle.xml")
+    sourceSets = [sourceSets.main]
+    ignoreFailures = false
+    showViolations = true
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+check.dependsOn checkstyleMain
