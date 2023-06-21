@@ -12,8 +12,6 @@ import static com.magnaboy.Util.getRandomItem;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String[] remarks;
-	public String name;
-	public String examine;
 	@Nullable
 	public String activeRemark = null;
 	public int speed = 4;

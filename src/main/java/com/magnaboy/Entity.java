@@ -15,6 +15,8 @@ import static net.runelite.api.Perspective.SINE;
 public class Entity<T extends Entity<T>> {
 	public int regionId;
 	public WorldPoint worldLocation;
+	public String name;
+	public String examine;
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
 	public float[] scale;

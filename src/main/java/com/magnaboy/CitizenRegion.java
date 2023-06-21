@@ -8,21 +8,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-///The main list of all the citizens
 public class CitizenRegion {
 
-	private static final float VALID_REGION_VERSION = 0.8f;        //This is just in case we want to make any major changes to the files
+	private static final float VALID_REGION_VERSION = 0.8f;
 	private static final HashMap<Integer, CitizenRegion> dirtyRegions = new HashMap<>();
 	private static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
+	private static final HashSet<Entity> allEntities = new HashSet<>();
 	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
 	private static CitizensPlugin plugin;
+	private final transient HashMap<UUID, Entity> entities = new HashMap<>();
 	public float version;
 	public int regionId;
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
 	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
-	//TODO Make hashmaps private and make getters/setters
-	public transient HashMap<UUID, Scenery> scenery = new HashMap<>();
-	public transient HashMap<UUID, Citizen> citizens = new HashMap<>();
 
 	public static void init(CitizensPlugin p) {
 		plugin = p;
@@ -70,12 +68,13 @@ public class CitizenRegion {
 			}
 			for (CitizenInfo cInfo : region.citizenRoster) {
 				Citizen citizen = loadCitizen(plugin, cInfo);
-				region.citizens.put(citizen.uuid, citizen);
+				region.entities.put(citizen.uuid, citizen);
 			}
 			for (SceneryInfo sInfo : region.sceneryRoster) {
 				Scenery scenery = loadScenery(plugin, sInfo);
-				region.scenery.put(scenery.uuid, scenery);
+				region.entities.put(scenery.uuid, scenery);
 			}
+			allEntities.addAll(region.entities.values());
 			regionCache.put(regionId, region);
 			Util.log("Loaded Region: " + regionId + " from file");
 			return region;
@@ -152,26 +151,27 @@ public class CitizenRegion {
 			.setRegion(info.regionId);
 	}
 
+	public static HashSet<Entity> getAllEntities() {
+		return allEntities;
+	}
+
 	public static void cleanUp() {
 		for (CitizenRegion r : regionCache.values()) {
 			r.citizenRoster.clear();
 			r.sceneryRoster.clear();
-
-			r.citizens.clear();
-			r.scenery.clear();
+			r.entities.clear();
 		}
 		regionCache.clear();
 		dirtyRegions.clear();
 	}
 
+	// DEVELOPMENT SECTION
 	public static Citizen spawnCitizenFromPanel(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
 		CitizenRegion region = loadRegion(info.regionId, true);
-		region.citizens.put(info.uuid, citizen);
+		region.entities.put(info.uuid, citizen);
 		region.citizenRoster.add(info);
-		plugin.citizens.add(citizen);
 		dirtyRegion(region);
-		plugin.refreshEntityCollection();
 		plugin.updateAll();
 		return citizen;
 	}
@@ -179,34 +179,26 @@ public class CitizenRegion {
 	public static Scenery spawnSceneryFromPanel(SceneryInfo info) {
 		Scenery scenery = loadScenery(plugin, info);
 		CitizenRegion region = regionCache.get(info.regionId);
-		region.scenery.put(info.uuid, scenery);
+		region.entities.put(info.uuid, scenery);
 		region.sceneryRoster.add(info);
-		plugin.scenery.add(scenery);
 		dirtyRegion(region);
-		plugin.refreshEntityCollection();
 		plugin.updateAll();
 		return scenery;
 	}
 
-	public static void saveEntity(EntityInfo info) {
+	public static void updateEntity(EntityInfo info) {
 		if (info.entityType == EntityType.Scenery) {
 			// TODO
 		} else {
-			Citizen citizen = loadCitizen(plugin, (CitizenInfo) info);
-			CitizenRegion region = loadRegion(info.regionId);
-			region.citizens.get(info.uuid).despawn();
-			region.citizens.put(info.uuid, citizen);
-			CitizenInfo oldInfo = region.citizenRoster.stream().filter(i -> i.uuid == info.uuid).findFirst().orElse(null);
-			if (oldInfo != null) {
-				region.citizenRoster.remove(oldInfo);
-				region.citizenRoster.add((CitizenInfo) info);
-			}
-			CitizensPlugin.reloadCitizens(plugin);
-			dirtyRegion(region);
+			CitizenRegion region = regionCache.get(info.regionId);
+			Entity e = region.entities.get(info.uuid);
+			Citizen updated = loadCitizen(plugin, (CitizenInfo) info);
+
+			addEntityToRegion(updated, info);
+			removeEntityFromRegion(e);
 		}
 	}
 
-	// DEV ONLY
 	public static void dirtyRegion(CitizenRegion region) {
 		dirtyRegions.put(region.regionId, region);
 	}
@@ -215,29 +207,44 @@ public class CitizenRegion {
 		dirtyRegions.clear();
 	}
 
-	public static void clearCache() {
-		regionCache.clear();
+	public static void addEntityToRegion(Entity e, EntityInfo info) {
+		CitizenRegion region = regionCache.get(e.regionId);
+		region.entities.put(e.uuid, e);
+		allEntities.add(e);
+		if (info instanceof CitizenInfo)
+			region.citizenRoster.add((CitizenInfo) info);
+		if (info instanceof SceneryInfo)
+			region.sceneryRoster.add((SceneryInfo) info);
 	}
 
-	public static void deleteEntity(Citizen citizen) {
-		CitizenRegion region = loadRegion(citizen.regionId);
+	private static void removeEntityFromRegion(Citizen citizen, CitizenRegion region) {
 		CitizenInfo info = region.citizenRoster.stream()
 			.filter(c -> c.uuid == citizen.uuid)
 			.findFirst()
 			.orElse(null);
-		plugin.citizens.remove(citizen);
 		region.citizenRoster.remove(info);
-		dirtyRegion(region);
 	}
 
-	public static void deleteEntity(Scenery scenery) {
-		CitizenRegion region = loadRegion(scenery.regionId);
+	private static void removeEntityFromRegion(Scenery scenery, CitizenRegion region) {
 		SceneryInfo info = region.sceneryRoster.stream()
 			.filter(c -> c.uuid == scenery.uuid)
 			.findFirst()
 			.orElse(null);
-		plugin.scenery.remove(scenery);
 		region.sceneryRoster.remove(info);
+	}
+
+	public static void removeEntityFromRegion(Entity e) {
+		CitizenRegion region = regionCache.get(e.regionId);
+		if (e instanceof Citizen) {
+			removeEntityFromRegion((Citizen) e, region);
+		}
+		if (e instanceof Scenery) {
+			removeEntityFromRegion((Scenery) e, region);
+		}
+
+		region.entities.remove(e);
+		allEntities.remove(e);
+		e.despawn();
 		dirtyRegion(region);
 	}
 
@@ -270,5 +277,14 @@ public class CitizenRegion {
 		} catch (IOException e) {
 			throw new IOException(e);
 		}
+	}
+
+	public void despawnRegion() {
+		allEntities.removeAll(entities.values());
+		entities.values().forEach(Entity::despawn);
+	}
+
+	public void updateEntities() {
+		entities.values().forEach(Entity::update);
 	}
 }
