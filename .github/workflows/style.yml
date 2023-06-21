@@ -30,5 +30,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Check code formatting
+        run: ./gradlew spotlessCheck
+
       - name: Run Checkstyle
         run: ./gradlew checkstyleMain checkstyleTest --continue
+
+

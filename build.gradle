@@ -34,7 +34,7 @@ tasks.withType(JavaCompile) {
 
 // Checkstyle configuration
 checkstyle {
-    toolVersion = '8.36.1'
+    toolVersion = '8.45'
     configFile = file("${project.rootDir}/checkstyle.xml")
     sourceSets = [sourceSets.main]
     ignoreFailures = false
