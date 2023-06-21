@@ -1,5 +1,8 @@
 package com.magnaboy;
 
+import net.runelite.api.Perspective;
+import net.runelite.api.coords.WorldPoint;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,14 +11,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
 import java.util.logging.Logger;
-import net.runelite.api.Perspective;
-import net.runelite.api.coords.WorldPoint;
 
 public final class Util {
-	public static Random rng = new Random();
-	private final static Logger logger = Logger.getLogger("Citizens");
 	public final static int TILES_WALKED_PER_GAME_TICK = 1;
 	public final static int GAME_TICK_MILLIS = 600;
+	private final static Logger logger = Logger.getLogger("Citizens");
+	public static Random rng = new Random();
 
 	// Prevent instantiation
 	private Util() {

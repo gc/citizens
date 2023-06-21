@@ -2,59 +2,30 @@ package com.magnaboy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
+
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 ///The main list of all the citizens
 public class CitizenRegion {
 
-	public float version;
-	public int regionId;
-	public List<CitizenInfo> citizenRoster = new ArrayList<>();
-	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
-
-	//TODO Make hashmaps private and make getters/setters
-	public transient HashMap<UUID, Scenery> scenery = new HashMap<>();
-	public transient HashMap<UUID, Citizen> citizens = new HashMap<>();
-	private static CitizensPlugin plugin;
 	private static final float VALID_REGION_VERSION = 0.8f;        //This is just in case we want to make any major changes to the files
 	private static final HashMap<Integer, CitizenRegion> dirtyRegions = new HashMap<>();
 	private static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
 	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
+	private static CitizensPlugin plugin;
+	public float version;
+	public int regionId;
+	public List<CitizenInfo> citizenRoster = new ArrayList<>();
+	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
+	//TODO Make hashmaps private and make getters/setters
+	public transient HashMap<UUID, Scenery> scenery = new HashMap<>();
+	public transient HashMap<UUID, Citizen> citizens = new HashMap<>();
 
 	public static void init(CitizensPlugin p) {
 		plugin = p;
-	}
-
-	public void saveRegion() throws IOException {
-		try {
-			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
-			Writer wr = new BufferedWriter(new FileWriter(path.toString()));
-			GsonBuilder gb = new GsonBuilder();
-			gb.setPrettyPrinting();
-			Gson gson = gb.create();
-			gson.toJson(this, wr);
-			wr.flush();
-			wr.close();
-		} catch (IOException e) {
-			throw new IOException(e);
-		}
 	}
 
 	public static CitizenRegion loadRegion(int regionId) {
@@ -284,5 +255,20 @@ public class CitizenRegion {
 		}
 		Util.log("Saved " + dirtyRegions.size() + " dirty regions");
 		clearDirtyRegions();
+	}
+
+	public void saveRegion() throws IOException {
+		try {
+			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
+			Writer wr = new BufferedWriter(new FileWriter(path.toString()));
+			GsonBuilder gb = new GsonBuilder();
+			gb.setPrettyPrinting();
+			Gson gson = gb.create();
+			gson.toJson(this, wr);
+			wr.flush();
+			wr.close();
+		} catch (IOException e) {
+			throw new IOException(e);
+		}
 	}
 }

@@ -1,12 +1,14 @@
 package com.magnaboy;
 
-import static com.magnaboy.Util.getRandomItem;
-import java.util.Timer;
-import java.util.TimerTask;
-import javax.annotation.Nullable;
 import net.runelite.api.Animation;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
+
+import javax.annotation.Nullable;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static com.magnaboy.Util.getRandomItem;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String[] remarks;
@@ -14,19 +16,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	public String examine;
 	@Nullable
 	public String activeRemark = null;
-	private int remarkTimer = 0;
 	public int speed = 4;
 	public AnimationID[] randomAnimations;
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
-
 	@Nullable()
 	Target currentTarget;
-
-	public class Target {
-		public WorldPoint worldDestinationPosition;
-		public LocalPoint localDestinationPosition;
-		public int currentDistance;
-	}
+	private int remarkTimer = 0;
 
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);
@@ -194,6 +189,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
 			}
 		}
+	}
+
+	public class Target {
+		public WorldPoint worldDestinationPosition;
+		public LocalPoint localDestinationPosition;
+		public int currentDistance;
 	}
 
 

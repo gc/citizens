@@ -1,34 +1,11 @@
 package com.magnaboy;
 
 import com.google.inject.Provides;
-import static com.magnaboy.Util.getRandom;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Animation;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
-import net.runelite.api.GameState;
-import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
-import net.runelite.api.Tile;
-import net.runelite.api.events.ClientTick;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.GameTick;
-import net.runelite.api.events.MenuOpened;
-import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.*;
+import net.runelite.api.events.*;
 import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
@@ -46,44 +23,70 @@ import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.magnaboy.Util.getRandom;
+
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
 public class CitizensPlugin extends Plugin {
+	public static HashMap<Integer, CitizenRegion> activeRegions;
 	@Inject
 	public Client client;
-
-	@Inject
-	@Getter
-	private CitizensConfig config;
-
-	@Provides
-	CitizensConfig getConfig(ConfigManager configManager) {
-		return configManager.getConfig(CitizensConfig.class);
-	}
-
-	@Inject
-	private OverlayManager overlayManager;
-
-	@Inject
-	ChatMessageManager chatMessageManager;
-
-	@Inject
-	private CitizensOverlay citizensOverlay;
-
 	@Inject
 	public ClientThread clientThread;
-
 	public CitizenPanel panel;
 	public AnimationID[] randomIdleActionAnimationIds = {AnimationID.Flex};
 	public List<Animation> animationPoses = new ArrayList<Animation>();
 	public List<Citizen> citizens = new ArrayList<Citizen>();
 	public List<Scenery> scenery = new ArrayList<Scenery>();
 	public List<List<? extends Entity>> entityCollection = new ArrayList<>();
-	public static HashMap<Integer, CitizenRegion> activeRegions;
-
 	@Inject
 	@Named("developerMode")
 	public boolean IS_DEVELOPMENT;
+	public boolean entitiesAreReady = false;
+	@Inject
+	ChatMessageManager chatMessageManager;
+	@Inject
+	@Getter
+	private CitizensConfig config;
+	@Inject
+	private OverlayManager overlayManager;
+	@Inject
+	private CitizensOverlay citizensOverlay;
+	@Inject
+	private ClientToolbar clientToolbar;
+
+	public static void reloadCitizens(CitizensPlugin plugin) {
+		Util.log("Reloading Citizens");
+		// Just clearing the hashmap should trigger a complete reload on the next 'CheckRegions()' call
+		plugin.despawnAll();
+		plugin.entityCollection.clear();
+		plugin.citizens.clear();
+		plugin.scenery.clear();
+		activeRegions.clear();
+		CitizenRegion.clearDirtyRegions();
+		try {
+			plugin.checkRegions();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		Util.log("Reloaded Citizens");
+	}
+
+	@Provides
+	CitizensConfig getConfig(ConfigManager configManager) {
+		return configManager.getConfig(CitizensConfig.class);
+	}
 
 	public Animation getAnimation(AnimationID animID) {
 		Animation anim = animationPoses.stream().filter(c -> c.getId() == animID.getId()).findFirst().orElse(null);
@@ -93,14 +96,9 @@ public class CitizensPlugin extends Plugin {
 		return anim;
 	}
 
-	public boolean entitiesAreReady = false;
-
 	public boolean isReady() {
 		return entitiesAreReady && client.getLocalPlayer() != null;
 	}
-
-	@Inject
-	private ClientToolbar clientToolbar;
 
 	@Override
 	protected void startUp() {
@@ -381,23 +379,6 @@ public class CitizensPlugin extends Plugin {
 				}
 			}
 		}
-	}
-
-	public static void reloadCitizens(CitizensPlugin plugin) {
-		Util.log("Reloading Citizens");
-		// Just clearing the hashmap should trigger a complete reload on the next 'CheckRegions()' call
-		plugin.despawnAll();
-		plugin.entityCollection.clear();
-		plugin.citizens.clear();
-		plugin.scenery.clear();
-		activeRegions.clear();
-		CitizenRegion.clearDirtyRegions();
-		try {
-			plugin.checkRegions();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		Util.log("Reloaded Citizens");
 	}
 }
 

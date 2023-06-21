@@ -1,88 +1,36 @@
 package com.magnaboy;
 
-import java.util.ArrayList;
-import java.util.UUID;
-import net.runelite.api.AABB;
-import net.runelite.api.Client;
-import net.runelite.api.Model;
-import net.runelite.api.ModelData;
-import net.runelite.api.Perspective;
-import static net.runelite.api.Perspective.COSINE;
-import static net.runelite.api.Perspective.SINE;
-import net.runelite.api.Player;
-import net.runelite.api.RuneLiteObject;
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.api.model.Jarvis;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
+import static net.runelite.api.Perspective.COSINE;
+import static net.runelite.api.Perspective.SINE;
 
 public class Entity<T extends Entity<T>> {
 	public int regionId;
 	public WorldPoint worldLocation;
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
+	public float[] scale;
+	public float[] translate;
 	protected RuneLiteObject rlObject;
 	protected EntityType entityType;
 	protected Integer baseOrientation;
+	protected UUID uuid;
 	private int[] modelIDs;
 	private int[] recolorsToFind;
 	private int[] recolorsToReplace;
-	public float[] scale;
-	public float[] translate;
-
 	private SimplePolygon clickbox;
-	protected UUID uuid;
-
-	public SimplePolygon getClickbox() {
-		LocalPoint location = getLocalLocation();
-		int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
-		return calculateAABB(plugin.client,
-			rlObject.getModel(),
-			rlObject.getOrientation(),
-			location.getX(),
-			location.getY(),
-			plugin.client.getPlane(),
-			zOff);
-	}
 
 	public Entity(CitizensPlugin plugin) {
 		this.plugin = plugin;
 		this.rlObject = plugin.client.createRuneLiteObject();
-	}
-
-	public LocalPoint getLocalLocation() {
-		return rlObject.getLocation();
-	}
-
-	public WorldPoint getWorldLocation() {
-		return this.worldLocation;
-	}
-
-	public void update() {
-		boolean inScene = shouldRender();
-
-		if (inScene) {
-			spawn();
-		} else {
-			despawn();
-		}
-
-		plugin.panel.update();
-	}
-
-	public T setScale(float[] scale) {
-		this.scale = scale;
-		return (T) this;
-	}
-
-	public T setTranslate(float translateX, float translateY, float translateZ) {
-		this.translate = new float[]{translateX, translateY, translateZ};
-		return (T) this;
-	}
-
-	public T setTranslate(float[] translate) {
-		this.translate = translate;
-		return (T) this;
 	}
 
 	static int radToJau(double a) {
@@ -196,6 +144,58 @@ public class Entity<T extends Entity<T>> {
 		}
 	}
 
+	public SimplePolygon getClickbox() {
+		LocalPoint location = getLocalLocation();
+		int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
+		return calculateAABB(plugin.client,
+			rlObject.getModel(),
+			rlObject.getOrientation(),
+			location.getX(),
+			location.getY(),
+			plugin.client.getPlane(),
+			zOff);
+	}
+
+	public LocalPoint getLocalLocation() {
+		return rlObject.getLocation();
+	}
+
+	public WorldPoint getWorldLocation() {
+		return this.worldLocation;
+	}
+
+	public T setWorldLocation(WorldPoint location) {
+		this.worldLocation = location;
+		return (T) this;
+	}
+
+	public void update() {
+		boolean inScene = shouldRender();
+
+		if (inScene) {
+			spawn();
+		} else {
+			despawn();
+		}
+
+		plugin.panel.update();
+	}
+
+	public T setScale(float[] scale) {
+		this.scale = scale;
+		return (T) this;
+	}
+
+	public T setTranslate(float translateX, float translateY, float translateZ) {
+		this.translate = new float[]{translateX, translateY, translateZ};
+		return (T) this;
+	}
+
+	public T setTranslate(float[] translate) {
+		this.translate = translate;
+		return (T) this;
+	}
+
 	public T setBaseOrientation(CardinalDirection baseOrientation) {
 		this.baseOrientation = baseOrientation.getAngle();
 		return (T) this;
@@ -214,11 +214,6 @@ public class Entity<T extends Entity<T>> {
 	public T setModelRecolors(int[] recolorsToFind, int[] recolorsToReplace) {
 		this.recolorsToFind = recolorsToFind;
 		this.recolorsToReplace = recolorsToReplace;
-		return (T) this;
-	}
-
-	public T setWorldLocation(WorldPoint location) {
-		this.worldLocation = location;
 		return (T) this;
 	}
 

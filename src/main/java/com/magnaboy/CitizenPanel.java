@@ -1,33 +1,32 @@
 package com.magnaboy;
 
-import static com.magnaboy.Util.worldPointToShortCoord;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.util.HashSet;
-import java.util.UUID;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.util.HashSet;
+import java.util.UUID;
+
+import static com.magnaboy.Util.worldPointToShortCoord;
+
 class CitizenPanel extends PluginPanel {
-	private CitizensPlugin plugin;
-	private JLabel label;
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
 	public static WorldPoint selectedPosition;
+	public static Entity selectedEntity;
+	public WorldPoint wanderRegionBL;
+	public WorldPoint wanderRegionTR;
+	public JLabel editingTargetLabel;
+	public JButton updateButton;
+	public JButton deleteButton;
+	public JLabel reloadWarning;
+	public JCheckBox manualFieldsToggle;
+	private CitizensPlugin plugin;
+	private JLabel label;
 	private CitizensOverlay overlay;
 	// Editor Panel Fields
 	private HashSet<JComponent> allElements;
@@ -53,16 +52,8 @@ class CitizenPanel extends PluginPanel {
 	private JTextField translateFieldZ;
 	private JButton selectWanderBL;
 	private JButton selectWanderTR;
-	public WorldPoint wanderRegionBL;
-	public WorldPoint wanderRegionTR;
-	public JLabel editingTargetLabel;
-	public JButton updateButton;
-	public JButton deleteButton;
-	public JLabel reloadWarning;
-	public JCheckBox manualFieldsToggle;
 	private JTextField manualAnimIdIdleSelect;
 	private JTextField manualAnimIdMoveSelect;
-	public static Entity selectedEntity;
 
 	// End Editor Fields
 

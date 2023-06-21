@@ -10,8 +10,6 @@ public enum CardinalDirection {
 	NorthWest(768),
 	East(1536);
 
-	private final int angle;
-
 	private static final HashMap<Integer, CardinalDirection> intToType = new HashMap<>();
 
 	static {
@@ -20,15 +18,17 @@ public enum CardinalDirection {
 		}
 	}
 
+	private final int angle;
+
 	CardinalDirection(int angle) {
 		this.angle = angle;
 	}
 
-	public int getAngle() {
-		return this.angle;
-	}
-
 	public static CardinalDirection fromInteger(Integer i) {
 		return i == null ? CardinalDirection.South : intToType.get(i);
+	}
+
+	public int getAngle() {
+		return this.angle;
 	}
 }

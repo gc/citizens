@@ -1,5 +1,7 @@
 package com.magnaboy;
 
+import net.runelite.api.coords.WorldPoint;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,13 +10,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import net.runelite.api.coords.WorldPoint;
 
 public class CitizenScript {
 
-	private ScriptedCitizen citizen;
 	private final List<Runnable> actions = new ArrayList<>();
 	private final ScheduledExecutorService executorService;
+	private ScriptedCitizen citizen;
 	private Iterator<Runnable> actionIterator;
 
 	public CitizenScript() {
