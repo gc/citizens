@@ -35,7 +35,7 @@ tasks.withType(JavaCompile) {
 // Checkstyle configuration
 checkstyle {
     toolVersion = '8.36.1'
-    configFile = file("${project.rootDir}/.idea/codeStyles/checkstyle.xml")
+    configFile = file("${project.rootDir}/checkstyle.xml")
     sourceSets = [sourceSets.main]
     ignoreFailures = false
     showViolations = true
