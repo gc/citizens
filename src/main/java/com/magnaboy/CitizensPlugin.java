@@ -130,6 +130,7 @@ public class CitizensPlugin extends Plugin {
 
 		if (IS_DEVELOPMENT) {
 			CitizenRegion.validateEntitiesInAllFiles();
+			panel.update();
 		}
 	}
 
@@ -203,6 +204,7 @@ public class CitizensPlugin extends Plugin {
 				}
 			});
 		});
+		panel.update();
 	}
 
 	@Subscribe
@@ -213,10 +215,8 @@ public class CitizensPlugin extends Plugin {
 	@Subscribe
 	public void onClientTick(ClientTick ignored) {
 		CitizenRegion.forEachEntity((entity) -> {
-			if (entity.isActive()) {
-				if (entity instanceof Citizen) {
-					((Citizen) entity).onClientTick();
-				}
+			if (entity.isActive() && entity.isCitizen()) {
+				((Citizen) entity).onClientTick();
 			}
 		});
 		try {
