@@ -215,7 +215,8 @@ class CitizenPanel extends PluginPanel {
 
 			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
-				CitizensPlugin.reloadCitizens(plugin);
+				plugin.shutDown();
+				plugin.startUp();
 			});
 			layoutPanel.add(reloadButton, gbc);
 

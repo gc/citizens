@@ -74,9 +74,6 @@ public class CitizensPlugin extends Plugin {
 	private ClientToolbar clientToolbar;
 
 	public static void reloadCitizens(CitizensPlugin plugin) {
-		for (CitizenRegion region : activeRegions.values()) {
-			region.despawnRegion();
-		}
 		CitizenRegion.cleanUp();
 		plugin.cleanup();
 	}
