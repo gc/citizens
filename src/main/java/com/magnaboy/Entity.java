@@ -228,6 +228,7 @@ public class Entity<T extends Entity<T>> {
 		if (!rlObject.isActive()) {
 			return false;
 		}
+
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
 		});
@@ -280,7 +281,6 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void validate() {
-		Util.log("Validating..." + debugName());
 		if (uuid == null) {
 			throw new IllegalStateException(debugName() + " has no uuid.");
 		}

@@ -124,11 +124,6 @@ public class CitizensPlugin extends Plugin {
 		for (AnimationID idList : AnimationID.values()) {
 			loadAnimation(idList);
 		}
-
-		if (IS_DEVELOPMENT) {
-			CitizenRegion.validateEntitiesInAllFiles();
-			panel.update();
-		}
 	}
 
 	@Override
@@ -340,10 +335,6 @@ public class CitizensPlugin extends Plugin {
 				}
 			}
 		}
-	}
-
-	public void despawnEntity(Entity e) {
-		e.despawn();
 	}
 
 	private void cleanup() {

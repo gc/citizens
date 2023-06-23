@@ -472,7 +472,7 @@ class CitizenPanel extends PluginPanel {
 			deleteButton.setBackground(new Color(135, 58, 58));
 			deleteButton.addActionListener(e -> {
 				CitizenRegion.removeEntityFromRegion(selectedEntity);
-				plugin.despawnEntity(selectedEntity);
+				selectedEntity.despawn();
 			});
 			layoutPanel.add(deleteButton, gbc);
 		}

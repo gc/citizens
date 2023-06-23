@@ -40,33 +40,6 @@ public class CitizenRegion {
 		plugin = p;
 	}
 
-	public static void validateEntitiesInAllFiles() {
-		if (!plugin.IS_DEVELOPMENT) {
-			return;
-		}
-
-		File directory = new File(REGIONDATA_DIRECTORY);
-		File[] files = directory.listFiles((dir, name) -> name.endsWith(".json"));
-
-		if (files == null) {
-			Util.log("No JSON files found in " + REGIONDATA_DIRECTORY);
-			return;
-		}
-
-		for (File file : files) {
-			String fileName = file.getName();
-			String fileBaseName = fileName.substring(0, fileName.lastIndexOf('.'));
-			int regionId;
-			try {
-				regionId = Integer.parseInt(fileBaseName);
-			} catch (NumberFormatException e) {
-				Util.log("Failed to parse region ID from file name: " + fileName);
-				continue;
-			}
-			loadRegion(regionId);
-		}
-	}
-
 	public static CitizenRegion loadRegion(int regionId) {
 		return loadRegion(regionId, false);
 	}
