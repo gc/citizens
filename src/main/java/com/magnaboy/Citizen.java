@@ -143,17 +143,19 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	}
 
 	public void onClientTick() {
-		movementTick();
-	}
-
-	public void movementTick() {
 		if (remarkTimer > 0) {
 			remarkTimer--;
 		}
 		if (remarkTimer == 0) {
 			this.activeRemark = null;
 		}
+		movementTick();
+	}
 
+	public void movementTick() {
+		if (entityType == EntityType.StationaryCitizen) {
+			return;
+		}
 		if (currentTarget != null) {
 			if (currentTarget.worldDestinationPosition == null) {
 				return;
