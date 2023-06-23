@@ -23,6 +23,36 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		super(plugin);
 	}
 
+	public void validate() {
+		super.validate();
+		if (name == null) {
+			throw new IllegalStateException(debugName() + " has no name.");
+		}
+
+		if (examine == null) {
+			throw new IllegalStateException(debugName() + " has no examine.");
+		}
+
+		if (entityType == EntityType.WanderingCitizen) {
+			WanderingCitizen casted = (WanderingCitizen) this;
+			if (casted.boundingBox == null) {
+				throw new IllegalStateException(debugName() + " has no boundingBox.");
+			}
+			if (casted.wanderRegionBL == null) {
+				throw new IllegalStateException(debugName() + " has no wanderRegionBL.");
+			}
+			if (casted.wanderRegionTR == null) {
+				throw new IllegalStateException(debugName() + " has no wanderRegionTR.");
+			}
+		}
+
+		for (String remark : remarks) {
+			if (remark == "") {
+				throw new IllegalStateException(debugName() + " has empty remark.");
+			}
+		}
+	}
+
 	public T setMovAnimID(AnimationID anim) {
 		this.movingAnimationId = anim;
 		return (T) this;
