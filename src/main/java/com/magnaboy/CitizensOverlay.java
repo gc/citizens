@@ -121,16 +121,16 @@ public class CitizensOverlay extends Overlay {
 			modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
 		}
 
-		for (Entity entity : CitizenRegion.getAllEntities()) {
+		CitizenRegion.forEachEntity((entity) -> {
 			if (entity == null || !(entity instanceof Citizen)) {
-				continue;
+				return;
 			}
 
 			Citizen citizen = (Citizen) entity;
 			LocalPoint localLocation = citizen.getLocalLocation();
 
 			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
-				continue;
+				return;
 			}
 
 			// Render generic marker for debugging
@@ -170,7 +170,7 @@ public class CitizensOverlay extends Overlay {
 					highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));
 				}
 			}
-		}
+		});
 
 		return null;
 	}

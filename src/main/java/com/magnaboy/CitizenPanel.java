@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -90,9 +91,22 @@ class CitizenPanel extends PluginPanel {
 			return;
 		}
 
-		int activeEntities = plugin.countActiveEntities();
-		int inactiveEntities = plugin.countInactiveEntities();
-		int totalEntities = activeEntities + inactiveEntities;
+		AtomicInteger activeEntities = new AtomicInteger();
+		AtomicInteger inactiveEntities = new AtomicInteger();
+
+		CitizenRegion.forEachEntity((entity) -> {
+			if (entity == null) {
+				return;
+			}
+			if (entity.isActive()) {
+				activeEntities.addAndGet(1);
+			} else {
+				inactiveEntities.addAndGet(1);
+			}
+		});
+
+		int totalEntities = activeEntities.get() + inactiveEntities.get();
+
 		label.setText(activeEntities + "/" + totalEntities + " entities are active");
 
 		UpdateEditorFields();
@@ -201,7 +215,8 @@ class CitizenPanel extends PluginPanel {
 
 			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
-				CitizensPlugin.reloadCitizens(plugin);
+				plugin.shutDown();
+				plugin.startUp();
 			});
 			layoutPanel.add(reloadButton, gbc);
 
@@ -457,7 +472,7 @@ class CitizenPanel extends PluginPanel {
 			deleteButton.setBackground(new Color(135, 58, 58));
 			deleteButton.addActionListener(e -> {
 				CitizenRegion.removeEntityFromRegion(selectedEntity);
-				plugin.despawnEntity(selectedEntity);
+				selectedEntity.despawn();
 			});
 			layoutPanel.add(deleteButton, gbc);
 		}

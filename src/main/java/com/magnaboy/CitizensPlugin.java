@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -73,9 +74,6 @@ public class CitizensPlugin extends Plugin {
 	private ClientToolbar clientToolbar;
 
 	public static void reloadCitizens(CitizensPlugin plugin) {
-		for (CitizenRegion region : activeRegions.values()) {
-			region.despawnRegion();
-		}
 		CitizenRegion.cleanUp();
 		plugin.cleanup();
 	}
@@ -126,10 +124,6 @@ public class CitizensPlugin extends Plugin {
 		for (AnimationID idList : AnimationID.values()) {
 			loadAnimation(idList);
 		}
-
-		if (IS_DEVELOPMENT) {
-			CitizenRegion.validateEntitiesInAllFiles();
-		}
 	}
 
 	@Override
@@ -177,10 +171,10 @@ public class CitizensPlugin extends Plugin {
 			return;
 		}
 		clientThread.invokeLater(() -> {
-			for (Entity entity : CitizenRegion.getAllEntities()) {
+			CitizenRegion.forEachEntity(entity -> {
 				entity.update();
 				if (!entity.shouldRender() || !entity.isActive()) {
-					continue;
+					return;
 				}
 				int random = getRandom(1, 10);
 				if (random < 4) {
@@ -200,8 +194,9 @@ public class CitizensPlugin extends Plugin {
 						((Citizen) entity).sayRandomRemark();
 					}
 				}
-			}
+			});
 		});
+		panel.update();
 	}
 
 	@Subscribe
@@ -211,43 +206,38 @@ public class CitizensPlugin extends Plugin {
 
 	@Subscribe
 	public void onClientTick(ClientTick ignored) {
-		for (Entity entity : CitizenRegion.getAllEntities()) {
-			if (entity.isActive()) {
-				if (entity instanceof Citizen) {
-					((Citizen) entity).onClientTick();
-				}
+		CitizenRegion.forEachEntity((entity) -> {
+			if (entity.isActive() && entity.isCitizen()) {
+				((Citizen) entity).onClientTick();
 			}
-		}
+		});
 		try {
 			//TODO: Try to find a better way of checking for regions. Could not find some sort region loaded event or similiar
 			checkRegions();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		if (IS_DEVELOPMENT) {
-			panel.update();
-		}
 	}
 
 	@Subscribe
 	public void onMenuOpened(MenuOpened ignored) {
-		int firstMenuIndex = 1;
+		final int[] firstMenuIndex = {1};
 
 		Point mousePos = client.getMouseCanvasPosition();
-		boolean clickedCitizen = false;
-		for (Entity entity : CitizenRegion.getAllEntities()) {
+		final AtomicBoolean[] clickedCitizen = {new AtomicBoolean(false)};
+		CitizenRegion.forEachEntity(entity -> {
 			if (entity.name == null || entity.examine == null) {
-				continue;
+				return;
 			}
 			if (entity.isActive()) {
 				SimplePolygon clickbox = entity.getClickbox();
 				if (clickbox == null) {
-					continue;
+					return;
 				}
 				boolean doesClickBoxContainMousePos = clickbox.contains(mousePos.getX(), mousePos.getY());
 				if (doesClickBoxContainMousePos) {
 
-					client.createMenuEntry(firstMenuIndex)
+					client.createMenuEntry(firstMenuIndex[0])
 						.setOption("Examine")
 						.setTarget("<col=fffe00>" + entity.name + "</col>")
 						.setType(MenuAction.RUNELITE)
@@ -259,10 +249,10 @@ public class CitizensPlugin extends Plugin {
 						String action = "Select";
 						if (CitizenPanel.selectedEntity == entity) {
 							action = "Deselect";
-							clickedCitizen = true;
+							clickedCitizen[0].set(true);
 						}
 
-						client.createMenuEntry(firstMenuIndex++)
+						client.createMenuEntry(firstMenuIndex[0]++)
 							.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
 							.setTarget(action + " <col=fffe00>" + entity.name + "</col>")
 							.setType(MenuAction.RUNELITE)
@@ -272,16 +262,16 @@ public class CitizensPlugin extends Plugin {
 								panel.update();
 							});
 					}
-					break;
 				}
 			}
-		}
+		});
+
 		if (IS_DEVELOPMENT) {
 			// Tile Selection
 			final Tile selectedSceneTile = client.getSelectedSceneTile();
 			final boolean same = CitizenPanel.selectedPosition != null && CitizenPanel.selectedPosition.equals(selectedSceneTile.getWorldLocation());
 			final String action = same ? "Deselect" : "Select";
-			client.createMenuEntry(firstMenuIndex++)
+			client.createMenuEntry(firstMenuIndex[0]++)
 				.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
 				.setTarget(action + " <col=fffe00>Tile</col>")
 				.setType(MenuAction.RUNELITE)
@@ -295,12 +285,12 @@ public class CitizensPlugin extends Plugin {
 					panel.update();
 				});
 			// Entity Deselect (from anywhere)
-			if (CitizenPanel.selectedEntity != null && !clickedCitizen) {
+			if (CitizenPanel.selectedEntity != null && !clickedCitizen[0].get()) {
 				String name = "Scenery Object";
 				if (CitizenPanel.selectedEntity instanceof Citizen) {
 					name = CitizenPanel.selectedEntity.name;
 				}
-				client.createMenuEntry(firstMenuIndex - 1)
+				client.createMenuEntry(firstMenuIndex[0] - 1)
 					.setOption(ColorUtil.wrapWithColorTag("Citizen Editor", Color.cyan))
 					.setTarget("Deselect <col=fffe00>" + name + "</col>")
 					.setType(MenuAction.RUNELITE)
@@ -318,7 +308,7 @@ public class CitizensPlugin extends Plugin {
 		if (!event.getMenuOption().equals("Examine")) {
 			return;
 		}
-		for (Entity entity : CitizenRegion.getAllEntities()) {
+		CitizenRegion.forEachEntity((entity) -> {
 			if (event.getMenuTarget().equals("<col=fffe00>" + entity.name + "</col>")) {
 				event.consume();
 				String chatMessage = new ChatMessageBuilder()
@@ -330,17 +320,8 @@ public class CitizensPlugin extends Plugin {
 					.runeLiteFormattedMessage(chatMessage)
 					.timestamp((int) (System.currentTimeMillis() / 1000)).build());
 
-				break;
 			}
-		}
-	}
-
-	public int countActiveEntities() {
-		return CitizenRegion.getAllEntities().stream().filter(ent -> ent.isActive() && ent != null).toArray().length;
-	}
-
-	public int countInactiveEntities() {
-		return CitizenRegion.getAllEntities().stream().filter(ent -> !ent.isActive() && ent != null).toArray().length;
+		});
 	}
 
 	private void checkRegions() throws IOException {
@@ -354,10 +335,6 @@ public class CitizensPlugin extends Plugin {
 				}
 			}
 		}
-	}
-
-	public void despawnEntity(Entity e) {
-		e.despawn();
 	}
 
 	private void cleanup() {

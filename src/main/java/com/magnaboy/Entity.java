@@ -150,8 +150,6 @@ public class Entity<T extends Entity<T>> {
 		} else {
 			despawn();
 		}
-
-		plugin.panel.update();
 	}
 
 	public T setScale(float[] scale) {
@@ -230,9 +228,15 @@ public class Entity<T extends Entity<T>> {
 		if (!rlObject.isActive()) {
 			return false;
 		}
+
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
 		});
+
+		if (plugin.IS_DEVELOPMENT) {
+			plugin.panel.update();
+		}
+
 		return true;
 	}
 
@@ -277,7 +281,6 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void validate() {
-		Util.log("Validating..." + debugName());
 		if (uuid == null) {
 			throw new IllegalStateException(debugName() + " has no uuid.");
 		}
@@ -302,6 +305,11 @@ public class Entity<T extends Entity<T>> {
 		initModel();
 		initLocation();
 		rlObject.setActive(true);
+
+		if (plugin.IS_DEVELOPMENT) {
+			plugin.panel.update();
+		}
+
 		return true;
 	}
 
