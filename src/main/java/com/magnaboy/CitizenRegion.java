@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class CitizenRegion {
 
@@ -194,20 +195,17 @@ public class CitizenRegion {
 			.setRegion(info.regionId);
 	}
 
-	public static List<Entity> getAllEntities() {
-		List<Entity> allEntities = new ArrayList<>();
-
-		for (CitizenRegion r : regionCache.values()) {
-			allEntities.addAll(r.entities.values());
-		}
-
-		return allEntities;
+	public static void forEachEntity(Consumer<Entity> function) {
+		regionCache.forEach((regionId, r) -> {
+			r.entities.forEach((entityId, e) -> {
+				function.accept(e);
+			});
+		});
 	}
 
 	public static void cleanUp() {
-		for (Entity e : getAllEntities()) {
-			e.despawn();
-		}
+		forEachEntity(Entity::despawn);
+
 		for (CitizenRegion r : regionCache.values()) {
 			r.citizenRoster.clear();
 			r.sceneryRoster.clear();

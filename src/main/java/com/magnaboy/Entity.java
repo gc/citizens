@@ -150,8 +150,6 @@ public class Entity<T extends Entity<T>> {
 		} else {
 			despawn();
 		}
-
-		plugin.panel.update();
 	}
 
 	public T setScale(float[] scale) {
@@ -233,6 +231,11 @@ public class Entity<T extends Entity<T>> {
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
 		});
+
+		if (plugin.IS_DEVELOPMENT) {
+			plugin.panel.update();
+		}
+
 		return true;
 	}
 
@@ -302,6 +305,11 @@ public class Entity<T extends Entity<T>> {
 		initModel();
 		initLocation();
 		rlObject.setActive(true);
+
+		if (plugin.IS_DEVELOPMENT) {
+			plugin.panel.update();
+		}
+
 		return true;
 	}
 
