@@ -9,6 +9,8 @@ This plugin adds a lot of NPCs (citizens) around runescape to make the world fee
 1. Citizens should 'fit in' with runescape, and look natural for the area that they're in.
 2. Currently, we do not add "fake players" (e.g. like "CowSlayer37" wearing dharoks armor).
 3. Citizens should not interfere with normal npcs/objects or gameplay.
+4. Citizens should be reasonably thought out and unique; don't just add a bunch quickly in random places with no
+   thought.
 
 # Thanks
 
