@@ -337,7 +337,7 @@ public class CitizensPlugin extends Plugin {
 		}
 	}
 
-	private void cleanup() {
+	public void cleanup() {
 		activeRegions.clear();
 	}
 
