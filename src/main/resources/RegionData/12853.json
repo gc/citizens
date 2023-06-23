@@ -9,7 +9,6 @@
                 "We need some more beers ova ere!"
             ],
             "idleAnimation": "Fletching",
-            "moveAnimation": "HumanWalk",
             "uuid": "7ce83fa7-933d-457b-a882-2e8c08826112",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -53,7 +52,6 @@
                 "Help me!"
             ],
             "idleAnimation": "HumanIdle",
-            "moveAnimation": "HumanWalk",
             "uuid": "a41802e8-e081-4300-ae82-1c3b34913ea1",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -88,7 +86,6 @@
                 "Oi!"
             ],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "a6dea8a5-95df-4d89-b2f3-c6e80a0d3933",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -128,7 +125,6 @@
                 "Ouch!"
             ],
             "idleAnimation": "AnvilBang",
-            "moveAnimation": "HumanWalk",
             "uuid": "f19a0b0e-81c7-4ec1-ae6d-b9a2e81b492e",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -171,7 +167,6 @@
             "examineText": "He\u0027s on his day off.",
             "remarks": [],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "83dd5d4f-4590-4a78-b92b-727b9ab8629e",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -212,7 +207,6 @@
             "examineText": "He\u0027s on a break.",
             "remarks": [],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "51473389-e193-4610-a764-b5717d6585fa",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -235,7 +229,6 @@
             "examineText": "A dwarf, possibly waiting for someone?",
             "remarks": [],
             "idleAnimation": "DwarfLean",
-            "moveAnimation": "HumanWalk",
             "uuid": "ef1b8b35-b5ed-4f8b-bca2-c6376a36a306",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -281,7 +274,6 @@
                 "We need some more beers ova ere!"
             ],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "19c68716-4838-4734-9a13-d0083e0fad7f",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -308,7 +300,6 @@
                 "Meow!"
             ],
             "idleAnimation": "CatSit",
-            "moveAnimation": "HumanWalk",
             "uuid": "be69d9d4-c3b6-455d-bf08-a03a8680f28c",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -342,7 +333,6 @@
                 "We need some more beers ova ere!"
             ],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "ee3c3e90-7fe5-4387-a976-74463163dab7",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -379,7 +369,6 @@
                 "We need some more beers ova ere!"
             ],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "fc28fec2-c105-49ab-8040-e36dda874646",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -416,7 +405,6 @@
             "examineText": "He\u0027s had better days.",
             "remarks": [],
             "idleAnimation": "CurledUp",
-            "moveAnimation": "HumanWalk",
             "uuid": "60997f90-dfef-445b-bd2a-b7a88a3c7842",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -443,7 +431,6 @@
             "examineText": "He\u0027s on his day off.",
             "remarks": [],
             "idleAnimation": "Sitting",
-            "moveAnimation": "HumanWalk",
             "uuid": "75b435f7-6ddd-4da8-9b71-0c1cd2a1fa9c",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -483,7 +470,6 @@
                 "Woe is me..."
             ],
             "idleAnimation": "Crying",
-            "moveAnimation": "HumanWalk",
             "uuid": "6b4cbab3-e8c4-46bd-bcd5-a20a3157fbca",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -510,7 +496,6 @@
             "examineText": "Eek!",
             "remarks": [],
             "idleAnimation": "RatBanging",
-            "moveAnimation": "HumanWalk",
             "uuid": "13d24ae0-15b6-4660-8ad2-0110e5162b91",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -542,7 +527,6 @@
                 "Chop chop!"
             ],
             "idleAnimation": "Woodcutting",
-            "moveAnimation": "HumanWalk",
             "uuid": "3b8ec9d8-9796-4048-8c77-d5c366efcc15",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -583,7 +567,6 @@
             "examineText": "TODO",
             "remarks": [],
             "idleAnimation": "HumanIdle",
-            "moveAnimation": "HumanWalk",
             "uuid": "bb076237-1858-42e1-8346-21b5d4f45997",
             "regionId": 12853,
             "entityType": "StationaryCitizen",

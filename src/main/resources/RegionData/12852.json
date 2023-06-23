@@ -6,7 +6,6 @@
             "name": "Child",
             "examineText": "A child.",
             "remarks": [],
-            "moveAnimation": "ChildWalk",
             "uuid": "6310e2d1-493c-45e2-aa06-6396d35b6fb1",
             "regionId": 12852,
             "entityType": "StationaryCitizen",
@@ -84,7 +83,6 @@
             "remarks": [
                 "TODO"
             ],
-            "moveAnimation": "HumanWalk",
             "uuid": "bc8fc6f7-6312-43ab-8742-b163b3c2eec7",
             "regionId": 12852,
             "entityType": "StationaryCitizen",
@@ -120,7 +118,6 @@
             "remarks": [
                 "TODO"
             ],
-            "moveAnimation": "HumanWalk",
             "uuid": "b7b58305-0904-41ec-b2e8-5ce2ba9b6a19",
             "regionId": 12852,
             "entityType": "StationaryCitizen",
@@ -157,7 +154,6 @@
             "remarks": [
                 "TODO"
             ],
-            "moveAnimation": "HumanWalk",
             "uuid": "025d8c03-09f9-491d-9c7f-5b98ad9e2035",
             "regionId": 12852,
             "entityType": "StationaryCitizen",
@@ -193,7 +189,6 @@
             "remarks": [
                 "TODO"
             ],
-            "moveAnimation": "HumanWalk",
             "uuid": "a7a69ec0-68cc-457e-98b9-68b4ef23daad",
             "regionId": 12852,
             "entityType": "StationaryCitizen",
@@ -219,7 +214,6 @@
             "remarks": [
                 "TODO"
             ],
-            "moveAnimation": "HumanWalk",
             "uuid": "cdbcb720-96a2-44db-b176-fc9a41990a10",
             "regionId": 12852,
             "entityType": "StationaryCitizen",

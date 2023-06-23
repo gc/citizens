@@ -9,7 +9,6 @@
                 "We need to cook!"
             ],
             "idleAnimation": "FireCook",
-            "moveAnimation": "HumanWalk",
             "uuid": "29343c79-3425-44a1-a5b7-cf37a2fc935b",
             "regionId": 12598,
             "entityType": "StationaryCitizen",

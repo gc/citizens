@@ -9,7 +9,6 @@
                 "Chop chop!"
             ],
             "idleAnimation": "HalfLayingDown",
-            "moveAnimation": "HumanWalk",
             "uuid": "f5adc6b8-f06e-4644-b0d7-f0163ac4f7e6",
             "regionId": 12597,
             "entityType": "StationaryCitizen",
@@ -36,7 +35,6 @@
                 "Chop chop!"
             ],
             "idleAnimation": "HerbloreMix",
-            "moveAnimation": "HumanWalk",
             "uuid": "edd6337c-423e-42b6-ad10-2b0e308b9cd3",
             "regionId": 12597,
             "entityType": "StationaryCitizen",

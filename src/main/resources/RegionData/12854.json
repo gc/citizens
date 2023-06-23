@@ -9,7 +9,6 @@
                 "I thought I saw a Tangleroot..."
             ],
             "idleAnimation": "FireCook",
-            "moveAnimation": "HumanWalk",
             "uuid": "8622dc92-f780-4b96-9642-2d9ba33663bd",
             "regionId": 12854,
             "entityType": "StationaryCitizen",
