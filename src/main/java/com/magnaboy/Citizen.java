@@ -53,11 +53,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
-	public T setMovAnimID(AnimationID anim) {
-		this.movingAnimationId = anim;
-		return (T) this;
-	}
-
 	public T setName(String name) {
 		this.name = name;
 		return (T) this;
@@ -70,11 +65,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 	public T setRemarks(String[] remarks) {
 		this.remarks = remarks;
-		return (T) this;
-	}
-
-	public T setRandomAnimations(AnimationID[] randomAnimations) {
-		this.randomAnimations = randomAnimations;
 		return (T) this;
 	}
 
