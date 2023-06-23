@@ -367,10 +367,11 @@ public class CitizensPlugin extends Plugin {
 	private void cleanupAll() {
 		shuttingDown = true;
 		overlayManager.remove(citizensOverlay);
-		activeRegions.clear();
+		this.cleanup();
 		CitizenRegion.cleanUp();
 		if (IS_DEVELOPMENT) {
 			panel.cleanup();
+			panel.update();
 		}
 		shuttingDown = false;
 	}
