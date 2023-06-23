@@ -40,6 +40,33 @@ public class CitizenRegion {
 		plugin = p;
 	}
 
+	public static void validateEntitiesInAllFiles() {
+		if (!plugin.IS_DEVELOPMENT) {
+			return;
+		}
+
+		File directory = new File(REGIONDATA_DIRECTORY);
+		File[] files = directory.listFiles((dir, name) -> name.endsWith(".json"));
+
+		if (files == null) {
+			Util.log("No JSON files found in " + REGIONDATA_DIRECTORY);
+			return;
+		}
+
+		for (File file : files) {
+			String fileName = file.getName();
+			String fileBaseName = fileName.substring(0, fileName.lastIndexOf('.'));
+			int regionId;
+			try {
+				regionId = Integer.parseInt(fileBaseName);
+			} catch (NumberFormatException e) {
+				Util.log("Failed to parse region ID from file name: " + fileName);
+				continue;
+			}
+			CitizenRegion region = loadRegion(regionId);
+		}
+	}
+
 	public static CitizenRegion loadRegion(int regionId) {
 		return loadRegion(regionId, false);
 	}
@@ -69,6 +96,7 @@ public class CitizenRegion {
 			}
 			return null;
 		}
+
 		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			Gson gson = new Gson();
 			CitizenRegion region = gson.fromJson(reader, CitizenRegion.class);
@@ -87,6 +115,9 @@ public class CitizenRegion {
 			for (SceneryInfo sInfo : region.sceneryRoster) {
 				Scenery scenery = loadScenery(plugin, sInfo);
 				region.entities.put(scenery.uuid, scenery);
+			}
+			if (plugin.IS_DEVELOPMENT) {
+				region.entities.values().forEach(Entity::validate);
 			}
 			allEntities.addAll(region.entities.values());
 			regionCache.put(regionId, region);

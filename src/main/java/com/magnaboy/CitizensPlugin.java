@@ -126,6 +126,10 @@ public class CitizensPlugin extends Plugin {
 		for (AnimationID idList : AnimationID.values()) {
 			loadAnimation(idList);
 		}
+
+		if (IS_DEVELOPMENT) {
+			CitizenRegion.validateEntitiesInAllFiles();
+		}
 	}
 
 	@Override
@@ -232,6 +236,9 @@ public class CitizensPlugin extends Plugin {
 		Point mousePos = client.getMouseCanvasPosition();
 		boolean clickedCitizen = false;
 		for (Entity entity : CitizenRegion.getAllEntities()) {
+			if (entity.name == null || entity.examine == null) {
+				continue;
+			}
 			if (entity.isActive()) {
 				SimplePolygon clickbox = entity.getClickbox();
 				if (clickbox == null) {
@@ -270,7 +277,7 @@ public class CitizensPlugin extends Plugin {
 			}
 		}
 		if (IS_DEVELOPMENT) {
-			//Tile Selection
+			// Tile Selection
 			final Tile selectedSceneTile = client.getSelectedSceneTile();
 			final boolean same = CitizenPanel.selectedPosition != null && CitizenPanel.selectedPosition.equals(selectedSceneTile.getWorldLocation());
 			final String action = same ? "Deselect" : "Select";
@@ -287,7 +294,7 @@ public class CitizensPlugin extends Plugin {
 					}
 					panel.update();
 				});
-			//Entity Deselect (from anywhere)
+			// Entity Deselect (from anywhere)
 			if (CitizenPanel.selectedEntity != null && !clickedCitizen) {
 				String name = "Scenery Object";
 				if (CitizenPanel.selectedEntity instanceof Citizen) {

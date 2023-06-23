@@ -17,7 +17,7 @@ import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.api.model.Jarvis;
 
 public class Entity<T extends Entity<T>> {
-	public int regionId;
+	public Integer regionId;
 	public WorldPoint worldLocation;
 	public String name;
 	public String examine;
@@ -39,9 +39,8 @@ public class Entity<T extends Entity<T>> {
 		this.rlObject = plugin.client.createRuneLiteObject();
 	}
 
-	static int radToJau(double a) {
-		int j = (int) Math.round(a / Perspective.UNIT);
-		return j & 2047;
+	public boolean isCitizen() {
+		return entityType == EntityType.StationaryCitizen || entityType == EntityType.WanderingCitizen || entityType == EntityType.ScriptedCitizen;
 	}
 
 	protected static SimplePolygon calculateAABB(Client client, Model m, Integer jauOrient, int x, int y, int z, int zOff) {
@@ -273,19 +272,24 @@ public class Entity<T extends Entity<T>> {
 		rlObject.setShouldLoop(true);
 	}
 
-	private String resolveIdentifier() {
-		if (this instanceof Citizen) {
-			Citizen citizen = (Citizen) this;
-			return citizen.name;
-		}
+	public String debugName() {
+		return "N:" + name + " T:" + entityType + " ID:" + uuid.toString().substring(0, 6);
+	}
 
-		return this.modelIDs.toString();
+	public void validate() {
+		Util.log("Validating..." + debugName());
+		if (uuid == null) {
+			throw new IllegalStateException(debugName() + " has no uuid.");
+		}
+		if (regionId == null) {
+			throw new IllegalStateException(debugName() + " has no regionId.");
+		}
 	}
 
 	private void initLocation() {
 		LocalPoint initializedLocation = LocalPoint.fromWorld(plugin.client, worldLocation);
 		if (initializedLocation == null) {
-			throw new IllegalStateException("Tried to spawn entity with no initializedLocation: " + resolveIdentifier());
+			throw new IllegalStateException("Tried to spawn entity with no initializedLocation: " + debugName());
 		}
 		setLocation(initializedLocation);
 	}
@@ -307,7 +311,7 @@ public class Entity<T extends Entity<T>> {
 
 	public boolean rotateObject(double intx, double inty) {
 		final int JAU_FULL_ROTATION = 2048;
-		int targetOrientation = Entity.radToJau(Math.atan2(intx, inty));
+		int targetOrientation = Util.radToJau(Math.atan2(intx, inty));
 		int currentOrientation = rlObject.getOrientation();
 
 		int dJau = (targetOrientation - currentOrientation) % JAU_FULL_ROTATION;
