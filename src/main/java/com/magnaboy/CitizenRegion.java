@@ -17,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,11 +25,11 @@ public class CitizenRegion {
 
 	private static final float VALID_REGION_VERSION = 0.8f;
 	private static final HashMap<Integer, CitizenRegion> dirtyRegions = new HashMap<>();
-	private static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
-	private static final HashSet<Entity> allEntities = new HashSet<>();
+	public static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
 	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
 	private static CitizensPlugin plugin;
 	private final transient HashMap<UUID, Entity> entities = new HashMap<>();
+
 	public float version;
 	public int regionId;
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
@@ -63,7 +62,7 @@ public class CitizenRegion {
 				Util.log("Failed to parse region ID from file name: " + fileName);
 				continue;
 			}
-			CitizenRegion region = loadRegion(regionId);
+			loadRegion(regionId);
 		}
 	}
 
@@ -119,7 +118,6 @@ public class CitizenRegion {
 			if (plugin.IS_DEVELOPMENT) {
 				region.entities.values().forEach(Entity::validate);
 			}
-			allEntities.addAll(region.entities.values());
 			regionCache.put(regionId, region);
 			Util.log("Loaded Region: " + regionId + " from file");
 			return region;
@@ -196,11 +194,20 @@ public class CitizenRegion {
 			.setRegion(info.regionId);
 	}
 
-	public static HashSet<Entity> getAllEntities() {
+	public static List<Entity> getAllEntities() {
+		List<Entity> allEntities = new ArrayList<>();
+
+		for (CitizenRegion r : regionCache.values()) {
+			allEntities.addAll(r.entities.values());
+		}
+
 		return allEntities;
 	}
 
 	public static void cleanUp() {
+		for (Entity e : getAllEntities()) {
+			e.despawn();
+		}
 		for (CitizenRegion r : regionCache.values()) {
 			r.citizenRoster.clear();
 			r.sceneryRoster.clear();
@@ -255,7 +262,6 @@ public class CitizenRegion {
 	public static void addEntityToRegion(Entity e, EntityInfo info) {
 		CitizenRegion region = regionCache.get(e.regionId);
 		region.entities.put(e.uuid, e);
-		allEntities.add(e);
 		if (info instanceof CitizenInfo) {
 			region.citizenRoster.add((CitizenInfo) info);
 		}
@@ -289,8 +295,7 @@ public class CitizenRegion {
 			removeEntityFromRegion((Scenery) e, region);
 		}
 
-		region.entities.remove(e);
-		allEntities.remove(e);
+		region.entities.remove(e.uuid);
 		e.despawn();
 		dirtyRegion(region);
 	}
@@ -327,7 +332,6 @@ public class CitizenRegion {
 	}
 
 	public void despawnRegion() {
-		allEntities.removeAll(entities.values());
 		entities.values().forEach(Entity::despawn);
 	}
 
