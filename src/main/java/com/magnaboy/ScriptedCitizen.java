@@ -25,4 +25,10 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		}
 		return didSpawn;
 	}
+
+	@Override
+	public boolean despawn() {
+		script.stop();
+		return super.despawn();
+	}
 }
