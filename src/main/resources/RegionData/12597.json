@@ -8,7 +8,6 @@
             "remarks": [
                 "Chop chop!"
             ],
-            "idleAnimation": "HalfLayingDown",
             "uuid": "f5adc6b8-f06e-4644-b0d7-f0163ac4f7e6",
             "regionId": 12597,
             "entityType": "StationaryCitizen",
@@ -26,7 +25,8 @@
             ],
             "baseOrientation": 1536,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "HalfLayingDown"
         },
         {
             "name": "Assistant Apothecary",
@@ -34,7 +34,6 @@
             "remarks": [
                 "Chop chop!"
             ],
-            "idleAnimation": "HerbloreMix",
             "uuid": "edd6337c-423e-42b6-ad10-2b0e308b9cd3",
             "regionId": 12597,
             "entityType": "StationaryCitizen",
@@ -69,7 +68,49 @@
                 6689,
                 5400,
                 5301
-            ]
+            ],
+            "idleAnimation": "HerbloreMix"
+        }
+    ],
+    "sceneryRoster": [
+        {
+            "uuid": "5fcbb2fb-dfea-4b34-9b6c-244448a128e8",
+            "regionId": 12597,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3190,
+                "y": 3434,
+                "plane": 0
+            },
+            "modelIds": [
+                12147
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "ef1cbc8a-2c14-4d3b-8335-1b7be0876f27",
+            "regionId": 12597,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3198,
+                "y": 3410,
+                "plane": 0
+            },
+            "modelIds": [
+                25858
+            ],
+            "baseOrientation": 256,
+            "translate": [
+                0.1,
+                1.9,
+                0.65
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "PigeonIdle"
         }
     ]
 }
