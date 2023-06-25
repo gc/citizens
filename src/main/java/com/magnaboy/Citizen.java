@@ -162,12 +162,13 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			}
 			LocalPoint targetPosition = currentTarget.localDestinationPosition;
 
-			double intx = rlObject
-				.getLocation()
-				.getX() - targetPosition.getX();
-			double inty = rlObject
-				.getLocation()
-				.getY() - targetPosition.getY();
+			LocalPoint localLoc = getLocalLocation();
+			if (localLoc == null) {
+				throw new RuntimeException("Tried to movement tick for citizen with no local location: " + debugName());
+			}
+
+			double intx = localLoc.getX() - targetPosition.getX();
+			double inty = localLoc.getY() - targetPosition.getY();
 
 			boolean rotationDone = rotateObject(intx, inty);
 
