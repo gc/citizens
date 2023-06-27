@@ -2,6 +2,9 @@ package com.magnaboy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.magnaboy.serialization.CitizenInfo;
+import com.magnaboy.serialization.EntityInfo;
+import com.magnaboy.serialization.SceneryInfo;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -157,8 +160,10 @@ public class CitizenRegion {
 	}
 
 	private static ScriptedCitizen loadScriptedCitizen(CitizensPlugin plugin, CitizenInfo info) {
-		info.entityType = EntityType.StationaryCitizen;
-		return new ScriptedCitizen(plugin).setWorldLocation(info.worldLocation);
+		info.entityType = EntityType.ScriptedCitizen;
+		return new ScriptedCitizen(plugin)
+			.setWorldLocation(info.worldLocation)
+			.setScript(info.startScript);
 	}
 
 	public static Scenery loadScenery(CitizensPlugin plugin, SceneryInfo info) {

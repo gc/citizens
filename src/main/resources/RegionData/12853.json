@@ -568,7 +568,7 @@
             "remarks": [],
             "uuid": "bb076237-1858-42e1-8346-21b5d4f45997",
             "regionId": 12853,
-            "entityType": "StationaryCitizen",
+            "entityType": "ScriptedCitizen",
             "worldLocation": {
                 "x": 3209,
                 "y": 3425,
@@ -769,7 +769,8 @@
             ],
             "baseOrientation": 1536,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "startScript" : "testScript"
         },
         {
             "uuid": "64b836cb-db1c-4d0d-84e4-63130fea1f89",
