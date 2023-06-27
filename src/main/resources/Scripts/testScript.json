@@ -1,0 +1,36 @@
+{
+    "actions": [
+        {
+            "action": "Idle",
+            "timeTilNextAction": 3
+        },
+        {
+            "action": "WalkTo",
+            "timeTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3215,
+                "y": 3425,
+                "plane": 0
+            }
+        },
+        {
+            "action": "Animation",
+            "timeTilNextAction": 0,
+            "animationId": "Flex"
+        },
+        {
+            "action": "Say",
+            "timeTilNextAction": 0,
+            "message": "Hello World"
+        },
+        {
+            "action": "WalkTo",
+            "timeTilNextAction": 0.0,
+            "targetPosition": {
+                "x": 3209,
+                "y": 3425,
+                "plane": 0
+            }
+        }
+    ]
+}
