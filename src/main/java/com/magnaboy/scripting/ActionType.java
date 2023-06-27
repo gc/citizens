@@ -5,5 +5,5 @@ public enum ActionType {
 	WalkTo,        //Go somewhere
 	Animation,  //Sets idle animation, can be one-shot or remain as idle anim
 	Say,        //Overhead text message
-	StartNewScript,//Can start a completely new script from a script
+	StartNewScript, //Can start a completely new script from a script
 }
