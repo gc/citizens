@@ -120,6 +120,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 			setWait(action.timeTilNextAction);
 		});
 	}
+
 	private void setWait(float seconds) {
 		//We never want thread.sleep(0)
 		seconds = Math.max(0.1f, seconds);
