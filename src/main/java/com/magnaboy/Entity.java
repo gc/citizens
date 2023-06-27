@@ -1,9 +1,11 @@
 package com.magnaboy;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import net.runelite.api.AABB;
 import net.runelite.api.Client;
+import net.runelite.api.GameObject;
 import net.runelite.api.Model;
 import net.runelite.api.ModelData;
 import net.runelite.api.Perspective;
@@ -11,6 +13,8 @@ import static net.runelite.api.Perspective.COSINE;
 import static net.runelite.api.Perspective.SINE;
 import net.runelite.api.Player;
 import net.runelite.api.RuneLiteObject;
+import net.runelite.api.Scene;
+import net.runelite.api.Tile;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.geometry.SimplePolygon;
@@ -33,6 +37,8 @@ public class Entity<T extends Entity<T>> {
 	private int[] recolorsToFind;
 	private int[] recolorsToReplace;
 	private SimplePolygon clickbox;
+	private Integer objectToRemove;
+	public List<MergedObject> mergedObjects = new ArrayList<>();
 
 	public Entity(CitizensPlugin plugin) {
 		this.plugin = plugin;
@@ -142,6 +148,16 @@ public class Entity<T extends Entity<T>> {
 		return (T) this;
 	}
 
+	public T setObjectToRemove(Integer objectToRemove) {
+		this.objectToRemove = objectToRemove;
+		return (T) this;
+	}
+
+	public T addMergedObject(MergedObject mergedObject) {
+		this.mergedObjects.add(mergedObject);
+		return (T) this;
+	}
+
 	public void update() {
 		boolean inScene = shouldRender();
 
@@ -247,6 +263,17 @@ public class Entity<T extends Entity<T>> {
 				ModelData data = plugin.client.loadModelData(modelID);
 				models.add(data);
 			}
+
+			// Merge merged objects
+			for (MergedObject obj : mergedObjects) {
+				ModelData data = plugin.client.loadModelData(obj.objectID);
+				for (int i = 0; i < obj.count90CCWRotations; i++) {
+					data.cloneVertices();
+					data.rotateY90Ccw();
+				}
+				models.add(data);
+			}
+
 			ModelData finalModel = plugin.client.mergeModels(models.toArray(new ModelData[models.size()]), models.size());
 			if (recolorsToReplace != null && recolorsToReplace.length > 0) {
 				for (int i = 0; i < recolorsToReplace.length; i++) {
@@ -262,6 +289,7 @@ public class Entity<T extends Entity<T>> {
 				finalModel.cloneVertices();
 				finalModel.translate(-(Math.round(translate[0] * 128)), -(Math.round(translate[1] * 128)), -(Math.round(translate[2] * 128)));
 			}
+
 			rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
 		}
 
@@ -304,6 +332,9 @@ public class Entity<T extends Entity<T>> {
 
 		initModel();
 		initLocation();
+		if (objectToRemove != null) {
+			removeOtherObjects();
+		}
 		rlObject.setActive(true);
 
 		if (plugin.IS_DEVELOPMENT) {
@@ -397,5 +428,28 @@ public class Entity<T extends Entity<T>> {
 		return Util.intArrayToString(recolorsToReplace);
 	}
 
+	private void removeOtherObjects() {
+		Scene scene = plugin.client.getScene();
+		Tile[][] tiles = scene.getTiles()[plugin.client.getPlane()];
 
+		LocalPoint lp = LocalPoint.fromWorld(plugin.client, worldLocation);
+		if (lp == null) {
+			return;
+		}
+		Tile tile = tiles[lp.getSceneX()][lp.getSceneY()];
+		if (tile == null) {
+			return;
+		}
+
+		for (GameObject gameObject : tile.getGameObjects()) {
+			if (gameObject == null) {
+				continue;
+			}
+			if (gameObject.getId() == objectToRemove) {
+				// Currently it's not possible to re-add the Game Object outside of an area load
+				scene.removeGameObject(gameObject);
+			}
+		}
+
+	}
 }

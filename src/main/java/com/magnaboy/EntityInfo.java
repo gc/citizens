@@ -1,5 +1,6 @@
 package com.magnaboy;
 
+import java.util.List;
 import java.util.UUID;
 import net.runelite.api.coords.WorldPoint;
 
@@ -15,4 +16,6 @@ public class EntityInfo {
 	public int[] modelRecolorFind = {};
 	public int[] modelRecolorReplace = {};
 	public AnimationID idleAnimation;
+	public Integer removedObject;
+	public List<MergedObject> mergedObjects;
 }

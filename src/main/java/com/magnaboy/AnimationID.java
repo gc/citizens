@@ -10,6 +10,7 @@ public enum AnimationID {
 	Woodcutting(2117),
 	HalfLayingDown(1147),
 	Sitting(4114),
+	ChurchSitting(3281),
 	CurledUp(4712),
 
 	// Actions
@@ -24,6 +25,7 @@ public enum AnimationID {
 	AnvilBang(898),
 	Crying(860),
 	Mining(823),
+	BuryOrPickingUp(827),
 
 	ChildStarJump(218),
 	ChildPlay1(6484),
@@ -35,8 +37,10 @@ public enum AnimationID {
 	FireIdle(475),
 	CatLunge(319),
 	CatSit(2134),
+	CatSleep(2159),
 	RatIdle(2704),
 	RatBanging(2706),
+	BeeIdle(0),
 
 	DwarfLean(6206),
 	DwarfWalk(98),

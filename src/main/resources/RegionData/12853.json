@@ -8,7 +8,6 @@
             "remarks": [
                 "We need some more beers ova ere!"
             ],
-            "idleAnimation": "Fletching",
             "uuid": "7ce83fa7-933d-457b-a882-2e8c08826112",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -43,7 +42,8 @@
                 3408,
                 2576,
                 908
-            ]
+            ],
+            "idleAnimation": "Fletching"
         },
         {
             "name": "Prisoner",
@@ -51,7 +51,6 @@
             "remarks": [
                 "Help me!"
             ],
-            "idleAnimation": "HumanIdle",
             "uuid": "a41802e8-e081-4300-ae82-1c3b34913ea1",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -77,7 +76,8 @@
             "modelRecolorReplace": [
                 21541,
                 7331
-            ]
+            ],
+            "idleAnimation": "HumanIdle"
         },
         {
             "name": "Alexander",
@@ -85,7 +85,6 @@
             "remarks": [
                 "Oi!"
             ],
-            "idleAnimation": "Sitting",
             "uuid": "a6dea8a5-95df-4d89-b2f3-c6e80a0d3933",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -116,7 +115,8 @@
                 6447,
                 6932,
                 4541
-            ]
+            ],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Smithing apprentice",
@@ -124,7 +124,6 @@
             "remarks": [
                 "Ouch!"
             ],
-            "idleAnimation": "AnvilBang",
             "uuid": "f19a0b0e-81c7-4ec1-ae6d-b9a2e81b492e",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -160,13 +159,13 @@
                 41490,
                 41418,
                 43150
-            ]
+            ],
+            "idleAnimation": "AnvilBang"
         },
         {
             "name": "Demon butler",
             "examineText": "He\u0027s on his day off.",
             "remarks": [],
-            "idleAnimation": "Sitting",
             "uuid": "83dd5d4f-4590-4a78-b92b-727b9ab8629e",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -200,13 +199,13 @@
                 532,
                 918,
                 902
-            ]
+            ],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Guard",
             "examineText": "He\u0027s on a break.",
             "remarks": [],
-            "idleAnimation": "Sitting",
             "uuid": "51473389-e193-4610-a764-b5717d6585fa",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -222,13 +221,13 @@
             ],
             "baseOrientation": 1536,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Dwarf",
             "examineText": "A dwarf, possibly waiting for someone?",
             "remarks": [],
-            "idleAnimation": "DwarfLean",
             "uuid": "ef1b8b35-b5ed-4f8b-bca2-c6376a36a306",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -265,7 +264,8 @@
                 16,
                 16,
                 10539
-            ]
+            ],
+            "idleAnimation": "DwarfLean"
         },
         {
             "name": "Darren",
@@ -273,7 +273,6 @@
             "remarks": [
                 "We need some more beers ova ere!"
             ],
-            "idleAnimation": "Sitting",
             "uuid": "19c68716-4838-4734-9a13-d0083e0fad7f",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -291,7 +290,8 @@
             ],
             "baseOrientation": 512,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Cat",
@@ -299,7 +299,6 @@
             "remarks": [
                 "Meow!"
             ],
-            "idleAnimation": "CatSit",
             "uuid": "be69d9d4-c3b6-455d-bf08-a03a8680f28c",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -324,7 +323,8 @@
                 -1.0
             ],
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "CatSit"
         },
         {
             "name": "Ali",
@@ -332,7 +332,6 @@
             "remarks": [
                 "We need some more beers ova ere!"
             ],
-            "idleAnimation": "Sitting",
             "uuid": "ee3c3e90-7fe5-4387-a976-74463163dab7",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -360,7 +359,8 @@
                 10351,
                 10351,
                 5555
-            ]
+            ],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Afrah",
@@ -368,7 +368,6 @@
             "remarks": [
                 "We need some more beers ova ere!"
             ],
-            "idleAnimation": "Sitting",
             "uuid": "fc28fec2-c105-49ab-8040-e36dda874646",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -398,13 +397,13 @@
                 127,
                 127,
                 127
-            ]
+            ],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Joe the tramp",
             "examineText": "He\u0027s had better days.",
             "remarks": [],
-            "idleAnimation": "CurledUp",
             "uuid": "60997f90-dfef-445b-bd2a-b7a88a3c7842",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -424,13 +423,13 @@
             ],
             "baseOrientation": 0,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "CurledUp"
         },
         {
             "name": "Butler jarvis",
             "examineText": "He\u0027s on his day off.",
             "remarks": [],
-            "idleAnimation": "Sitting",
             "uuid": "75b435f7-6ddd-4da8-9b71-0c1cd2a1fa9c",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -461,7 +460,8 @@
                 33030,
                 8070,
                 94
-            ]
+            ],
+            "idleAnimation": "Sitting"
         },
         {
             "name": "Prisoner",
@@ -469,7 +469,6 @@
             "remarks": [
                 "Woe is me..."
             ],
-            "idleAnimation": "Crying",
             "uuid": "6b4cbab3-e8c4-46bd-bcd5-a20a3157fbca",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -489,13 +488,13 @@
             ],
             "baseOrientation": 1024,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "Crying"
         },
         {
             "name": "Rat",
             "examineText": "Eek!",
             "remarks": [],
-            "idleAnimation": "RatBanging",
             "uuid": "13d24ae0-15b6-4660-8ad2-0110e5162b91",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -518,7 +517,8 @@
             ],
             "modelRecolorReplace": [
                 24
-            ]
+            ],
+            "idleAnimation": "RatBanging"
         },
         {
             "name": "Benny",
@@ -526,7 +526,6 @@
             "remarks": [
                 "Chop chop!"
             ],
-            "idleAnimation": "Woodcutting",
             "uuid": "3b8ec9d8-9796-4048-8c77-d5c366efcc15",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -560,13 +559,13 @@
                 922,
                 10409,
                 803
-            ]
+            ],
+            "idleAnimation": "Woodcutting"
         },
         {
             "name": "ScriptedEmme",
             "examineText": "TODO",
             "remarks": [],
-            "idleAnimation": "HumanIdle",
             "uuid": "bb076237-1858-42e1-8346-21b5d4f45997",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -580,7 +579,8 @@
             ],
             "baseOrientation": 1024,
             "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
         },
         {
             "name": "Emme",
@@ -588,7 +588,6 @@
             "remarks": [
                 "Good morning!"
             ],
-            "idleAnimation": "HumanIdle",
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
                 "x": 3212,
@@ -609,17 +608,27 @@
                 "plane": 0
             },
             "modelIds": [
-                38135
+                38135,
+                28456,
+                28455,
+                28451,
+                176,
+                27152,
+                28288
             ],
             "baseOrientation": 0,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": []
+            "modelRecolorFind": [
+                6798
+            ],
+            "modelRecolorReplace": [
+                109
+            ],
+            "idleAnimation": "HumanIdle"
         },
         {
             "name": "Jofridr",
             "examineText": "A Citizen of Gielinor.",
             "remarks": [],
-            "idleAnimation": "Sitting",
             "uuid": "1601ae3a-a863-4ecd-9234-6ddedb854a78",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -653,13 +662,20 @@
                 6817,
                 10308,
                 10279
+            ],
+            "idleAnimation": "Sitting",
+            "removedObject": 3632,
+            "mergedObjects": [
+                {
+                    "objectID": 7719,
+                    "count90CCWRotations": 2
+                }
             ]
         },
         {
             "name": "Morten",
             "examineText": "A Citizen of Gielinor.",
             "remarks": [],
-            "idleAnimation": "Sitting",
             "uuid": "0601451f-b71a-4d54-87d8-74c4d79b63c7",
             "regionId": 12853,
             "entityType": "StationaryCitizen",
@@ -693,7 +709,49 @@
                 2590,
                 5404,
                 2721
+            ],
+            "idleAnimation": "Sitting",
+            "mergedObjects": [
+                {
+                    "objectID": 7719,
+                    "count90CCWRotations": 2
+                }
             ]
+        },
+        {
+            "name": "Bees!",
+            "examineText": "Not the bees!",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3200,
+                "y": 3409,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3202,
+                "y": 3412,
+                "plane": 0
+            },
+            "uuid": "931c734a-80aa-45ac-ae40-5ed153d011ca",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3202,
+                "y": 3412,
+                "plane": 0
+            },
+            "modelIds": [
+                2950
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                12
+            ],
+            "modelRecolorReplace": [
+                3988
+            ],
+            "idleAnimation": "BeeIdle"
         }
     ],
     "sceneryRoster": [
