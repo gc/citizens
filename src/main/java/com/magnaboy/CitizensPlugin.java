@@ -151,13 +151,19 @@ public class CitizensPlugin extends Plugin {
 
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged) {
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN) {
+		GameState newState = gameStateChanged.getGameState();
+
+		if (newState == GameState.LOGGED_IN) {
 			try {
 				checkRegions();
 				entitiesAreReady = true;
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
+		}
+
+		if (newState == GameState.LOADING) {
+			CitizenRegion.forEachEntity((Entity::despawn));
 		}
 	}
 
