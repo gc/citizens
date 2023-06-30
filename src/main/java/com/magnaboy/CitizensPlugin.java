@@ -226,9 +226,6 @@ public class CitizensPlugin extends Plugin {
 		Point mousePos = client.getMouseCanvasPosition();
 		final AtomicBoolean[] clickedCitizen = {new AtomicBoolean(false)};
 		CitizenRegion.forEachEntity(entity -> {
-			if (entity.name == null || entity.examine == null) {
-				return;
-			}
 			if (entity.isActive()) {
 				SimplePolygon clickbox = entity.getClickbox();
 				if (clickbox == null) {
@@ -237,13 +234,15 @@ public class CitizensPlugin extends Plugin {
 				boolean doesClickBoxContainMousePos = clickbox.contains(mousePos.getX(), mousePos.getY());
 				if (doesClickBoxContainMousePos) {
 
-					client.createMenuEntry(firstMenuIndex[0])
-						.setOption("Examine")
-						.setTarget("<col=fffe00>" + entity.name + "</col>")
-						.setType(MenuAction.RUNELITE)
-						.setParam0(0)
-						.setParam1(0)
-						.setDeprioritized(true);
+					if ((entity.name != null && entity.examine != null) || IS_DEVELOPMENT) {
+						client.createMenuEntry(firstMenuIndex[0])
+							.setOption("Examine")
+							.setTarget("<col=fffe00>" + entity.name + "</col>")
+							.setType(MenuAction.RUNELITE)
+							.setParam0(0)
+							.setParam1(0)
+							.setDeprioritized(true);
+					}
 
 					if (IS_DEVELOPMENT) {
 						String action = "Select";
