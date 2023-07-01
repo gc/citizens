@@ -138,6 +138,10 @@ public class CitizenRegion {
 			info.mergedObjects.forEach(citizen::addMergedObject);
 		}
 
+		if (info.moveAnimation != null) {
+			citizen.movingAnimationId = info.moveAnimation;
+		}
+
 		return citizen;
 	}
 
