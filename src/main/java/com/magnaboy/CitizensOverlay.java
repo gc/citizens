@@ -159,7 +159,7 @@ public class CitizensOverlay extends Overlay {
 			// For wandering citizens, highlight their wandering area.
 			if (citizen instanceof WanderingCitizen) {
 				WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
-				Color color = new Color(0, 0, 255, 20);
+				Color color = new Color(0, 0, 255, 5);
 				highlightRegion(graphics, boundingBox, citizen.getPlane(), color);
 			}
 
