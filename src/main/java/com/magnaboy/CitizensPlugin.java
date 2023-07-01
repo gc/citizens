@@ -183,7 +183,7 @@ public class CitizensPlugin extends Plugin {
 					return;
 				}
 				int random = getRandom(1, 10);
-				if (random < 4) {
+				if (random < 8) {
 					if (entity instanceof WanderingCitizen) {
 						((WanderingCitizen) entity).wander();
 					}
