@@ -105,8 +105,9 @@ public class CitizensOverlay extends Overlay {
 		if (CitizenPanel.selectedPosition != null) {
 			Color selectedColor = new Color(0, 255, 255, 200);
 			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
-			if (plugin.getConfig().showOverlay()) {
-				renderText(graphics, LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition), "Selected Tile", selectedColor);
+			LocalPoint lp = LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition);
+			if (plugin.getConfig().showOverlay() && lp != null) {
+				renderText(graphics, lp, "Selected Tile", selectedColor);
 			}
 		}
 
