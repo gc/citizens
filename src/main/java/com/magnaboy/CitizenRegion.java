@@ -184,9 +184,9 @@ public class CitizenRegion {
 
 	public static void forEachEntity(Consumer<Entity> function) {
 		regionCache.forEach((regionId, r) -> {
-			if(r != null) {
+			if (r != null) {
 				r.entities.forEach((entityId, e) -> {
-					if(e != null) {
+					if (e != null) {
 						function.accept(e);
 					}
 				});
