@@ -1,5 +1,8 @@
-package com.magnaboy;
+package com.magnaboy.serialization;
 
+import com.magnaboy.AnimationID;
+import com.magnaboy.EntityType;
+import com.magnaboy.MergedObject;
 import java.util.List;
 import java.util.UUID;
 import net.runelite.api.coords.WorldPoint;

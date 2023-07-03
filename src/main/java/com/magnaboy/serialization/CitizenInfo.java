@@ -1,5 +1,6 @@
-package com.magnaboy;
+package com.magnaboy.serialization;
 
+import com.magnaboy.AnimationID;
 import net.runelite.api.coords.WorldPoint;
 
 public class CitizenInfo extends EntityInfo {
@@ -10,4 +11,6 @@ public class CitizenInfo extends EntityInfo {
 
 	public WorldPoint wanderBoxBL;
 	public WorldPoint wanderBoxTR;
+
+	public String startScript;
 }
