@@ -44,7 +44,7 @@ public final class Util {
 		return j & 2047;
 	}
 
-	static void log(String message) {
+	public static void log(String message) {
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("citizens.log", true)))) {
 			out.println(message);
 		} catch (IOException e) {
