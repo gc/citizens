@@ -313,9 +313,9 @@
             ],
             "baseOrientation": 768,
             "scale": [
-                0.46875,
-                0.46875,
-                0.46875
+                -0.46875,
+                -0.46875,
+                -0.46875
             ],
             "translate": [
                 0.0,
@@ -752,6 +752,231 @@
                 3988
             ],
             "idleAnimation": "BeeIdle"
+        },
+        {
+            "name": "Knight",
+            "examineText": "A knight.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "08b33a76-0595-4a85-89e9-5b2efdd8eb06",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3241,
+                "y": 3434,
+                "plane": 0
+            },
+            "modelIds": [
+                164,
+                185,
+                176,
+                215,
+                246,
+                3329,
+                313
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [
+                10004,
+                4626,
+                7566,
+                7446,
+                25238,
+                54397
+            ],
+            "modelRecolorReplace": [
+                61,
+                61,
+                61,
+                41,
+                61,
+                41410
+            ],
+            "idleAnimation": "Sitting",
+            "removedObject": 3632,
+            "mergedObjects": [
+                {
+                    "objectID": 7719,
+                    "count90CCWRotations": 2
+                }
+            ]
+        },
+        {
+            "name": "Balin",
+            "examineText": "A dwarf.",
+            "remarks": [],
+            "moveAnimation": "DwarfWalk",
+            "wanderBoxBL": {
+                "x": 3241,
+                "y": 3401,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3245,
+                "y": 3410,
+                "plane": 0
+            },
+            "uuid": "509500a0-8540-4fa5-87c9-f9f64619385b",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3242,
+                "y": 3402,
+                "plane": 0
+            },
+            "modelIds": [
+                2972,
+                2980,
+                2977,
+                7050,
+                10326
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                5784,
+                28,
+                61,
+                7054,
+                4550
+            ],
+            "modelRecolorReplace": [
+                7050,
+                5301,
+                37,
+                61,
+                5557
+            ],
+            "idleAnimation": "DwarfIdle"
+        },
+        {
+            "name": "Dofur",
+            "examineText": "A dwarf.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "671be842-a89f-4825-85f3-1aaf6cf8d1e9",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3246,
+                "y": 3407,
+                "plane": 0
+            },
+            "modelIds": [
+                2970,
+                7072,
+                7059,
+                2978,
+                7045,
+                2985
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                61,
+                22
+            ],
+            "modelRecolorReplace": [
+                5417,
+                43536
+            ],
+            "idleAnimation": "DwarfSit"
+        },
+        {
+            "name": "Rifur",
+            "examineText": "A dwarf.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "bc018a82-1bc9-4acf-90eb-f923d9c541c1",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3248,
+                "y": 3405,
+                "plane": 0
+            },
+            "modelIds": [
+                2970,
+                2980,
+                2978,
+                2984,
+                2985,
+                2993
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "DwarfSmith"
+        },
+        {
+            "name": "Simon",
+            "examineText": "A dwarf.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "c1abbec2-2426-4ec5-8a34-98dcb9b3777c",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3250,
+                "y": 3408,
+                "plane": 0
+            },
+            "modelIds": [
+                2972,
+                7063,
+                2978,
+                7045,
+                2985
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                10347,
+                61,
+                22
+            ],
+            "modelRecolorReplace": [
+                169,
+                8613,
+                8598
+            ],
+            "idleAnimation": "DwarfSit"
+        },
+        {
+            "name": "Dorgud",
+            "examineText": "A dwarf.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "d873529b-b913-487e-b26d-92d6af2a2d81",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3249,
+                "y": 3411,
+                "plane": 0
+            },
+            "modelIds": [
+                2972,
+                7063,
+                2978,
+                7045,
+                2985
+            ],
+            "baseOrientation": 1024,
+            "translate": [
+                -0.5,
+                0.0,
+                0.0
+            ],
+            "modelRecolorFind": [
+                10347,
+                61,
+                22,
+                4626
+            ],
+            "modelRecolorReplace": [
+                169,
+                35096,
+                54410,
+                398
+            ],
+            "idleAnimation": "DwarfHandsBehindBack"
         }
     ],
     "sceneryRoster": [
@@ -920,6 +1145,118 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "PigeonIdle"
+        },
+        {
+            "uuid": "5203fc26-5ec6-4dff-b136-998a92afe8d6",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3240,
+                "y": 3435,
+                "plane": 0
+            },
+            "modelIds": [
+                2754
+            ],
+            "baseOrientation": 1322,
+            "translate": [
+                0.5,
+                0.5,
+                1.0
+            ],
+            "modelRecolorFind": [
+                61
+            ],
+            "modelRecolorReplace": [
+                99
+            ],
+            "idleAnimation": "Sitting",
+            "removedObject": 3632,
+            "mergedObjects": [
+                {
+                    "objectID": 7719,
+                    "count90CCWRotations": 2
+                }
+            ]
+        },
+        {
+            "uuid": "f36aa472-40ae-4357-a030-1f1fefdf5ed0",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3255,
+                "y": 3402,
+                "plane": 0
+            },
+            "modelIds": [
+                36939
+            ],
+            "baseOrientation": 256,
+            "modelRecolorFind": [
+                6315,
+                7326,
+                7331,
+                10258,
+                54430,
+                54552
+            ],
+            "modelRecolorReplace": [
+                7393,
+                7380,
+                7366,
+                5289,
+                9036,
+                9019
+            ],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "60b22b90-bdd5-43f3-8827-d69e198775ea",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3248,
+                "y": 3404,
+                "plane": 0
+            },
+            "modelIds": [
+                2408
+            ],
+            "baseOrientation": 512,
+            "translate": [
+                0.0,
+                0.5,
+                0.0
+            ],
+            "modelRecolorFind": [
+                7062
+            ],
+            "modelRecolorReplace": [
+                43297
+            ],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "8c8b2161-6036-4093-84e1-48a7a78be740",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3250,
+                "y": 3404,
+                "plane": 0
+            },
+            "modelIds": [
+                2361
+            ],
+            "baseOrientation": 512,
+            "translate": [
+                0.0,
+                0.8,
+                0.0
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
         }
     ]
 }

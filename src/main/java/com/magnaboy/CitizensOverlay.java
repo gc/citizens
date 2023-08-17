@@ -111,11 +111,11 @@ public class CitizensOverlay extends Overlay {
 			}
 		}
 
-		WorldPoint bl = plugin.panel.wanderRegionBL;
-		WorldPoint tr = plugin.panel.wanderRegionTR;
-		if (bl != null && tr != null) {
-			highlightRegion(graphics, bl, tr, bl.getPlane(), new Color(0, 255, 255, 20));
-		}
+//		WorldPoint bl = plugin.panel.wanderRegionBL;
+//		WorldPoint tr = plugin.panel.wanderRegionTR;
+//		if (bl != null && tr != null) {
+//			highlightRegion(graphics, bl, tr, bl.getPlane(), new Color(0, 255, 255, 20));
+//		}
 
 		if (CitizenPanel.selectedEntity != null) {
 			final int outlineWidth = 4;
@@ -135,11 +135,11 @@ public class CitizensOverlay extends Overlay {
 			}
 
 			// Render generic marker for debugging
-			highlightTile(graphics, localLocation, new Color(0, 255, 0, 255 / 2));
-			highlightTile(graphics, citizen.getWorldLocation(), new Color(0, 255, 0, 255 / 2));
-			String debugText =
-				citizen.name + " D:" + citizen.distanceToPlayer() + " MH:" + citizen.rlObject.getModelHeight();
-			renderText(graphics, localLocation, debugText);
+//			highlightTile(graphics, localLocation, new Color(0, 255, 0, 255 / 2));
+//			highlightTile(graphics, citizen.getWorldLocation(), new Color(0, 255, 0, 255 / 2));
+//			String debugText =
+//				citizen.name + " D:" + citizen.distanceToPlayer() + " MH:" + citizen.rlObject.getModelHeight();
+//			renderText(graphics, localLocation, debugText);
 
 			// Render remarks
 			if (citizen.activeRemark != null) {
@@ -155,13 +155,6 @@ public class CitizensOverlay extends Overlay {
 					OverlayUtil.renderTextLocation(graphics, shiftedP, citizen.activeRemark,
 						JagexColors.YELLOW_INTERFACE_TEXT);
 				}
-			}
-
-			// For wandering citizens, highlight their wandering area.
-			if (citizen instanceof WanderingCitizen) {
-				WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
-				Color color = new Color(0, 0, 255, 5);
-				highlightRegion(graphics, boundingBox, citizen.getPlane(), color);
 			}
 
 			// If the citizen has a walking target, mark it.

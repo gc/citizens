@@ -90,6 +90,7 @@
         {
             "name": "Saradomin wizard",
             "examineText": "He looks familiar.",
+            "remarks": [],
             "moveAnimation": "HumanWalk",
             "uuid": "e76e7992-ea73-4d29-8a50-71782270f00b",
             "regionId": 12854,
@@ -128,5 +129,6 @@
             "idleAnimation": "ChurchSitting"
         }
     ],
-    "sceneryRoster": []
+    "sceneryRoster": [
+    ]
 }

@@ -272,14 +272,55 @@
                 23905
             ],
             "baseOrientation": 0,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "ChickenIdle",
             "scale": [
                 -0.7,
                 -0.7,
                 -0.7
-            ]
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "ChickenIdle"
+        },
+        {
+            "name": "Charlie",
+            "examineText": "A Citizen of Gielinor",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "7c948414-0a03-4021-b98a-af7aff186ebb",
+            "regionId": 12852,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3243,
+                "y": 3381,
+                "plane": 0
+            },
+            "modelIds": [
+                217,
+                246,
+                25676,
+                14373,
+                10218,
+                12138,
+                181
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                25238,
+                8741,
+                8860,
+                16,
+                8,
+                922
+            ],
+            "modelRecolorReplace": [
+                11146,
+                8481,
+                8472,
+                8481,
+                8472,
+                35908
+            ],
+            "idleAnimation": "Sitting"
         }
     ],
     "sceneryRoster": [
@@ -437,6 +478,99 @@
                 -0.5,
                 0.0,
                 0.0
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "52af0b29-884d-41e8-a997-39d3997f1e5c",
+            "regionId": 12852,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3247,
+                "y": 3383,
+                "plane": 0
+            },
+            "modelIds": [
+                2676
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "uuid": "0ce04f55-8f9c-42b5-b406-02918028db9e",
+            "regionId": 12852,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3247,
+                "y": 3383,
+                "plane": 0
+            },
+            "modelIds": [
+                14186
+            ],
+            "baseOrientation": 0,
+            "translate": [
+                0.0,
+                0.0,
+                0.4
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "uuid": "efe1b227-95c2-4d72-9459-d4b39e9365ee",
+            "regionId": 12852,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3247,
+                "y": 3383,
+                "plane": 0
+            },
+            "modelIds": [
+                41886
+            ],
+            "baseOrientation": 0,
+            "scale": [
+                0.2,
+                0.2,
+                0.2
+            ],
+            "translate": [
+                -0.3,
+                0.0,
+                0.1
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "953662e0-bd02-46a3-86cd-10e3c0c6e04b",
+            "regionId": 12852,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3247,
+                "y": 3382,
+                "plane": 0
+            },
+            "modelIds": [
+                2815
+            ],
+            "baseOrientation": 512,
+            "scale": [
+                -0.5,
+                -0.5,
+                -0.5
+            ],
+            "translate": [
+                -0.1,
+                0.9,
+                -0.3
             ],
             "modelRecolorFind": [],
             "modelRecolorReplace": [],

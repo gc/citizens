@@ -166,7 +166,7 @@ public class CitizenRegion {
 	}
 
 	public static Scenery loadScenery(CitizensPlugin plugin, SceneryInfo info) {
-		return new Scenery(plugin).setModelIDs(info.modelIds)
+		Scenery scenery = new Scenery(plugin).setModelIDs(info.modelIds)
 			.setModelRecolors(info.modelRecolorFind, info.modelRecolorReplace)
 			.setIdleAnimation(info.idleAnimation)
 			.setScale(info.scale)
@@ -175,6 +175,12 @@ public class CitizenRegion {
 			.setUUID(info.uuid)
 			.setWorldLocation(info.worldLocation)
 			.setRegion(info.regionId);
+
+		if (info.mergedObjects != null) {
+			info.mergedObjects.forEach(scenery::addMergedObject);
+		}
+
+		return scenery;
 	}
 
 	public static void forEachEntity(Consumer<Entity> function) {
@@ -220,7 +226,12 @@ public class CitizenRegion {
 
 	public static void updateEntity(EntityInfo info) {
 		if (info.entityType == EntityType.Scenery) {
-			// TODO
+			CitizenRegion region = regionCache.get(info.regionId);
+			Entity e = region.entities.get(info.uuid);
+			Scenery updated = loadScenery(plugin, (SceneryInfo) info);
+
+			addEntityToRegion(updated, info);
+			removeEntityFromRegion(e);
 		} else {
 			CitizenRegion region = regionCache.get(info.regionId);
 			Entity e = region.entities.get(info.uuid);

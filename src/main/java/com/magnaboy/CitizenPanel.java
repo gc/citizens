@@ -450,10 +450,19 @@ class CitizenPanel extends PluginPanel {
 			updateButton.setText("Update Entity");
 			updateButton.setFocusable(false);
 			updateButton.addActionListener(e -> {
-				CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
-				if (selectedEntity != null) {
-					info.uuid = selectedEntity.uuid;
-					CitizenRegion.updateEntity(info);
+				if (selectedEntity.isCitizen()) {
+					CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
+					if (selectedEntity != null) {
+						info.uuid = selectedEntity.uuid;
+						CitizenRegion.updateEntity(info);
+					}
+				} else if (selectedEntity.entityType == EntityType.Scenery) {
+					SceneryInfo info = buildSceneryInfo();
+					if (selectedEntity != null) {
+
+						info.uuid = selectedEntity.uuid;
+						CitizenRegion.updateEntity(info);
+					}
 				}
 
 				update();

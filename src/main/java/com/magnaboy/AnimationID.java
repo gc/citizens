@@ -41,6 +41,8 @@ public enum AnimationID {
 	RatIdle(2704),
 	RatBanging(2706),
 	BeeIdle(0),
+	PuffinIdle(5873),
+	PuffinWalk(5872),
 
 	DwarfLean(6206),
 	DwarfWalk(98),
