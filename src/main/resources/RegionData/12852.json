@@ -1,579 +1,645 @@
 {
-    "version": 0.8,
-    "regionId": 12852,
-    "citizenRoster": [
-        {
-            "name": "Liam",
-            "examineText": "A child.",
-            "remarks": [],
-            "uuid": "6310e2d1-493c-45e2-aa06-6396d35b6fb1",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3215,
-                "y": 3389,
-                "plane": 0
-            },
-            "modelIds": [
-                2897,
-                2909,
-                2917
-            ],
-            "modelRecolorFind": [
-                22424,
-                11162,
-                6550
-            ],
-            "modelRecolorReplace": [
-                51088,
-                4,
-                5027
-            ],
-            "idleAnimation": "ChildIdle"
-        },
-        {
-            "name": "Mary",
-            "examineText": "She has her hands full with those kids.",
-            "remarks": [],
-            "moveAnimation": "HumanWalk",
-            "wanderBoxBL": {
-                "x": 3218,
-                "y": 3387,
-                "plane": 0
-            },
-            "wanderBoxTR": {
-                "x": 3222,
-                "y": 3387,
-                "plane": 0
-            },
-            "uuid": "23614232-2402-44ea-bc68-153c533fdb83",
-            "regionId": 12852,
-            "entityType": "WanderingCitizen",
-            "worldLocation": {
-                "x": 3222,
-                "y": 3387,
-                "plane": 0
-            },
-            "modelIds": [
-                390,
-                456,
-                483,
-                332,
-                353,
-                437,
-                358
-            ],
-            "modelRecolorFind": [
-                8741,
-                25238,
-                6798,
-                43072
-            ],
-            "modelRecolorReplace": [
-                322,
-                5532,
-                8099,
-                4550
-            ],
-            "idleAnimation": "HumanIdle"
-        },
-        {
-            "name": "Oliver",
-            "examineText": "A child.",
-            "remarks": [
-            ],
-            "uuid": "bc8fc6f7-6312-43ab-8742-b163b3c2eec7",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3216,
-                "y": 3388,
-                "plane": 0
-            },
-            "modelIds": [
-                14289,
-                25846,
-                2915,
-                25849
-            ],
-            "baseOrientation": 0,
-            "modelRecolorFind": [
-                22426,
-                22294,
-                6550,
-                8893
-            ],
-            "modelRecolorReplace": [
-                38065,
-                62637,
-                9152,
-                2983
-            ],
-            "idleAnimation": "ChildPlay1"
-        },
-        {
-            "name": "Master Thief",
-            "examineText": "He know's what he's doing.",
-            "remarks": [],
-            "uuid": "b7b58305-0904-41ec-b2e8-5ce2ba9b6a19",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3206,
-                "y": 3388,
-                "plane": 0
-            },
-            "modelIds": [
-                215,
-                246,
-                292,
-                151,
-                179,
-                254,
-                185,
-                320,
-                18956
-            ],
-            "baseOrientation": 1024,
-            "modelRecolorFind": [
-                25238,
-                8741
-            ],
-            "modelRecolorReplace": [
-                47399,
-                6930
-            ],
-            "idleAnimation": "HumanIdle"
-        },
-        {
-            "name": "Thief",
-            "examineText": "Up to no good.",
-            "remarks": [
-                "We need timing and precision.",
-                "What if we get caught?",
-                "We should hire a mage to blast the lock open."
-            ],
-            "uuid": "025d8c03-09f9-491d-9c7f-5b98ad9e2035",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3203,
-                "y": 3387,
-                "plane": 0
-            },
-            "modelIds": [
-                208,
-                10304,
-                25675,
-                317,
-                25643,
-                25652,
-                25668,
-                25650
-            ],
-            "baseOrientation": 0,
-            "modelRecolorFind": [
-                7952,
-                8741
-            ],
-            "modelRecolorReplace": [
-                38156,
-                38160
-            ],
-            "idleAnimation": "Sitting"
-        },
-        {
-            "name": "Henry",
-            "examineText": "A child.",
-            "remarks": [
-            ],
-            "uuid": "a7a69ec0-68cc-457e-98b9-68b4ef23daad",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3220,
-                "y": 3386,
-                "plane": 0
-            },
-            "modelIds": [
-                14289,
-                25846,
-                2915,
-                25848
-            ],
-            "baseOrientation": 512,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "ChildPlay2"
-        },
-        {
-            "name": "Thief",
-            "examineText": "An inexperienced, young thief.",
-            "remarks": [
-                "Are you sure about this?",
-                "A vault is basically a big chest, right?"
-            ],
-            "uuid": "cdbcb720-96a2-44db-b176-fc9a41990a10",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3204,
-                "y": 3386,
-                "plane": 0
-            },
-            "modelIds": [
-                215,
-                228,
-                246,
-                292,
-                326,
-                170,
-                179,
-                254,
-                185,
-                317
-            ],
-            "baseOrientation": 512,
-            "modelRecolorFind": [
-                25238,
-                8741
-            ],
-            "modelRecolorReplace": [
-                3486,
-                8728
-            ],
-            "idleAnimation": "Sitting"
-        },
-        {
-            "name": "Chicken",
-            "examineText": "Yep. Definitely a chicken.",
-            "remarks": [],
-            "moveAnimation": "ChickenWalk",
-            "wanderBoxBL": {
-                "x": 3227,
-                "y": 3385,
-                "plane": 0
-            },
-            "wanderBoxTR": {
-                "x": 3229,
-                "y": 3388,
-                "plane": 0
-            },
-            "uuid": "f6be496a-3336-48bf-8960-1ea226642c6b",
-            "regionId": 12852,
-            "entityType": "WanderingCitizen",
-            "worldLocation": {
-                "x": 3229,
-                "y": 3388,
-                "plane": 0
-            },
-            "modelIds": [
-                23905
-            ],
-            "baseOrientation": 0,
-            "scale": [
-                -0.7,
-                -0.7,
-                -0.7
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "ChickenIdle"
-        },
-        {
-            "name": "Charlie",
-            "examineText": "A Citizen of Gielinor",
-            "remarks": [],
-            "moveAnimation": "HumanWalk",
-            "uuid": "7c948414-0a03-4021-b98a-af7aff186ebb",
-            "regionId": 12852,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3243,
-                "y": 3381,
-                "plane": 0
-            },
-            "modelIds": [
-                217,
-                246,
-                25676,
-                14373,
-                10218,
-                12138,
-                181
-            ],
-            "baseOrientation": 0,
-            "modelRecolorFind": [
-                25238,
-                8741,
-                8860,
-                16,
-                8,
-                922
-            ],
-            "modelRecolorReplace": [
-                11146,
-                8481,
-                8472,
-                8481,
-                8472,
-                35908
-            ],
-            "idleAnimation": "Sitting"
-        }
-    ],
-    "sceneryRoster": [
-        {
-            "uuid": "6637be1e-cb0e-49cd-a873-be9c6eeddac8",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3214,
-                "y": 3387,
-                "plane": 0
-            },
-            "modelIds": [
-                1680
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": []
-        },
-        {
-            "uuid": "66e1f093-0f66-4bf2-abc2-e75755d9ecec",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3214,
-                "y": 3383,
-                "plane": 0
-            },
-            "modelIds": [
-                1680
-            ],
-            "modelRecolorFind": [
-                43968
-            ],
-            "modelRecolorReplace": [
-                939
-            ]
-        },
-        {
-            "uuid": "fc3172d7-319e-40bd-ae0e-d5d7315435a5",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3217,
-                "y": 3385,
-                "plane": 0
-            },
-            "modelIds": [
-                2138
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": []
-        },
-        {
-            "uuid": "184b11b6-6f27-4066-90b8-fcff3b0279cf",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3208,
-                "y": 3384,
-                "plane": 0
-            },
-            "modelIds": [
-                14651,
-                14652
-            ],
-            "baseOrientation": 512,
-            "modelRecolorFind": [
-                7587,
-                7587,
-                7582,
-                7706,
-                8404
-            ],
-            "modelRecolorReplace": [
-                7601,
-                7601,
-                7721,
-                7841,
-                6336
-            ]
-        },
-        {
-            "uuid": "eefdc701-f8bf-410f-ac08-75778c736456",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3205,
-                "y": 3384,
-                "plane": 0
-            },
-            "modelIds": [
-                24840
-            ],
-            "baseOrientation": 1024,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": []
-        },
-        {
-            "uuid": "93e76fa9-0aaa-43bd-9ec5-e366ffad766a",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3203,
-                "y": 3385,
-                "plane": 0
-            },
-            "modelIds": [
-                13446
-            ],
-            "baseOrientation": 1536,
-            "modelRecolorFind": [
-                6466,
-                5545
-            ],
-            "modelRecolorReplace": [
-                7465,
-                7580
-            ]
-        },
-        {
-            "uuid": "dffaf248-75d2-47a7-a6b7-0a988f8e8d6d",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3205,
-                "y": 3384,
-                "plane": 0
-            },
-            "modelIds": [
-                24884
-            ],
-            "baseOrientation": 1536,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": []
-        },
-        {
-            "uuid": "61c03c1a-8997-4b95-bd30-42f10db76be1",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3225,
-                "y": 3384,
-                "plane": 0
-            },
-            "modelIds": [
-                36449
-            ],
-            "baseOrientation": 1536,
-            "scale": [
-                -0.8,
-                -0.8,
-                -0.8
-            ],
-            "translate": [
-                -0.5,
-                0.0,
-                0.0
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "HumanIdle"
-        },
-        {
-            "uuid": "52af0b29-884d-41e8-a997-39d3997f1e5c",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3247,
-                "y": 3383,
-                "plane": 0
-            },
-            "modelIds": [
-                2676
-            ],
-            "baseOrientation": 0,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "Sitting"
-        },
-        {
-            "uuid": "0ce04f55-8f9c-42b5-b406-02918028db9e",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3247,
-                "y": 3383,
-                "plane": 0
-            },
-            "modelIds": [
-                14186
-            ],
-            "baseOrientation": 0,
-            "translate": [
-                0.0,
-                0.0,
-                0.4
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "Sitting"
-        },
-        {
-            "uuid": "efe1b227-95c2-4d72-9459-d4b39e9365ee",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3247,
-                "y": 3383,
-                "plane": 0
-            },
-            "modelIds": [
-                41886
-            ],
-            "baseOrientation": 0,
-            "scale": [
-                0.2,
-                0.2,
-                0.2
-            ],
-            "translate": [
-                -0.3,
-                0.0,
-                0.1
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "HumanIdle"
-        },
-        {
-            "uuid": "953662e0-bd02-46a3-86cd-10e3c0c6e04b",
-            "regionId": 12852,
-            "entityType": "Scenery",
-            "worldLocation": {
-                "x": 3247,
-                "y": 3382,
-                "plane": 0
-            },
-            "modelIds": [
-                2815
-            ],
-            "baseOrientation": 512,
-            "scale": [
-                -0.5,
-                -0.5,
-                -0.5
-            ],
-            "translate": [
-                -0.1,
-                0.9,
-                -0.3
-            ],
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "HumanIdle"
-        }
-    ]
+  "version": 0.8,
+  "regionId": 12852,
+  "citizenRoster": [
+    {
+      "name": "Liam",
+      "examineText": "A child.",
+      "remarks": [],
+      "uuid": "6310e2d1-493c-45e2-aa06-6396d35b6fb1",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3215,
+        "y": 3389,
+        "plane": 0
+      },
+      "modelIds": [
+        2897,
+        2909,
+        2917
+      ],
+      "modelRecolorFind": [
+        22424,
+        11162,
+        6550
+      ],
+      "modelRecolorReplace": [
+        51088,
+        4,
+        5027
+      ],
+      "idleAnimation": "ChildIdle"
+    },
+    {
+      "name": "Mary",
+      "examineText": "She has her hands full with those kids.",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3218,
+        "y": 3387,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3222,
+        "y": 3387,
+        "plane": 0
+      },
+      "uuid": "23614232-2402-44ea-bc68-153c533fdb83",
+      "regionId": 12852,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3222,
+        "y": 3387,
+        "plane": 0
+      },
+      "modelIds": [
+        390,
+        456,
+        483,
+        332,
+        353,
+        437,
+        358
+      ],
+      "modelRecolorFind": [
+        8741,
+        25238,
+        6798,
+        43072
+      ],
+      "modelRecolorReplace": [
+        322,
+        5532,
+        8099,
+        4550
+      ],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Oliver",
+      "examineText": "A child.",
+      "remarks": [],
+      "uuid": "bc8fc6f7-6312-43ab-8742-b163b3c2eec7",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3216,
+        "y": 3388,
+        "plane": 0
+      },
+      "modelIds": [
+        14289,
+        25846,
+        2915,
+        25849
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [
+        22426,
+        22294,
+        6550,
+        8893
+      ],
+      "modelRecolorReplace": [
+        38065,
+        62637,
+        9152,
+        2983
+      ],
+      "idleAnimation": "ChildPlay1"
+    },
+    {
+      "name": "Master Thief",
+      "examineText": "He know\u0027s what he\u0027s doing.",
+      "remarks": [],
+      "uuid": "b7b58305-0904-41ec-b2e8-5ce2ba9b6a19",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3206,
+        "y": 3388,
+        "plane": 0
+      },
+      "modelIds": [
+        215,
+        246,
+        292,
+        151,
+        179,
+        254,
+        185,
+        320,
+        18956
+      ],
+      "baseOrientation": 1024,
+      "modelRecolorFind": [
+        25238,
+        8741
+      ],
+      "modelRecolorReplace": [
+        47399,
+        6930
+      ],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Thief",
+      "examineText": "Up to no good.",
+      "remarks": [
+        "We need timing and precision.",
+        "What if we get caught?",
+        "We should hire a mage to blast the lock open."
+      ],
+      "uuid": "025d8c03-09f9-491d-9c7f-5b98ad9e2035",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3203,
+        "y": 3387,
+        "plane": 0
+      },
+      "modelIds": [
+        208,
+        10304,
+        25675,
+        317,
+        25643,
+        25652,
+        25668,
+        25650
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [
+        7952,
+        8741
+      ],
+      "modelRecolorReplace": [
+        38156,
+        38160
+      ],
+      "idleAnimation": "Sitting"
+    },
+    {
+      "name": "Henry",
+      "examineText": "A child.",
+      "remarks": [],
+      "uuid": "a7a69ec0-68cc-457e-98b9-68b4ef23daad",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3220,
+        "y": 3386,
+        "plane": 0
+      },
+      "modelIds": [
+        14289,
+        25846,
+        2915,
+        25848
+      ],
+      "baseOrientation": 512,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "ChildPlay2"
+    },
+    {
+      "name": "Thief",
+      "examineText": "An inexperienced, young thief.",
+      "remarks": [
+        "Are you sure about this?",
+        "A vault is basically a big chest, right?"
+      ],
+      "uuid": "cdbcb720-96a2-44db-b176-fc9a41990a10",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3204,
+        "y": 3386,
+        "plane": 0
+      },
+      "modelIds": [
+        215,
+        228,
+        246,
+        292,
+        326,
+        170,
+        179,
+        254,
+        185,
+        317
+      ],
+      "baseOrientation": 512,
+      "modelRecolorFind": [
+        25238,
+        8741
+      ],
+      "modelRecolorReplace": [
+        3486,
+        8728
+      ],
+      "idleAnimation": "Sitting"
+    },
+    {
+      "name": "Chicken",
+      "examineText": "Yep. Definitely a chicken.",
+      "remarks": [],
+      "moveAnimation": "ChickenWalk",
+      "wanderBoxBL": {
+        "x": 3227,
+        "y": 3385,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3229,
+        "y": 3388,
+        "plane": 0
+      },
+      "uuid": "f6be496a-3336-48bf-8960-1ea226642c6b",
+      "regionId": 12852,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3229,
+        "y": 3388,
+        "plane": 0
+      },
+      "modelIds": [
+        23905
+      ],
+      "baseOrientation": 0,
+      "scale": [
+        -0.7,
+        -0.7,
+        -0.7
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "ChickenIdle"
+    },
+    {
+      "name": "Charlie",
+      "examineText": "A Citizen of Gielinor",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "uuid": "7c948414-0a03-4021-b98a-af7aff186ebb",
+      "regionId": 12852,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3243,
+        "y": 3381,
+        "plane": 0
+      },
+      "modelIds": [
+        217,
+        246,
+        25676,
+        14373,
+        10218,
+        12138,
+        181
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [
+        25238,
+        8741,
+        8860,
+        16,
+        8,
+        922
+      ],
+      "modelRecolorReplace": [
+        11146,
+        8481,
+        8472,
+        8481,
+        8472,
+        35908
+      ],
+      "idleAnimation": "Sitting"
+    },
+    {
+      "name": "Dark wizard",
+      "examineText": "Evil beyond our worst nightmares.",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3254,
+        "y": 3381,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3255,
+        "y": 3384,
+        "plane": 0
+      },
+      "uuid": "f15a7927-82ff-49be-ad5e-9493bc4297cd",
+      "regionId": 12852,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3255,
+        "y": 3384,
+        "plane": 0
+      },
+      "modelIds": [
+        208,
+        250,
+        292,
+        11766,
+        11809,
+        10218,
+        256,
+        181,
+        11767
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [
+        25238,
+        8741,
+        6798
+      ],
+      "modelRecolorReplace": [
+        262,
+        262,
+        103
+      ],
+      "idleAnimation": "HumanIdle"
+    }
+  ],
+  "sceneryRoster": [
+    {
+      "uuid": "6637be1e-cb0e-49cd-a873-be9c6eeddac8",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3214,
+        "y": 3387,
+        "plane": 0
+      },
+      "modelIds": [
+        1680
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
+    },
+    {
+      "uuid": "66e1f093-0f66-4bf2-abc2-e75755d9ecec",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3214,
+        "y": 3383,
+        "plane": 0
+      },
+      "modelIds": [
+        1680
+      ],
+      "modelRecolorFind": [
+        43968
+      ],
+      "modelRecolorReplace": [
+        939
+      ]
+    },
+    {
+      "uuid": "fc3172d7-319e-40bd-ae0e-d5d7315435a5",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3217,
+        "y": 3385,
+        "plane": 0
+      },
+      "modelIds": [
+        2138
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
+    },
+    {
+      "uuid": "184b11b6-6f27-4066-90b8-fcff3b0279cf",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3208,
+        "y": 3384,
+        "plane": 0
+      },
+      "modelIds": [
+        14651,
+        14652
+      ],
+      "baseOrientation": 512,
+      "modelRecolorFind": [
+        7587,
+        7587,
+        7582,
+        7706,
+        8404
+      ],
+      "modelRecolorReplace": [
+        7601,
+        7601,
+        7721,
+        7841,
+        6336
+      ]
+    },
+    {
+      "uuid": "eefdc701-f8bf-410f-ac08-75778c736456",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3205,
+        "y": 3384,
+        "plane": 0
+      },
+      "modelIds": [
+        24840
+      ],
+      "baseOrientation": 1024,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
+    },
+    {
+      "uuid": "93e76fa9-0aaa-43bd-9ec5-e366ffad766a",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3203,
+        "y": 3385,
+        "plane": 0
+      },
+      "modelIds": [
+        13446
+      ],
+      "baseOrientation": 1536,
+      "modelRecolorFind": [
+        6466,
+        5545
+      ],
+      "modelRecolorReplace": [
+        7465,
+        7580
+      ]
+    },
+    {
+      "uuid": "dffaf248-75d2-47a7-a6b7-0a988f8e8d6d",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3205,
+        "y": 3384,
+        "plane": 0
+      },
+      "modelIds": [
+        24884
+      ],
+      "baseOrientation": 1536,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": []
+    },
+    {
+      "uuid": "61c03c1a-8997-4b95-bd30-42f10db76be1",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3225,
+        "y": 3384,
+        "plane": 0
+      },
+      "modelIds": [
+        36449
+      ],
+      "baseOrientation": 1536,
+      "scale": [
+        -0.8,
+        -0.8,
+        -0.8
+      ],
+      "translate": [
+        -0.5,
+        0.0,
+        0.0
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "uuid": "52af0b29-884d-41e8-a997-39d3997f1e5c",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3247,
+        "y": 3383,
+        "plane": 0
+      },
+      "modelIds": [
+        2676
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "Sitting"
+    },
+    {
+      "uuid": "0ce04f55-8f9c-42b5-b406-02918028db9e",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3247,
+        "y": 3383,
+        "plane": 0
+      },
+      "modelIds": [
+        14186
+      ],
+      "baseOrientation": 0,
+      "translate": [
+        0.0,
+        0.0,
+        0.4
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "Sitting"
+    },
+    {
+      "uuid": "efe1b227-95c2-4d72-9459-d4b39e9365ee",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3247,
+        "y": 3383,
+        "plane": 0
+      },
+      "modelIds": [
+        41886
+      ],
+      "baseOrientation": 0,
+      "scale": [
+        0.2,
+        0.2,
+        0.2
+      ],
+      "translate": [
+        -0.3,
+        0.0,
+        0.1
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "uuid": "953662e0-bd02-46a3-86cd-10e3c0c6e04b",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3247,
+        "y": 3382,
+        "plane": 0
+      },
+      "modelIds": [
+        2815
+      ],
+      "baseOrientation": 512,
+      "scale": [
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "translate": [
+        -0.1,
+        0.9,
+        -0.3
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "uuid": "9cc2d934-57cf-48cd-94e7-633c83f1baa8",
+      "regionId": 12852,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3263,
+        "y": 3391,
+        "plane": 0
+      },
+      "modelIds": [
+        1079
+      ],
+      "baseOrientation": 512,
+      "modelRecolorFind": [
+        6241
+      ],
+      "modelRecolorReplace": [
+        16
+      ],
+      "idleAnimation": "HumanIdle"
+    }
+  ]
 }

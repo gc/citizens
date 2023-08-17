@@ -26,6 +26,7 @@ public enum AnimationID {
 	Crying(860),
 	Mining(823),
 	BuryOrPickingUp(827),
+	LayingDown(838),
 
 	ChildStarJump(218),
 	ChildPlay1(6484),
@@ -44,6 +45,10 @@ public enum AnimationID {
 	PuffinIdle(5873),
 	PuffinWalk(5872),
 
+	RiftGuardianIdle(7307),
+	RiftGuardianWalk(7306),
+	RiftGuardianSit(9397),
+
 	DwarfLean(6206),
 	DwarfWalk(98),
 	DwarfMining(99),
@@ -59,6 +64,10 @@ public enum AnimationID {
 	GoblinPull(3387),
 
 	PigeonIdle(4133),
+
+	MagicBoxIdle(5221),
+	StandingWithBook(1350),
+	WalkingWithBook(10170),
 
 	// ???
 	FrontalGrab(897),
