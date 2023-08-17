@@ -1,6 +1,8 @@
 package com.magnaboy;
 
 import static com.magnaboy.Util.worldPointToShortCoord;
+import com.magnaboy.serialization.CitizenInfo;
+import com.magnaboy.serialization.SceneryInfo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -708,7 +710,9 @@ class CitizenPanel extends PluginPanel {
 			entityNameField.setText(c.name);
 			examineTextField.setText(c.examine);
 			animIdMoveSelect.setSelectedItem(c.movingAnimationId);
-			remarksField.setText(String.join(",", c.remarks));
+			if (c.remarks != null) {
+				remarksField.setText(String.join(",", c.remarks));
+			}
 		}
 
 		if (e instanceof WanderingCitizen) {
