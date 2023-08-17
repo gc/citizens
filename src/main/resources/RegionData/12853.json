@@ -581,7 +581,7 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "HumanIdle",
-            "startScript" : "testScript"
+            "startScript": "testScript"
         },
         {
             "name": "Emme",
@@ -996,7 +996,7 @@
             "baseOrientation": 1536,
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
-            "startScript" : "testScript"
+            "startScript": "testScript"
         },
         {
             "uuid": "64b836cb-db1c-4d0d-84e4-63130fea1f89",
