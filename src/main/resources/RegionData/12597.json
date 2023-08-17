@@ -3,10 +3,11 @@
     "regionId": 12597,
     "citizenRoster": [
         {
-            "name": "Benny",
-            "examineText": "Chop chop chop!",
+            "name": "Drunken peasant",
+            "examineText": "He had a long night.",
             "remarks": [
-                "Chop chop!"
+                "I'm just resting my eyes... and my legs... and my everything.",
+                "Hey, have you met the floor? We're real close."
             ],
             "uuid": "f5adc6b8-f06e-4644-b0d7-f0163ac4f7e6",
             "regionId": 12597,
@@ -30,9 +31,11 @@
         },
         {
             "name": "Assistant Apothecary",
-            "examineText": "Chop chop chop!",
+            "examineText": "He's learning to make potions",
             "remarks": [
-                "Chop chop!"
+                "It's more than science, it's an art.",
+                "It's all about balance...",
+                "Is this safe?"
             ],
             "uuid": "edd6337c-423e-42b6-ad10-2b0e308b9cd3",
             "regionId": 12597,

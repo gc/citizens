@@ -3,7 +3,7 @@
     "regionId": 12852,
     "citizenRoster": [
         {
-            "name": "Child",
+            "name": "Liam",
             "examineText": "A child.",
             "remarks": [],
             "uuid": "6310e2d1-493c-45e2-aa06-6396d35b6fb1",
@@ -78,10 +78,9 @@
             "idleAnimation": "HumanIdle"
         },
         {
-            "name": "Child",
-            "examineText": "TODO",
+            "name": "Oliver",
+            "examineText": "A child.",
             "remarks": [
-                "TODO"
             ],
             "uuid": "bc8fc6f7-6312-43ab-8742-b163b3c2eec7",
             "regionId": 12852,
@@ -114,10 +113,8 @@
         },
         {
             "name": "Master Thief",
-            "examineText": "TODO",
-            "remarks": [
-                "TODO"
-            ],
+            "examineText": "He know's what he's doing.",
+            "remarks": [],
             "uuid": "b7b58305-0904-41ec-b2e8-5ce2ba9b6a19",
             "regionId": 12852,
             "entityType": "StationaryCitizen",
@@ -150,9 +147,11 @@
         },
         {
             "name": "Thief",
-            "examineText": "TODO",
+            "examineText": "Up to no good.",
             "remarks": [
-                "TODO"
+                "We need timing and precision.",
+                "What if we get caught?",
+                "We should hire a mage to blast the lock open."
             ],
             "uuid": "025d8c03-09f9-491d-9c7f-5b98ad9e2035",
             "regionId": 12852,
@@ -184,10 +183,9 @@
             "idleAnimation": "Sitting"
         },
         {
-            "name": "Child",
-            "examineText": "TODO",
+            "name": "Henry",
+            "examineText": "A child.",
             "remarks": [
-                "TODO"
             ],
             "uuid": "a7a69ec0-68cc-457e-98b9-68b4ef23daad",
             "regionId": 12852,
@@ -210,9 +208,10 @@
         },
         {
             "name": "Thief",
-            "examineText": "TODO",
+            "examineText": "An inexperienced, young thief.",
             "remarks": [
-                "TODO"
+                "Are you sure about this?",
+                "A vault is basically a big chest, right?"
             ],
             "uuid": "cdbcb720-96a2-44db-b176-fc9a41990a10",
             "regionId": 12852,
