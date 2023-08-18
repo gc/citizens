@@ -176,24 +176,26 @@ public class CitizensPlugin extends Plugin {
 			return;
 		}
 
-		for (CitizenRegion r : activeRegions.values()) {
-			r.updateEntities();
-			r.percentileAction(30, 2, entity -> {
-				if (entity instanceof WanderingCitizen) {
-					((WanderingCitizen) entity).wander();
-				}
-			});
-			r.percentileAction(20, 2, entity -> {
-				if (entity instanceof Citizen) {
-					((Citizen) entity).triggerIdleAnimation();
-				}
-			});
-			r.percentileAction(20, 2, entity -> {
-				if (entity instanceof Citizen) {
-					((Citizen) entity).sayRandomRemark();
-				}
-			});
-		}
+		clientThread.invokeLater(() -> {
+			for (CitizenRegion r : activeRegions.values()) {
+				r.updateEntities();
+				r.percentileAction(30, 4, entity -> {
+					if (entity instanceof WanderingCitizen) {
+						((WanderingCitizen) entity).wander();
+					}
+				});
+				r.percentileAction(20, 4, entity -> {
+					if (entity instanceof Citizen) {
+						((Citizen) entity).triggerIdleAnimation();
+					}
+				});
+				r.percentileAction(20, 4, entity -> {
+					if (entity instanceof Citizen) {
+						((Citizen) entity).sayRandomRemark();
+					}
+				});
+			}
+		});
 
 		panel.update();
 	}

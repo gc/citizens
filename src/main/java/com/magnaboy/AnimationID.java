@@ -24,9 +24,10 @@ public enum AnimationID {
 	Fletching(1248),
 	AnvilBang(898),
 	Crying(860),
-	Mining(823),
+	Mining(1728),
 	BuryOrPickingUp(827),
 	LayingDown(838),
+	HumanLook(2713),
 
 	ChildStarJump(218),
 	ChildPlay1(6484),
@@ -72,6 +73,13 @@ public enum AnimationID {
 	MagicBoxIdle(5221),
 	StandingWithBook(1350),
 	WalkingWithBook(10170),
+
+	KittenSit(2694),
+	KittenWalk(314),
+	KittenLunge(315),
+	KittenDip(316),
+	KittenIdle(317),
+	KittenSleep(2159),
 
 	// ???
 	FrontalGrab(897),

@@ -47,7 +47,7 @@
             "idleAnimation": "Fletching"
         },
         {
-            "name": "Prisoner",
+            "name": "Sefton",
             "examineText": "I wonder what he did wrong.",
             "remarks": [
                 "Help me!"
@@ -433,7 +433,7 @@
             "idleAnimation": "Sitting"
         },
         {
-            "name": "Prisoner",
+            "name": "Pryce",
             "examineText": "He\u0027s not having a good day.",
             "remarks": [
                 "Woe is me..."
@@ -681,101 +681,6 @@
             "idleAnimation": "BeeIdle"
         },
         {
-            "name": "Knight",
-            "examineText": "A knight.",
-            "remarks": [],
-            "moveAnimation": "HumanWalk",
-            "uuid": "08b33a76-0595-4a85-89e9-5b2efdd8eb06",
-            "regionId": 12853,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3241,
-                "y": 3434,
-                "plane": 0
-            },
-            "modelIds": [
-                164,
-                185,
-                176,
-                215,
-                246,
-                3329,
-                313
-            ],
-            "baseOrientation": 512,
-            "modelRecolorFind": [
-                10004,
-                4626,
-                7566,
-                7446,
-                25238,
-                54397
-            ],
-            "modelRecolorReplace": [
-                61,
-                61,
-                61,
-                41,
-                61,
-                41410
-            ],
-            "idleAnimation": "Sitting",
-            "removedObject": 3632,
-            "mergedObjects": [
-                {
-                    "objectID": 7719,
-                    "count90CCWRotations": 2
-                }
-            ]
-        },
-        {
-            "name": "Balin",
-            "examineText": "A dwarf.",
-            "remarks": [],
-            "moveAnimation": "DwarfWalk",
-            "wanderBoxBL": {
-                "x": 3241,
-                "y": 3401,
-                "plane": 0
-            },
-            "wanderBoxTR": {
-                "x": 3245,
-                "y": 3410,
-                "plane": 0
-            },
-            "uuid": "509500a0-8540-4fa5-87c9-f9f64619385b",
-            "regionId": 12853,
-            "entityType": "WanderingCitizen",
-            "worldLocation": {
-                "x": 3242,
-                "y": 3402,
-                "plane": 0
-            },
-            "modelIds": [
-                2972,
-                2980,
-                2977,
-                7050,
-                10326
-            ],
-            "baseOrientation": 1024,
-            "modelRecolorFind": [
-                5784,
-                28,
-                61,
-                7054,
-                4550
-            ],
-            "modelRecolorReplace": [
-                7050,
-                5301,
-                37,
-                61,
-                5557
-            ],
-            "idleAnimation": "DwarfIdle"
-        },
-        {
             "name": "Dofur",
             "examineText": "A dwarf.",
             "remarks": [],
@@ -832,39 +737,6 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "DwarfSmith"
-        },
-        {
-            "name": "Simon",
-            "examineText": "A dwarf.",
-            "remarks": [],
-            "moveAnimation": "HumanWalk",
-            "uuid": "c1abbec2-2426-4ec5-8a34-98dcb9b3777c",
-            "regionId": 12853,
-            "entityType": "StationaryCitizen",
-            "worldLocation": {
-                "x": 3250,
-                "y": 3408,
-                "plane": 0
-            },
-            "modelIds": [
-                2972,
-                7063,
-                2978,
-                7045,
-                2985
-            ],
-            "baseOrientation": 0,
-            "modelRecolorFind": [
-                10347,
-                61,
-                22
-            ],
-            "modelRecolorReplace": [
-                169,
-                8613,
-                8598
-            ],
-            "idleAnimation": "DwarfSit"
         },
         {
             "name": "Mysterious Old Man",
@@ -1105,7 +977,9 @@
         {
             "name": "Toren",
             "examineText": "A citizen of Varrock.",
-            "remarks": [],
+            "remarks": [
+                "He should be here by now..."
+            ],
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
                 "x": 3226,
@@ -1501,7 +1375,7 @@
             "remarks": [
                 "Pure silver, pure satisfaction!",
                 "Your silver needs, met right here!",
-                "Looking for silverware? You're in luck!"
+                "Looking for silverware? You\u0027re in luck!"
             ],
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
@@ -1549,6 +1423,149 @@
                 5584
             ],
             "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Archer",
+            "examineText": "A skilled archer.",
+            "remarks": [
+                "Fine arrows Lowe.",
+                "Sharp!",
+                "Brilliant fletching."
+            ],
+            "moveAnimation": "HumanWalk",
+            "uuid": "11e17f04-8e27-40ba-a4b0-55002ebee244",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3232,
+                "y": 3423,
+                "plane": 0
+            },
+            "modelIds": [
+                220,
+                185,
+                253,
+                296,
+                151,
+                179,
+                262,
+                563
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Stranger",
+            "examineText": "He\u0027s looking at the prisoners?",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "b45cc6df-5eee-41b7-bcb2-4a4ff14364b4",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3235,
+                "y": 3407,
+                "plane": 0
+            },
+            "modelIds": [
+                35119
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Simon",
+            "examineText": "A dwarf.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "c1abbec2-2426-4ec5-8a34-98dcb9b3777c",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3250,
+                "y": 3408,
+                "plane": 0
+            },
+            "modelIds": [
+                2972,
+                7063,
+                2978,
+                7045,
+                2985
+            ],
+            "baseOrientation": 0,
+            "translate": [
+                0.0,
+                0.0,
+                -1.0
+            ],
+            "modelRecolorFind": [
+                10347,
+                61,
+                22
+            ],
+            "modelRecolorReplace": [
+                169,
+                8613,
+                8598
+            ],
+            "idleAnimation": "DwarfSit"
+        },
+        {
+            "name": "Stonehand",
+            "examineText": "A dwarf.",
+            "remarks": [],
+            "moveAnimation": "DwarfWalk",
+            "wanderBoxBL": {
+                "x": 3241,
+                "y": 3401,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3245,
+                "y": 3410,
+                "plane": 0
+            },
+            "uuid": "509500a0-8540-4fa5-87c9-f9f64619385b",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3243,
+                "y": 3408,
+                "plane": 0
+            },
+            "modelIds": [
+                2972,
+                2980,
+                2977,
+                7050,
+                10326
+            ],
+            "baseOrientation": 1024,
+            "translate": [
+                0.0,
+                0.0,
+                -1.0
+            ],
+            "modelRecolorFind": [
+                5784,
+                28,
+                61,
+                7054,
+                4550
+            ],
+            "modelRecolorReplace": [
+                7050,
+                5301,
+                37,
+                61,
+                5557
+            ],
+            "idleAnimation": "DwarfIdle"
         }
     ],
     "sceneryRoster": [
@@ -1835,6 +1852,110 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "73278ace-26a1-4bf4-bec6-e97299a30566",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3261,
+                "y": 3411,
+                "plane": 0
+            },
+            "modelIds": [
+                16519
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "Mining"
+        },
+        {
+            "uuid": "ef3221a7-bdd3-4ee8-816a-ef79bc765a9b",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3262,
+                "y": 3411,
+                "plane": 0
+            },
+            "modelIds": [
+                9386,
+                9388
+            ],
+            "baseOrientation": 512,
+            "scale": [
+                -0.23,
+                -0.23,
+                -0.23
+            ],
+            "translate": [
+                0.0,
+                -0.5,
+                0.3
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "KittenSit"
+        },
+        {
+            "uuid": "81291663-b080-4137-ab3c-89ca2d18067c",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3261,
+                "y": 3410,
+                "plane": 0
+            },
+            "modelIds": [
+                9386,
+                9388
+            ],
+            "baseOrientation": 1024,
+            "scale": [
+                -0.23,
+                -0.23,
+                -0.23
+            ],
+            "translate": [
+                0.0,
+                0.0,
+                0.7
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "KittenDip"
+        },
+        {
+            "uuid": "05f48525-5675-4a9f-9111-1aedc256bec5",
+            "regionId": 12853,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3262,
+                "y": 3411,
+                "plane": 0
+            },
+            "modelIds": [
+                3010,
+                3006
+            ],
+            "baseOrientation": 768,
+            "scale": [
+                -0.4,
+                -0.4,
+                -0.4
+            ],
+            "modelRecolorFind": [
+                127,
+                16,
+                61
+            ],
+            "modelRecolorReplace": [
+                16,
+                61,
+                127
+            ],
+            "idleAnimation": "KittenSleep"
         }
     ]
 }

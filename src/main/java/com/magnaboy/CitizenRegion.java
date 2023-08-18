@@ -347,17 +347,19 @@ public class CitizenRegion {
 		entities.values().forEach(Entity::update);
 	}
 
-	ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+	public transient ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 	public void percentileAction(int percentage, int maxDelaySeconds, Consumer<Entity> callback) {
 		List<Entity> entityList = new ArrayList<>(entities.values());
-		Collections.shuffle(entityList); // Shuffle to randomize the order
+		Collections.shuffle(entityList);
 
-		int selectedCount = (int) Math.ceil(percentage * entityList.size() / 100.0); // Round up the count
+		int selectedCount = (int) Math.ceil(percentage * entityList.size() / 100.0);
+
+		int maxDelayMillis = maxDelaySeconds * 1000;
 
 		for (int i = 0; i < selectedCount; i++) {
 			Entity entity = entityList.get(i);
-			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelaySeconds), TimeUnit.SECONDS);
+			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelayMillis), TimeUnit.MILLISECONDS);
 		}
 	}
 
