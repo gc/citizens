@@ -117,7 +117,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			return;
 		}
 		this.activeRemark = message;
-		this.remarkTimer = 80;
+		this.remarkTimer = 120;
 	}
 
 	public void moveTo(WorldPoint worldPosition) {
@@ -152,12 +152,18 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		movementTick();
 	}
 
+	public void stopMoving() {
+		currentTarget = null;
+		rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
+	}
+
 	public void movementTick() {
 		if (entityType == EntityType.StationaryCitizen) {
 			return;
 		}
 		if (currentTarget != null) {
 			if (currentTarget.worldDestinationPosition == null) {
+				stopMoving();
 				return;
 			}
 			LocalPoint targetPosition = currentTarget.localDestinationPosition;
@@ -165,6 +171,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			LocalPoint localLoc = getLocalLocation();
 			if (localLoc == null) {
 				throw new RuntimeException("Tried to movement tick for citizen with no local location: " + debugName());
+			}
+
+			if (targetPosition == null) {
+				Util.log(debugName() + " is cancelling movement due to targetPosition being null.");
+				stopMoving();
+				return;
 			}
 
 			double intx = localLoc.getX() - targetPosition.getX();
@@ -204,8 +216,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			}
 
 			if (dx == 0 && dy == 0 && rotationDone) {
-				currentTarget = null;
-				rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
+				stopMoving();
 			}
 		}
 	}

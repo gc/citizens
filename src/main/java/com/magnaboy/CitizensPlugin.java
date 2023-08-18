@@ -1,7 +1,6 @@
 package com.magnaboy;
 
 import com.google.inject.Provides;
-import static com.magnaboy.Util.getRandom;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -172,36 +171,30 @@ public class CitizensPlugin extends Plugin {
 		unit = ChronoUnit.SECONDS,
 		asynchronous = true
 	)
-	public void citizenTick() {
+	public void citizenBehaviourTick() {
 		if (!isReady()) {
 			return;
 		}
-		clientThread.invokeLater(() -> {
-			CitizenRegion.forEachEntity(entity -> {
-				entity.update();
-				if (!entity.shouldRender() || !entity.isActive()) {
-					return;
-				}
-				int random = getRandom(1, 10);
-				if (random < 8) {
-					if (entity instanceof WanderingCitizen) {
-						((WanderingCitizen) entity).wander();
-					}
-				}
 
-				if (random == 7 || random == 8 || random == 9) {
-					if (entity instanceof Citizen) {
-						((Citizen) entity).triggerIdleAnimation();
-					}
-				}
-
-				if (random == 10) {
-					if (entity instanceof Citizen) {
-						((Citizen) entity).sayRandomRemark();
-					}
+		for (CitizenRegion r : activeRegions.values()) {
+			r.updateEntities();
+			r.percentileAction(30, 2, entity -> {
+				if (entity instanceof WanderingCitizen) {
+					((WanderingCitizen) entity).wander();
 				}
 			});
-		});
+			r.percentileAction(20, 2, entity -> {
+				if (entity instanceof Citizen) {
+					((Citizen) entity).triggerIdleAnimation();
+				}
+			});
+			r.percentileAction(20, 2, entity -> {
+				if (entity instanceof Citizen) {
+					((Citizen) entity).sayRandomRemark();
+				}
+			});
+		}
+
 		panel.update();
 	}
 

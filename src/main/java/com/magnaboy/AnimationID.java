@@ -34,6 +34,10 @@ public enum AnimationID {
 	ChildWalk(189),
 	ChildIdle(195),
 
+	SuzieIdle(10060),
+	LectorIdle(5875),
+	LectorWalk(5876),
+
 	// Non-human
 	FireIdle(475),
 	CatLunge(319),

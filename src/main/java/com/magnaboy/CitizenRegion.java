@@ -19,10 +19,14 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class CitizenRegion {
@@ -32,12 +36,16 @@ public class CitizenRegion {
 	public static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
 	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
 	private static CitizensPlugin plugin;
-	private final transient HashMap<UUID, Entity> entities = new HashMap<>();
+	public transient HashMap<UUID, Entity> entities = new HashMap<>();
 
 	public float version;
 	public int regionId;
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
 	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
+
+	public int size() {
+		return entities.size();
+	}
 
 	public static void init(CitizensPlugin p) {
 		plugin = p;
@@ -338,4 +346,20 @@ public class CitizenRegion {
 	public void updateEntities() {
 		entities.values().forEach(Entity::update);
 	}
+
+	ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
+	public void percentileAction(int percentage, int maxDelaySeconds, Consumer<Entity> callback) {
+		List<Entity> entityList = new ArrayList<>(entities.values());
+		Collections.shuffle(entityList); // Shuffle to randomize the order
+
+		int selectedCount = (int) Math.ceil(percentage * entityList.size() / 100.0); // Round up the count
+
+		for (int i = 0; i < selectedCount; i++) {
+			Entity entity = entityList.get(i);
+			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelaySeconds), TimeUnit.SECONDS);
+		}
+	}
+
+
 }

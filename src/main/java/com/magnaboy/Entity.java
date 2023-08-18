@@ -245,6 +245,10 @@ public class Entity<T extends Entity<T>> {
 			return false;
 		}
 
+		if (this instanceof Citizen) {
+			Citizen citizen = (Citizen) this;
+			citizen.stopMoving();
+		}
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
 		});

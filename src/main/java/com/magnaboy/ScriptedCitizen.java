@@ -49,7 +49,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		for (ScriptAction action : script.actions) {
 			addAction(action);
 		}
-		scriptExecutor.submit(() -> buildRoutine());
+		scriptExecutor.submit(this::buildRoutine);
 	}
 
 	private void addAction(ScriptAction action) {
