@@ -9,10 +9,18 @@ import java.util.concurrent.Executors;
 public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ScriptFile script;
 	private ExecutorService scriptExecutor;
+	public ScriptAction currentAction;
 
 	public ScriptedCitizen(CitizensPlugin plugin) {
 		super(plugin);
 		entityType = EntityType.ScriptedCitizen;
+	}
+
+	private void submitAction(ScriptAction action, Runnable task) {
+		scriptExecutor.submit(() -> {
+			this.currentAction = action;
+			task.run();
+		});
 	}
 
 	public ScriptedCitizen setScript(String scriptName) {
@@ -56,7 +64,9 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		if (action != null) {
 			switch (action.action) {
 				case Idle:
-					scriptExecutor.submit(() -> setWait(action.secondsTilNextAction));
+					submitAction(action, () -> {
+						setWait(action.secondsTilNextAction);
+					});
 					break;
 				case Say:
 					addSayAction(action);
@@ -67,6 +77,9 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 				case Animation:
 					addAnimationAction(action);
 					break;
+				case FaceDirection:
+					addRotateAction(action);
+					break;
 				default:
 					Util.log("Unknown action type");
 					break;
@@ -75,15 +88,20 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	}
 
 	private void addSayAction(ScriptAction action) {
-		scriptExecutor.submit(() -> {
+		submitAction(action, () -> {
 			say(action.message);
 			setWait(action.secondsTilNextAction);
 		});
 	}
 
 	private void addWalkAction(ScriptAction action) {
-		scriptExecutor.submit(() -> {
-			moveTo(action.targetPosition);
+		submitAction(action, () -> {
+			if (action.targetRotation != null) {
+				moveTo(action.targetPosition, action.targetRotation.getAngle(), rlObject.getAnimation().getId(), false, false, false);
+			} else {
+				moveTo(action.targetPosition);
+			}
+
 			while (!getWorldLocation().equals(action.targetPosition)) {
 				Thread.yield();
 			}
@@ -91,8 +109,19 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		});
 	}
 
+	private void addRotateAction(ScriptAction action) {
+		submitAction(action, () -> {
+//			rlObject.setOrientation(action.targetRotation.getAngle());
+			moveTo(worldLocation, action.targetRotation.getAngle(), rlObject.getAnimation().getId(), false, false, false);
+			while (!getWorldLocation().equals(action.targetPosition) || rlObject.getOrientation() != action.targetRotation.getAngle()) {
+				Thread.yield();
+			}
+			setWait(action.secondsTilNextAction);
+		});
+	}
+
 	private void addAnimationAction(ScriptAction action) {
-		scriptExecutor.submit(() -> {
+		submitAction(action, () -> {
 			AnimationID oldAnimation = idleAnimationId;
 			setIdleAnimation(action.animationId);
 			//Switching animations is not immedidate, so wait til it switches.
@@ -117,7 +146,10 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		});
 	}
 
-	private void setWait(float seconds) {
+	private void setWait(Float seconds) {
+		if (seconds == null) {
+			return;
+		}
 		//We never want thread.sleep(0)
 		seconds = Math.max(0.1f, seconds);
 		try {

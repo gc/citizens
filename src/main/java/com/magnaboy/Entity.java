@@ -45,6 +45,10 @@ public class Entity<T extends Entity<T>> {
 		this.rlObject = plugin.client.createRuneLiteObject();
 	}
 
+	public int getAnimationID() {
+		return rlObject.getAnimation().getId();
+	}
+
 	public boolean isCitizen() {
 		return entityType == EntityType.StationaryCitizen || entityType == EntityType.WanderingCitizen || entityType == EntityType.ScriptedCitizen;
 	}
@@ -353,11 +357,10 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public boolean rotateObject(double intx, double inty) {
-		final int JAU_FULL_ROTATION = 2048;
 		int targetOrientation = Util.radToJau(Math.atan2(intx, inty));
 		int currentOrientation = rlObject.getOrientation();
 
-		int dJau = (targetOrientation - currentOrientation) % JAU_FULL_ROTATION;
+		int dJau = (targetOrientation - currentOrientation) % Util.JAU_FULL_ROTATION;
 
 		if (dJau != 0) {
 			final int JAU_HALF_ROTATION = 1024;
@@ -365,7 +368,7 @@ public class Entity<T extends Entity<T>> {
 			int dJauCW = Math.abs(dJau);
 
 			if (dJauCW > JAU_HALF_ROTATION) {
-				dJau = (currentOrientation - targetOrientation) % JAU_FULL_ROTATION;
+				dJau = (currentOrientation - targetOrientation) % Util.JAU_FULL_ROTATION;
 			} else if (dJauCW == JAU_HALF_ROTATION) {
 				dJau = dJauCW;
 			}
@@ -375,14 +378,22 @@ public class Entity<T extends Entity<T>> {
 				dJau = Integer.signum(dJau) * JAU_TURN_SPEED;
 			}
 
-			int newOrientation = (JAU_FULL_ROTATION + rlObject.getOrientation() + dJau) % JAU_FULL_ROTATION;
+			int newOrientation = (Util.JAU_FULL_ROTATION + rlObject.getOrientation() + dJau) % Util.JAU_FULL_ROTATION;
 
 			rlObject.setOrientation(newOrientation);
 
-			dJau = (targetOrientation - newOrientation) % JAU_FULL_ROTATION;
+			dJau = (targetOrientation - newOrientation) % Util.JAU_FULL_ROTATION;
 		}
 
 		return dJau == 0;
+	}
+
+	public boolean rotateObject(CardinalDirection direction) {
+		System.out.println(direction.getAngle());
+		double radians = direction.getAngle() * 2 * Math.PI / Util.JAU_FULL_ROTATION;
+		double intx = Math.cos(radians);
+		double inty = Math.sin(radians);
+		return rotateObject(intx, inty);
 	}
 
 	public T setIdleAnimation(AnimationID idleAnimationId) {

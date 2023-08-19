@@ -1,6 +1,7 @@
 package com.magnaboy.scripting;
 
 import com.magnaboy.AnimationID;
+import com.magnaboy.CardinalDirection;
 import net.runelite.api.coords.WorldPoint;
 
 public class ScriptAction {
@@ -14,5 +15,6 @@ public class ScriptAction {
 	public String message;
 	public AnimationID animationId;
 	public String scriptName;
+	public CardinalDirection targetRotation;
 }
 

@@ -1,0 +1,43 @@
+{
+    "actions": [
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetRotation": "North",
+            "targetPosition": {
+                "x": 3165,
+                "y": 3446,
+                "plane": 0
+            }
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetRotation": "North",
+            "targetPosition": {
+                "x": 3167,
+                "y": 3446,
+                "plane": 0
+            }
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3169,
+                "y": 3446,
+                "plane": 0
+            }
+        },
+        {
+            "action": "WalkTo",
+            "targetRotation": "North",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3163,
+                "y": 3446,
+                "plane": 0
+            }
+        }
+    ]
+}

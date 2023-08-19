@@ -164,6 +164,13 @@ public class CitizensOverlay extends Overlay {
 					highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));
 				}
 			}
+
+			if (citizen.entityType == EntityType.ScriptedCitizen) {
+				ScriptedCitizen scriptedCitizen = (ScriptedCitizen) citizen;
+				if (scriptedCitizen.currentAction != null) {
+					renderText(graphics, localLocation, scriptedCitizen.currentAction.action.toString() + " A:" + scriptedCitizen.rlObject.getOrientation(), JagexColors.YELLOW_INTERFACE_TEXT);
+				}
+			}
 		});
 
 		return null;

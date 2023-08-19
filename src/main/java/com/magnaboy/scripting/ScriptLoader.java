@@ -47,6 +47,7 @@ public final class ScriptLoader {
 			Util.log("Script Loading Error: " + e.getMessage());
 			return null;
 		}
+		script.name = scriptName;
 		Util.log("Loaded Script: " + scriptName + " from file");
 		return script;
 	}

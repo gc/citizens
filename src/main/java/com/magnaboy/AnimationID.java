@@ -28,6 +28,7 @@ public enum AnimationID {
 	BuryOrPickingUp(827),
 	LayingDown(838),
 	HumanLook(2713),
+	WateringCanPour(2293),
 
 	ChildStarJump(218),
 	ChildPlay1(6484),
