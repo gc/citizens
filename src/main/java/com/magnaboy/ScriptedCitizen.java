@@ -5,6 +5,8 @@ import com.magnaboy.scripting.ScriptFile;
 import com.magnaboy.scripting.ScriptLoader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import net.runelite.api.Animation;
+import net.runelite.api.coords.WorldPoint;
 
 public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ScriptFile script;
@@ -18,6 +20,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void submitAction(ScriptAction action, Runnable task) {
 		scriptExecutor.submit(() -> {
+			System.out.println("Executing action: " + action.action);
 			this.currentAction = action;
 			task.run();
 		});
@@ -58,6 +61,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 			addAction(action);
 		}
 		scriptExecutor.submit(this::buildRoutine);
+		System.out.println(debugName() + " has " + script.actions.size() + " actions");
 	}
 
 	private void addAction(ScriptAction action) {
@@ -96,14 +100,13 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
-			if (action.targetRotation != null) {
-				moveTo(action.targetPosition, action.targetRotation.getAngle(), rlObject.getAnimation().getId(), false, false, false);
-			} else {
-				moveTo(action.targetPosition);
-			}
-
-			while (!getWorldLocation().equals(action.targetPosition)) {
-				Thread.yield();
+			moveTo(action.targetPosition, action.targetRotation.getAngle(), false, false);
+			while (
+				!getWorldLocation().equals(action.targetPosition) ||
+					getAnimationID() != idleAnimationId.getId() ||
+					WorldPoint.fromLocal(plugin.client, getLocalLocation()).distanceTo2D(getWorldLocation()) > 1
+			) {
+				sleep();
 			}
 			setWait(action.secondsTilNextAction);
 		});
@@ -111,37 +114,44 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addRotateAction(ScriptAction action) {
 		submitAction(action, () -> {
-//			rlObject.setOrientation(action.targetRotation.getAngle());
-			moveTo(worldLocation, action.targetRotation.getAngle(), rlObject.getAnimation().getId(), false, false, false);
-			while (!getWorldLocation().equals(action.targetPosition) || rlObject.getOrientation() != action.targetRotation.getAngle()) {
-				Thread.yield();
-			}
+			plugin.clientThread.invoke(() -> {
+				rlObject.setOrientation(action.targetRotation.getAngle());
+			});
+////			moveTo(worldLocation, action.targetRotation.getAngle(), currentAnimationID, false, false);
+//			while (!getWorldLocation().equals(action.targetPosition) || getOrientation() != action.targetRotation.getAngle()) {
+//				Thread.yield();
+//			}
 			setWait(action.secondsTilNextAction);
 		});
 	}
 
+	private void sleep() {
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private void addAnimationAction(ScriptAction action) {
 		submitAction(action, () -> {
-			AnimationID oldAnimation = idleAnimationId;
-			setIdleAnimation(action.animationId);
-			//Switching animations is not immedidate, so wait til it switches.
+			Animation oldAnimation = rlObject.getAnimation();
+			setAnimation(action.animationId.getId());
+
 			while (rlObject.getAnimation().getId() != action.animationId.getId()) {
-				Thread.yield();
+				sleep();
 			}
 
 			int lastFrame = 0;
 			while (lastFrame <= rlObject.getAnimationFrame()) {
-				//While the last frame is less or equal to the current animation frame
-				//Check if the frame changed, and if so, set the last frame to that frame number
-				//Once the real frame reaches zero the while loop condition becomes false, unlocking the thread.
-				if (lastFrame != rlObject.getAnimationFrame()) {
-					lastFrame = rlObject.getAnimationFrame();
+				int frameNumber = rlObject.getAnimationFrame();
+				if (lastFrame != frameNumber) {
+					lastFrame = frameNumber;
 				}
-				Thread.yield();
+				sleep();
 			}
-			if (!action.loopAnimation) {
-				setIdleAnimation(oldAnimation);
-			}
+
+			setAnimation(oldAnimation.getId());
 			setWait(action.secondsTilNextAction);
 		});
 	}
@@ -150,7 +160,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		if (seconds == null) {
 			return;
 		}
-		//We never want thread.sleep(0)
+		// We never want thread.sleep(0)
 		seconds = Math.max(0.1f, seconds);
 		try {
 			Thread.sleep((long) (seconds * 1000L));

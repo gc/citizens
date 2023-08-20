@@ -31,5 +31,5 @@ public enum CardinalDirection {
 	public int getAngle() {
 		return this.angle;
 	}
-	
+
 }

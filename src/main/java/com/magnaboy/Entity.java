@@ -249,10 +249,6 @@ public class Entity<T extends Entity<T>> {
 			return false;
 		}
 
-		if (this instanceof Citizen) {
-			Citizen citizen = (Citizen) this;
-			citizen.stopMoving();
-		}
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
 		});
@@ -357,11 +353,13 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public boolean rotateObject(double intx, double inty) {
+		if (intx == 0 && inty == 0) {
+			return true;
+		}
 		int targetOrientation = Util.radToJau(Math.atan2(intx, inty));
 		int currentOrientation = rlObject.getOrientation();
 
 		int dJau = (targetOrientation - currentOrientation) % Util.JAU_FULL_ROTATION;
-
 		if (dJau != 0) {
 			final int JAU_HALF_ROTATION = 1024;
 			final int JAU_TURN_SPEED = 32;
@@ -381,20 +379,19 @@ public class Entity<T extends Entity<T>> {
 			int newOrientation = (Util.JAU_FULL_ROTATION + rlObject.getOrientation() + dJau) % Util.JAU_FULL_ROTATION;
 
 			rlObject.setOrientation(newOrientation);
-
 			dJau = (targetOrientation - newOrientation) % Util.JAU_FULL_ROTATION;
 		}
 
 		return dJau == 0;
 	}
 
-	public boolean rotateObject(CardinalDirection direction) {
-		System.out.println(direction.getAngle());
-		double radians = direction.getAngle() * 2 * Math.PI / Util.JAU_FULL_ROTATION;
-		double intx = Math.cos(radians);
-		double inty = Math.sin(radians);
-		return rotateObject(intx, inty);
-	}
+//	public boolean rotateObject(CardinalDirection direction) {
+//		System.out.println(direction.getAngle());
+//		double radians = direction.getAngle() * 2 * Math.PI / Util.JAU_FULL_ROTATION;
+//		double intx = Math.cos(radians);
+//		double inty = Math.sin(radians);
+//		return rotateObject(intx, inty);
+//	}
 
 	public T setIdleAnimation(AnimationID idleAnimationId) {
 		this.idleAnimationId = idleAnimationId;

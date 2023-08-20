@@ -175,6 +175,7 @@ public class CitizenRegion {
 		info.entityType = EntityType.ScriptedCitizen;
 		return new ScriptedCitizen(plugin)
 			.setWorldLocation(info.worldLocation)
+			.setUUID(info.uuid)
 			.setScript(info.startScript);
 	}
 

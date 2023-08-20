@@ -1,27 +1,105 @@
 package com.magnaboy;
 
 import static com.magnaboy.Util.getRandomItem;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.annotation.Nullable;
+import net.runelite.api.Actor;
 import net.runelite.api.Animation;
+import net.runelite.api.Client;
 import net.runelite.api.CollisionDataFlag;
+import net.runelite.api.Model;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
+	private final Client client;
+	public final CitizensPlugin plugin;
+
+	public static class Target {
+		public WorldPoint worldDestinationPosition;
+		public LocalPoint localDestinationPosition;
+		public int jauDestinationOrientation;
+		public boolean isPoseAnimation;
+		public boolean isInteracting;
+		public boolean isMidPoint;
+	}
+
+	private final int MAX_TARGET_QUEUE_SIZE = 10;
+	private final Target[] targetQueue = new Target[MAX_TARGET_QUEUE_SIZE];
+	private int currentTargetIndex;
+	private int targetQueueSize;
+
 	public String[] remarks;
 	@Nullable
-	public String activeRemark = null;
-	public int speed = 4;
-	public AnimationID[] randomAnimations;
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
 	@Nullable()
-	Target currentTarget;
-	private int remarkTimer = 0;
+
+	private static final int[][] BLOCKING_DIRECTIONS_5x5 = {
+		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_EAST, CollisionDataFlag.BLOCK_MOVEMENT_EAST, 0, CollisionDataFlag.BLOCK_MOVEMENT_WEST, CollisionDataFlag.BLOCK_MOVEMENT_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST}};
+
+	private static final int[][] JAU_DIRECTIONS_5X5 = {
+		{768, 768, 1024, 1280, 1280},
+		{768, 768, 1024, 1280, 1280},
+		{512, 512, 0, 1536, 1536},
+		{256, 256, 0, 1792, 1792},
+		{256, 256, 0, 1792, 1792}};
+	private static final int CENTER_INDEX_5X5 = 2;
+
+	private enum POSE_ANIM {
+		IDLE,
+		WALK,
+		RUN,
+		WALK_ROTATE_180,
+		WALK_STRAFE_LEFT,
+		WALK_STRAFE_RIGHT,
+		IDLE_ROTATE_LEFT,
+		IDLE_ROTATE_RIGHT
+	}
+
+	Animation[] animationPoses = new Animation[8];
 
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);
+		this.plugin = plugin;
+		this.client = plugin.client;
+		this.rlObject = client.createRuneLiteObject();
+		for (int i = 0; i < MAX_TARGET_QUEUE_SIZE; i++) {
+			targetQueue[i] = new Target();
+		}
+		setPoseAnimations(plugin.client.getLocalPlayer());
+	}
+
+	public void setAnimation(int animationID) {
+		plugin.clientThread.invoke(() -> {
+			Animation anim = plugin.client.loadAnimation(animationID);
+			rlObject.setAnimation(anim);
+		});
+	}
+
+	public int getOrientation() {
+		return rlObject.getOrientation();
+	}
+
+	public void setModel(Model model) {
+		rlObject.setModel(model);
+	}
+
+	public T setName(String name) {
+		this.name = name;
+		return (T) this;
+	}
+
+	public T setExamine(String examine) {
+		this.examine = examine;
+		return (T) this;
+	}
+
+	public T setRemarks(String[] remarks) {
+		this.remarks = remarks;
+		return (T) this;
 	}
 
 	public void validate() {
@@ -54,130 +132,9 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
-	public T setName(String name) {
-		this.name = name;
-		return (T) this;
-	}
-
-	public T setExamine(String examine) {
-		this.examine = examine;
-		return (T) this;
-	}
-
-	public T setRemarks(String[] remarks) {
-		this.remarks = remarks;
-		return (T) this;
-	}
-
-	public void triggerIdleAnimation() {
-		if (randomAnimations == null) {
-			return;
-		}
-		AnimationID animID = getRandomItem(randomAnimations);
-		Animation anim = plugin.getAnimation(animID);
-		rlObject.setAnimation(anim);
-		// TODO: cancel this timer on plugin shutdown
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				rlObject.setAnimation(plugin.getAnimation(idleAnimationId));
-			}
-			// TODO: this delay is random
-		}, 600 * 8);
-	}
-
-	public boolean despawn() {
-		this.currentTarget = null;
-		this.activeRemark = null;
-		this.remarkTimer = 0;
-		boolean didDespawn = super.despawn();
-
-		if (didDespawn) {
-			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
-		}
-		return didDespawn;
-	}
-
-	public boolean spawn() {
-		boolean didSpawn = super.spawn();
-		if (didSpawn) {
-			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
-		}
-
-		return didSpawn;
-	}
-
-	public void sayRandomRemark() {
-		if (activeRemark == null && remarks != null && remarks.length > 0) {
-			say(getRandomItem(remarks));
-		}
-	}
-
-	public void say(String message) {
-		if (distanceToPlayer() > 30) {
-			return;
-		}
-		this.activeRemark = message;
-		this.remarkTimer = 120;
-	}
-
-	public void moveTo(WorldPoint worldPosition) {
-		if (!rlObject.isActive()) {
-			spawn();
-		}
-
-		LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, worldPosition);
-
-		WorldPoint prevWorldPosition;
-		if (currentTarget != null) {
-			prevWorldPosition = currentTarget.worldDestinationPosition;
-		} else {
-			prevWorldPosition = WorldPoint.fromLocal(plugin.client, getLocalLocation());
-		}
-
-		int distance = prevWorldPosition.distanceTo(worldPosition);
-
-		currentTarget = new Target();
-		currentTarget.worldDestinationPosition = worldPosition;
-		currentTarget.localDestinationPosition = localPosition;
-		currentTarget.currentDistance = distance;
-	}
-
-	public void onClientTick() {
-		if (remarkTimer > 0) {
-			remarkTimer--;
-		}
-		if (remarkTimer == 0) {
-			this.activeRemark = null;
-		}
-		movementTick();
-	}
-
-	public void stopMoving() {
-		currentTarget = null;
-		rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
-	}
-
-	private static class JTarget {
-		public WorldPoint worldDestinationPosition;
-		public LocalPoint localDestinationPosition;
-		public int tileMovementSpeed;
-		public int jauDestinationOrientation;
-		public int primaryAnimationID;
-		public boolean isPoseAnimation;
-		public boolean isInteracting;
-		public boolean isMidPoint;
-		public boolean isInstanced;
-	}
-
-	private final int MAX_TARGET_QUEUE_SIZE = 10;
-	private final JTarget[] targetQueue = new JTarget[MAX_TARGET_QUEUE_SIZE];
-	private int currentTargetIndex;
-	private int targetQueueSize;
-
 	public void spawn(WorldPoint position, int jauOrientation) {
-		LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, position);
-		if (localPosition != null && plugin.client.getPlane() == position.getPlane()) {
+		LocalPoint localPosition = LocalPoint.fromWorld(client, position);
+		if (localPosition != null && client.getPlane() == position.getPlane()) {
 			rlObject.setLocation(localPosition, position.getPlane());
 		} else {
 			return;
@@ -190,7 +147,82 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		this.targetQueueSize = 0;
 	}
 
-	public void moveTo(WorldPoint worldPosition, int jauOrientation, int primaryAnimationID, boolean isInteracting, boolean isPoseAnimation, boolean isInstanced) {
+	public boolean despawn() {
+		this.targetQueueSize = 0;
+		this.currentTargetIndex = 0;
+		this.activeRemark = null;
+		this.remarkTimer = 0;
+		boolean didDespawn = super.despawn();
+
+		if (didDespawn) {
+			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
+		}
+		return didDespawn;
+	}
+
+	public void setPoseAnimations(Actor actor) {
+		this.animationPoses[POSE_ANIM.IDLE.ordinal()] = client.loadAnimation(actor.getIdlePoseAnimation());
+		this.animationPoses[POSE_ANIM.WALK.ordinal()] = client.loadAnimation(actor.getWalkAnimation());
+		this.animationPoses[POSE_ANIM.RUN.ordinal()] = client.loadAnimation(actor.getRunAnimation());
+		this.animationPoses[POSE_ANIM.WALK_ROTATE_180.ordinal()] = client.loadAnimation(actor.getWalkRotate180());
+		this.animationPoses[POSE_ANIM.WALK_STRAFE_LEFT.ordinal()] = client.loadAnimation(actor.getWalkRotateLeft()); // rotate is a misnomer here
+		this.animationPoses[POSE_ANIM.WALK_STRAFE_RIGHT.ordinal()] = client.loadAnimation(actor.getWalkRotateRight()); // rotate is a misnomer here
+		this.animationPoses[POSE_ANIM.IDLE_ROTATE_LEFT.ordinal()] = client.loadAnimation(actor.getIdleRotateLeft());
+		this.animationPoses[POSE_ANIM.IDLE_ROTATE_RIGHT.ordinal()] = client.loadAnimation(actor.getIdleRotateRight());
+	}
+
+	public Target getCurrentTarget() {
+		Target target = targetQueue[currentTargetIndex];
+		if (target.localDestinationPosition == null) {
+			return null;
+		}
+		return target;
+	}
+
+	public WorldPoint getWorldLocation() {
+		return targetQueueSize > 0 ? targetQueue[currentTargetIndex].worldDestinationPosition : WorldPoint.fromLocal(client, rlObject.getLocation());
+	}
+
+	public LocalPoint getLocalLocation() {
+		return rlObject.getLocation();
+	}
+
+	public boolean isActive() {
+		return rlObject.isActive();
+	}
+
+	@Nullable
+	public String activeRemark = null;
+	private int remarkTimer = 0;
+
+	public void say(String message) {
+		if (distanceToPlayer() > 30) {
+			return;
+		}
+		this.activeRemark = message;
+		this.remarkTimer = 120;
+	}
+
+	public void sayRandomRemark() {
+		if (activeRemark == null && remarks != null && remarks.length > 0) {
+			say(getRandomItem(remarks));
+		}
+	}
+
+	public void moveTo(WorldPoint worldPosition) {
+		moveTo(worldPosition, 0, false, false);
+	}
+
+	// moveTo() adds target movement states to the queue for later per-frame updating for rendering in onClientTick()
+	// Set this every game tick for each new position (usually only up to 2 tiles out)
+	// This is not set up for pathfinding to the final destination of distant targets (you will just move there directly)
+	// It will, however, handle nearby collision detection (1-2 tiles away from you) under certain scenarios
+	// jauOrientation is not used if isInteracting is false; it will instead default to the angle being moved towards
+	public void moveTo(WorldPoint worldPosition, int jauOrientation, boolean isInteracting, boolean isPoseAnimation) {
+		if (entityType == EntityType.StationaryCitizen) {
+			throw new IllegalStateException(debugName() + " is a stationary citizen and cannot move.");
+		}
+
 		// respawn this actor if it was previously despawned
 		if (!rlObject.isActive()) {
 			spawn(worldPosition, jauOrientation);
@@ -208,7 +240,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 		int prevTargetIndex = (currentTargetIndex + targetQueueSize - 1) % MAX_TARGET_QUEUE_SIZE;
 		int newTargetIndex = (currentTargetIndex + targetQueueSize) % MAX_TARGET_QUEUE_SIZE;
-		LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, worldPosition);
+		LocalPoint localPosition = LocalPoint.fromWorld(client, worldPosition);
 
 		if (localPosition == null) {
 			return;
@@ -220,7 +252,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			prevWorldPosition = targetQueue[prevTargetIndex].worldDestinationPosition;
 			// TODO: check if a different primaryAnimationID exists; if so, modify the old one with our new one (hopefully this prevents the extra tick of animation repeating)
 		} else {
-			prevWorldPosition = WorldPoint.fromLocal(plugin.client, rlObject.getLocation());
+			prevWorldPosition = WorldPoint.fromLocal(client, rlObject.getLocation());
 		}
 
 		int distance = prevWorldPosition.distanceTo(worldPosition);
@@ -233,10 +265,10 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			if (distance == 1 && dx != 0 && dy != 0) // test for blockage along diagonal
 			{
 				// if blocked diagonally, go around in an L shape (2 options)
-				int[][] colliders = plugin.client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
-				final int diagonalTest = Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5 - dy][Util.CENTER_INDEX_5X5 + dx];
-				final int axisXTest = Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5][Util.CENTER_INDEX_5X5 + dx] | Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5 + dy][Util.CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-				final int axisYTest = Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5 - dy][Util.CENTER_INDEX_5X5] | Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5][Util.CENTER_INDEX_5X5 - dx] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+				int[][] colliders = client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
+				final int diagonalTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
+				final int axisXTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 + dx] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 + dy][CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+				final int axisYTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 - dx] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
 
 				int diagonalFlag = colliders[localPosition.getSceneX()][localPosition.getSceneY()];
 				int axisXFlag = colliders[localPosition.getSceneX()][localPosition.getSceneY() - dy];
@@ -257,10 +289,10 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			} else if (distance == 2 && Math.abs(Math.abs(dy) - Math.abs(dx)) == 1) // test for blockage along knight-style moves
 			{
 				useMidPointTile = true; // we will always need a midpoint for these types of moves
-				int[][] colliders = plugin.client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
-				final int diagonalTest = Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5 - dy][Util.CENTER_INDEX_5X5 + dx];
-				final int axisXTest = Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5][Util.CENTER_INDEX_5X5 + dx] | Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5 + dy][Util.CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
-				final int axisYTest = Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5 - dy][Util.CENTER_INDEX_5X5] | Util.BLOCKING_DIRECTIONS_5x5[Util.CENTER_INDEX_5X5][Util.CENTER_INDEX_5X5 - dx] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+				int[][] colliders = client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
+				final int diagonalTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
+				final int axisXTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 + dx] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 + dy][CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+				final int axisYTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 - dx] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
 
 				int dxSign = Integer.signum(dx);
 				int dySign = Integer.signum(dy);
@@ -298,18 +330,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 					// the distance between these points should be guaranteed to be 1 here
 					dx = midPoint.getX() - prevWorldPosition.getX();
 					dy = midPoint.getY() - prevWorldPosition.getY();
-					jauOrientation = Util.JAU_DIRECTIONS_5X5[Util.CENTER_INDEX_5X5 - dy][Util.CENTER_INDEX_5X5 + dx];
+					jauOrientation = JAU_DIRECTIONS_5X5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
 				}
 
 				this.targetQueue[newTargetIndex].worldDestinationPosition = midPoint;
-				this.targetQueue[newTargetIndex].localDestinationPosition = LocalPoint.fromWorld(plugin.client, midPoint);
-				this.targetQueue[newTargetIndex].tileMovementSpeed = distance;
+				this.targetQueue[newTargetIndex].localDestinationPosition = LocalPoint.fromWorld(client, midPoint);
 				this.targetQueue[newTargetIndex].jauDestinationOrientation = jauOrientation;
-				this.targetQueue[newTargetIndex].primaryAnimationID = primaryAnimationID;
 				this.targetQueue[newTargetIndex].isPoseAnimation = isPoseAnimation;
 				this.targetQueue[newTargetIndex].isInteracting = isInteracting;
 				this.targetQueue[newTargetIndex].isMidPoint = true;
-				this.targetQueue[newTargetIndex].isInstanced = isInstanced;
 
 				newTargetIndex = (currentTargetIndex + targetQueueSize++) % MAX_TARGET_QUEUE_SIZE;
 				prevWorldPosition = midPoint;
@@ -321,90 +350,86 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				// the distance between these points may be up to 2
 				dx = worldPosition.getX() - prevWorldPosition.getX();
 				dy = worldPosition.getY() - prevWorldPosition.getY();
-				jauOrientation = Util.JAU_DIRECTIONS_5X5[Util.CENTER_INDEX_5X5 - dy][Util.CENTER_INDEX_5X5 + dx];
+				jauOrientation = JAU_DIRECTIONS_5X5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
 			}
 		}
 
 		this.targetQueue[newTargetIndex].worldDestinationPosition = worldPosition;
 		this.targetQueue[newTargetIndex].localDestinationPosition = localPosition;
-		this.targetQueue[newTargetIndex].tileMovementSpeed = distance;
 		this.targetQueue[newTargetIndex].jauDestinationOrientation = jauOrientation;
-		this.targetQueue[newTargetIndex].primaryAnimationID = primaryAnimationID;
 		this.targetQueue[newTargetIndex].isInteracting = isInteracting;
 		this.targetQueue[newTargetIndex].isPoseAnimation = isPoseAnimation;
 		this.targetQueue[newTargetIndex].isMidPoint = false;
-		this.targetQueue[newTargetIndex].isInstanced = isInstanced;
 	}
 
-	public void movementTick() {
-		if (entityType == EntityType.StationaryCitizen) {
-			return;
+	// onClientTick() updates the per-frame state needed for rendering actor movement
+	public boolean onClientTick() {
+		if (remarkTimer > 0) {
+			remarkTimer--;
 		}
-		if (currentTarget != null) {
-			if (currentTarget.worldDestinationPosition == null) {
-				stopMoving();
-				return;
-			}
-			LocalPoint targetPosition = currentTarget.localDestinationPosition;
-
-			LocalPoint localLoc = getLocalLocation();
-			if (localLoc == null) {
-				throw new RuntimeException("Tried to movement tick for citizen with no local location: " + debugName());
-			}
-
-			if (targetPosition == null) {
-				Util.log(debugName() + " is cancelling movement due to targetPosition being null.");
-				stopMoving();
-				return;
-			}
-
-			double intx = localLoc.getX() - targetPosition.getX();
-			double inty = localLoc.getY() - targetPosition.getY();
-
-			boolean rotationDone = rotateObject(intx, inty);
-
-			LocalPoint currentPosition = rlObject.getLocation();
-			int dx = targetPosition.getX() - currentPosition.getX();
-			int dy = targetPosition.getY() - currentPosition.getY();
-
-			if (dx != 0 || dy != 0) {
-				if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
-					rlObject.setAnimation(plugin.getAnimation(movingAnimationId));
-				}
-
-				if (Math.abs(dx) > speed) {
-					dx = Integer.signum(dx) * speed;
-				}
-
-				if (Math.abs(dy) > speed) {
-					dy = Integer.signum(dy) * speed;
-				}
-
-				LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
-
-				setLocation(newLocation);
-
-				int currentX = rlObject
-					.getLocation()
-					.getX();
-				int currentY = rlObject
-					.getLocation()
-					.getY();
-				dx = targetPosition.getX() - currentX;
-				dy = targetPosition.getY() - currentY;
-			}
-
-			if (dx == 0 && dy == 0 && rotationDone) {
-				stopMoving();
-			}
+		if (remarkTimer == 0) {
+			this.activeRemark = null;
 		}
+		if (rlObject.isActive()) {
+			if (targetQueueSize > 0) {
+				int targetPlane = targetQueue[currentTargetIndex].worldDestinationPosition.getPlane();
+				LocalPoint targetPosition = targetQueue[currentTargetIndex].localDestinationPosition;
+				int targetOrientation = targetQueue[currentTargetIndex].jauDestinationOrientation;
+
+				if (client.getPlane() != targetPlane || targetPosition == null || !targetPosition.isInScene() || targetOrientation < 0) {
+					despawn();
+					return false;
+				}
+
+				LocalPoint currentPosition = getLocalLocation();
+				int dx = targetPosition.getX() - currentPosition.getX();
+				int dy = targetPosition.getY() - currentPosition.getY();
+
+				if (dx != 0 || dy != 0) {
+					if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
+						setAnimation(movingAnimationId.getId());
+					}
+
+					int speed = 4;
+					// only use the delta if it won't send up past the target
+					if (Math.abs(dx) > speed) {
+						dx = Integer.signum(dx) * speed;
+					}
+					if (Math.abs(dy) > speed) {
+						dy = Integer.signum(dy) * speed;
+					}
+
+					LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
+					setLocation(newLocation);
+
+					currentPosition = getLocalLocation();
+					dx = targetPosition.getX() - currentPosition.getX();
+					dy = targetPosition.getY() - currentPosition.getY();
+				}
+
+				LocalPoint localLoc = getLocalLocation();
+				double intx = localLoc.getX() - targetPosition.getX();
+				double inty = localLoc.getY() - targetPosition.getY();
+
+				boolean rotationDone = rotateObject(intx, inty);
+
+				if (dx == 0 && dy == 0 && rotationDone) {
+					currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
+					targetQueueSize--;
+				}
+
+				if (targetQueueSize == 0) {
+					stopMoving();
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
-	public class Target {
-		public WorldPoint worldDestinationPosition;
-		public LocalPoint localDestinationPosition;
-		public int currentDistance;
+	public void stopMoving() {
+		setAnimation(idleAnimationId.getId());
 	}
-
-
 }

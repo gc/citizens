@@ -1,9 +1,17 @@
 {
     "actions": [
         {
+            "action": "FaceDirection",
+            "targetRotation": "North"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
             "action": "WalkTo",
             "secondsTilNextAction": 0.25,
-            "targetRotation": "North",
             "targetPosition": {
                 "x": 3165,
                 "y": 3446,
@@ -11,14 +19,31 @@
             }
         },
         {
+            "action": "FaceDirection",
+            "targetRotation": "North"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
             "action": "WalkTo",
             "secondsTilNextAction": 0.25,
-            "targetRotation": "North",
             "targetPosition": {
                 "x": 3167,
                 "y": 3446,
                 "plane": 0
             }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "North"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
         },
         {
             "action": "WalkTo",
@@ -30,8 +55,16 @@
             }
         },
         {
+            "action": "FaceDirection",
+            "targetRotation": "North"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
             "action": "WalkTo",
-            "targetRotation": "North",
             "secondsTilNextAction": 0.25,
             "targetPosition": {
                 "x": 3163,

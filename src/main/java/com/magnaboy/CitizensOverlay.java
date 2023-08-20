@@ -158,8 +158,9 @@ public class CitizensOverlay extends Overlay {
 			}
 
 			// If the citizen has a walking target, mark it.
-			if (citizen.currentTarget != null) {
-				Citizen.Target target = ((Citizen<WanderingCitizen>.Target) citizen.currentTarget);
+			Citizen.Target currentTarget = citizen.getCurrentTarget();
+			if (currentTarget != null) {
+				Citizen.Target target = currentTarget;
 				if (target.localDestinationPosition != null) {
 					highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));
 				}
