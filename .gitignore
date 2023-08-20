@@ -9,3 +9,4 @@ nbproject/
 citizens.log
 .idea/
 !.idea/codeStyles/codeStyleConfig.xml
+bin/

@@ -6,13 +6,16 @@ import net.runelite.api.Actor;
 import net.runelite.api.Animation;
 import net.runelite.api.Client;
 import net.runelite.api.CollisionDataFlag;
-import net.runelite.api.Model;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	private final Client client;
 	public final CitizensPlugin plugin;
+
+	@Nullable
+	public String activeRemark = null;
+	private int remarkTimer = 0;
 
 	public static class Target {
 		public WorldPoint worldDestinationPosition;
@@ -27,6 +30,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	private final Target[] targetQueue = new Target[MAX_TARGET_QUEUE_SIZE];
 	private int currentTargetIndex;
 	private int targetQueueSize;
+	Animation[] animationPoses = new Animation[8];
 
 	public String[] remarks;
 	@Nullable
@@ -59,8 +63,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		IDLE_ROTATE_RIGHT
 	}
 
-	Animation[] animationPoses = new Animation[8];
-
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);
 		this.plugin = plugin;
@@ -70,21 +72,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			targetQueue[i] = new Target();
 		}
 		setPoseAnimations(plugin.client.getLocalPlayer());
-	}
-
-	public void setAnimation(int animationID) {
-		plugin.clientThread.invoke(() -> {
-			Animation anim = plugin.client.loadAnimation(animationID);
-			rlObject.setAnimation(anim);
-		});
-	}
-
-	public int getOrientation() {
-		return rlObject.getOrientation();
-	}
-
-	public void setModel(Model model) {
-		rlObject.setModel(model);
 	}
 
 	public T setName(String name) {
@@ -132,20 +119,20 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
-	public void spawn(WorldPoint position, int jauOrientation) {
-		LocalPoint localPosition = LocalPoint.fromWorld(client, position);
-		if (localPosition != null && client.getPlane() == position.getPlane()) {
-			rlObject.setLocation(localPosition, position.getPlane());
-		} else {
-			return;
-		}
-		rlObject.setOrientation(jauOrientation);
-		rlObject.setAnimation(null);
-		rlObject.setShouldLoop(true);
-		rlObject.setActive(true);
-		this.currentTargetIndex = 0;
-		this.targetQueueSize = 0;
-	}
+//	public boolean spawn() {
+//		plugin.clientThread.invoke(() -> {
+////			LocalPoint localPosition = LocalPoint.fromWorld(client, position);
+////			if (localPosition != null && client.getPlane() == position.getPlane()) {
+//////				rlObject.setLocation(localPosition, position.getPlane());
+////				setLocation(localPosition);
+////			}
+//			setAnimation(idleAnimationId.getId());
+//			this.currentTargetIndex = 0;
+//			this.targetQueueSize = 0;
+//			super.spawn();
+//		});
+//		return true;
+//	}
 
 	public boolean despawn() {
 		this.targetQueueSize = 0;
@@ -180,20 +167,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	}
 
 	public WorldPoint getWorldLocation() {
-		return targetQueueSize > 0 ? targetQueue[currentTargetIndex].worldDestinationPosition : WorldPoint.fromLocal(client, rlObject.getLocation());
+		Target currentTarget = getCurrentTarget();
+		if (currentTarget != null) {
+			return currentTarget.worldDestinationPosition;
+		}
+		return super.getWorldLocation();
 	}
-
-	public LocalPoint getLocalLocation() {
-		return rlObject.getLocation();
-	}
-
-	public boolean isActive() {
-		return rlObject.isActive();
-	}
-
-	@Nullable
-	public String activeRemark = null;
-	private int remarkTimer = 0;
 
 	public void say(String message) {
 		if (distanceToPlayer() > 30) {
@@ -224,14 +203,14 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 
 		// respawn this actor if it was previously despawned
-		if (!rlObject.isActive()) {
-			spawn(worldPosition, jauOrientation);
-
-			// if still not active, just exit
-			if (!rlObject.isActive()) {
-				return;
-			}
-		}
+//		if (!rlObject.isActive()) {
+//			spawn();
+//
+//			// if still not active, just exit
+//			if (!rlObject.isActive()) {
+//				return;
+//			}
+//		}
 
 		// just clear the queue and move immediately to the destination if many ticks behind
 		if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE - 2) {

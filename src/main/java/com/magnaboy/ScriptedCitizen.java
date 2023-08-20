@@ -20,9 +20,12 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void submitAction(ScriptAction action, Runnable task) {
 		scriptExecutor.submit(() -> {
+			long startTime = System.currentTimeMillis();
 			System.out.println("Executing action: " + action.action);
 			this.currentAction = action;
 			task.run();
+			long endTime = System.currentTimeMillis();
+			System.out.println("Action " + action.action + " took " + (endTime - startTime) + " milliseconds");
 		});
 	}
 
@@ -36,20 +39,9 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	}
 
 	@Override
-	public boolean spawn() {
-		boolean didSpawn = super.spawn();
-		return didSpawn;
-	}
-
-	@Override
 	public boolean despawn() {
 		scriptExecutor.shutdownNow();
 		return super.despawn();
-	}
-
-	@Override
-	public void update() {
-		super.update();
 	}
 
 	private void buildRoutine() {
@@ -61,7 +53,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 			addAction(action);
 		}
 		scriptExecutor.submit(this::buildRoutine);
-		System.out.println(debugName() + " has " + script.actions.size() + " actions");
 	}
 
 	private void addAction(ScriptAction action) {
@@ -144,12 +135,13 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 			int lastFrame = 0;
 			while (lastFrame <= rlObject.getAnimationFrame()) {
-				int frameNumber = rlObject.getAnimationFrame();
-				if (lastFrame != frameNumber) {
-					lastFrame = frameNumber;
+				if (lastFrame != rlObject.getAnimationFrame()) {
+					lastFrame = rlObject.getAnimationFrame();
 				}
 				sleep();
 			}
+
+			System.out.println("Animation finished with " + lastFrame + " frames");
 
 			setAnimation(oldAnimation.getId());
 			setWait(action.secondsTilNextAction);

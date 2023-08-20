@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import net.runelite.api.AABB;
+import net.runelite.api.Animation;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
 import net.runelite.api.Model;
@@ -22,7 +23,7 @@ import net.runelite.api.model.Jarvis;
 
 public class Entity<T extends Entity<T>> {
 	public Integer regionId;
-	public WorldPoint worldLocation;
+	private WorldPoint worldLocation;
 	public String name;
 	public String examine;
 	public CitizensPlugin plugin;
@@ -143,12 +144,28 @@ public class Entity<T extends Entity<T>> {
 		return rlObject.getLocation();
 	}
 
+	public int getOrientation() {
+		return rlObject.getOrientation();
+	}
+
+	public void setModel(Model model) {
+		rlObject.setModel(model);
+	}
+
+	public void setAnimation(int animationID) {
+		plugin.clientThread.invoke(() -> {
+			Animation anim = plugin.client.loadAnimation(animationID);
+			rlObject.setAnimation(anim);
+		});
+	}
+
 	public WorldPoint getWorldLocation() {
 		return this.worldLocation;
 	}
 
 	public T setWorldLocation(WorldPoint location) {
 		this.worldLocation = location;
+		Util.log(debugName() + " Set World Location: " + location);
 		return (T) this;
 	}
 
@@ -163,6 +180,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void update() {
+		Util.log(debugName() + " Update: Current Location: " + getLocalLocation() + " | World Location: " + getWorldLocation() + " | Should Render: " + shouldRender());
 		boolean inScene = shouldRender();
 
 		if (inScene) {
@@ -209,6 +227,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public T setLocation(LocalPoint location) {
+		Util.log("Setting location of " + debugName() + " to " + location + " on plane " + getPlane() + " from " + getLocalLocation() + " to " + location);
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
@@ -223,15 +242,23 @@ public class Entity<T extends Entity<T>> {
 
 	public boolean shouldRender() {
 		if (getPlane() != plugin.client.getPlane()) {
+			Util.log(debugName() + " PLANE DIFFERENCE");
 			return false;
 		}
 
 		float distanceFromPlayer = distanceToPlayer();
+
+		Util.log(debugName() + " DIST " + distanceToPlayer() + "x tiles " + getWorldLocation() + " " + getLocalLocation());
+
 		if (distanceFromPlayer > 50) {
+
 			return false;
 		}
 
 		LocalPoint lp = LocalPoint.fromWorld(plugin.client, worldLocation);
+		if (lp == null) {
+			Util.log(debugName() + " LP NULL");
+		}
 		return lp != null;
 	}
 

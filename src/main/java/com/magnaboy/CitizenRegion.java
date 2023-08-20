@@ -111,23 +111,7 @@ public class CitizenRegion {
 		}
 	}
 
-	public static Citizen loadCitizen(CitizensPlugin plugin, CitizenInfo info) {
-		Citizen citizen;
-		if (info.entityType == null) {
-			citizen = loadStationaryCitizen(plugin, info);
-		} else {
-			switch (info.entityType) {
-				case WanderingCitizen:
-					citizen = loadWanderingCitizen(plugin, info);
-					break;
-				case ScriptedCitizen:
-					citizen = loadScriptedCitizen(plugin, info);
-					break;
-				default:
-					citizen = loadStationaryCitizen(plugin, info);
-					break;
-			}
-		}
+	public static void initCitizenInfo(Citizen citizen, CitizenInfo info) {
 		// Citizen
 		citizen.setName(info.name)
 			.setExamine(info.examineText)
@@ -144,6 +128,22 @@ public class CitizenRegion {
 			.setUUID(info.uuid)
 			.setWorldLocation(info.worldLocation)
 			.setRegion(info.regionId);
+	}
+
+	public static Citizen loadCitizen(CitizensPlugin plugin, CitizenInfo info) {
+		Citizen citizen;
+
+		switch (info.entityType) {
+			case WanderingCitizen:
+				citizen = loadWanderingCitizen(plugin, info);
+				break;
+			case ScriptedCitizen:
+				citizen = loadScriptedCitizen(plugin, info);
+				break;
+			default:
+				citizen = loadStationaryCitizen(plugin, info);
+				break;
+		}
 
 		if (info.mergedObjects != null) {
 			info.mergedObjects.forEach(citizen::addMergedObject);
@@ -158,25 +158,30 @@ public class CitizenRegion {
 
 	private static StationaryCitizen loadStationaryCitizen(CitizensPlugin plugin, CitizenInfo info) {
 		info.entityType = EntityType.StationaryCitizen;
-		return new StationaryCitizen(plugin)
-			.setWorldLocation(info.worldLocation);
+		StationaryCitizen citizen = new StationaryCitizen(plugin);
+		initCitizenInfo(citizen, info);
+		citizen.setWorldLocation(info.worldLocation);
+		return citizen;
 	}
 
 	private static WanderingCitizen loadWanderingCitizen(CitizensPlugin plugin, CitizenInfo info) {
 		info.entityType = EntityType.WanderingCitizen;
-		return new WanderingCitizen(plugin)
-			.setWanderRegionBL(info.wanderBoxBL)
+		WanderingCitizen citizen = new WanderingCitizen(plugin);
+		initCitizenInfo(citizen, info);
+		citizen.setWanderRegionBL(info.wanderBoxBL)
 			.setWanderRegionTR(info.wanderBoxTR)
 			.setWorldLocation(info.worldLocation)
 			.setBoundingBox(info.wanderBoxBL, info.wanderBoxTR);
+		return citizen;
 	}
 
 	private static ScriptedCitizen loadScriptedCitizen(CitizensPlugin plugin, CitizenInfo info) {
 		info.entityType = EntityType.ScriptedCitizen;
-		return new ScriptedCitizen(plugin)
-			.setWorldLocation(info.worldLocation)
-			.setUUID(info.uuid)
+		ScriptedCitizen citizen = new ScriptedCitizen(plugin);
+		initCitizenInfo(citizen, info);
+		citizen.setWorldLocation(info.worldLocation)
 			.setScript(info.startScript);
+		return citizen;
 	}
 
 	public static Scenery loadScenery(CitizensPlugin plugin, SceneryInfo info) {
