@@ -231,8 +231,10 @@ public class Entity<T extends Entity<T>> {
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
-		rlObject.setLocation(location, getPlane());
-		setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
+		plugin.clientThread.invoke(() -> {
+			rlObject.setLocation(location, getPlane());
+			setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
+		});
 		return (T) this;
 	}
 
@@ -329,7 +331,7 @@ public class Entity<T extends Entity<T>> {
 		}
 
 		if (this.idleAnimationId != null && rlObject.getAnimation() == null) {
-			rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
+			setAnimation((this.idleAnimationId).getId());
 		}
 
 		rlObject.setShouldLoop(true);
@@ -411,14 +413,6 @@ public class Entity<T extends Entity<T>> {
 
 		return dJau == 0;
 	}
-
-//	public boolean rotateObject(CardinalDirection direction) {
-//		System.out.println(direction.getAngle());
-//		double radians = direction.getAngle() * 2 * Math.PI / Util.JAU_FULL_ROTATION;
-//		double intx = Math.cos(radians);
-//		double inty = Math.sin(radians);
-//		return rotateObject(intx, inty);
-//	}
 
 	public T setIdleAnimation(AnimationID idleAnimationId) {
 		this.idleAnimationId = idleAnimationId;

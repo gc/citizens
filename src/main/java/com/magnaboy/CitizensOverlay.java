@@ -173,7 +173,7 @@ public class CitizensOverlay extends Overlay {
 				}
 			}
 
-			renderText(graphics, localLocation, citizen.debugName(), JagexColors.YELLOW_INTERFACE_TEXT);
+//			renderText(graphics, localLocation, citizen.debugName(), JagexColors.YELLOW_INTERFACE_TEXT);
 		});
 
 		return null;

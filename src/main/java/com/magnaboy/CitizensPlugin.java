@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Animation;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -54,8 +52,6 @@ public class CitizensPlugin extends Plugin {
 	@Inject
 	public ClientThread clientThread;
 	public CitizenPanel panel;
-	public AnimationID[] randomIdleActionAnimationIds = {AnimationID.Flex};
-	public List<Animation> animationPoses = new ArrayList<Animation>();
 	@Inject
 	@Named("developerMode")
 	public boolean IS_DEVELOPMENT;
@@ -80,14 +76,6 @@ public class CitizensPlugin extends Plugin {
 	@Provides
 	CitizensConfig getConfig(ConfigManager configManager) {
 		return configManager.getConfig(CitizensConfig.class);
-	}
-
-	public Animation getAnimation(AnimationID animID) {
-		Animation anim = animationPoses.stream().filter(c -> c.getId() == animID.getId()).findFirst().orElse(null);
-		if (anim == null) {
-			throw new IllegalStateException("Tried to get non-existant anim: " + animID);
-		}
-		return anim;
 	}
 
 	public boolean isReady() {
@@ -115,29 +103,11 @@ public class CitizensPlugin extends Plugin {
 
 			overlayManager.add(citizensOverlay);
 		}
-
-		for (AnimationID animId : randomIdleActionAnimationIds) {
-			loadAnimation(animId);
-		}
-
-		for (AnimationID idList : AnimationID.values()) {
-			loadAnimation(idList);
-		}
 	}
 
 	@Override
 	protected void shutDown() {
 		cleanupAll();
-	}
-
-	public void loadAnimation(AnimationID animId) {
-		clientThread.invoke(() -> {
-			Animation anim = client.loadAnimation(animId.getId());
-			if (anim == null) {
-				throw new IllegalStateException("Tried to load non-existant anim: " + animId);
-			}
-			animationPoses.add(anim);
-		});
 	}
 
 	protected void updateAll() {

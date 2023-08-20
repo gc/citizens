@@ -197,7 +197,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	// This is not set up for pathfinding to the final destination of distant targets (you will just move there directly)
 	// It will, however, handle nearby collision detection (1-2 tiles away from you) under certain scenarios
 	// jauOrientation is not used if isInteracting is false; it will instead default to the angle being moved towards
-	public void moveTo(WorldPoint worldPosition, int jauOrientation, boolean isInteracting, boolean isPoseAnimation) {
+	public void moveTo(WorldPoint worldPosition, Integer jauOrientation, boolean isInteracting, boolean isPoseAnimation) {
 		if (entityType == EntityType.StationaryCitizen) {
 			throw new IllegalStateException(debugName() + " is a stationary citizen and cannot move.");
 		}
@@ -229,7 +229,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		WorldPoint prevWorldPosition;
 		if (targetQueueSize++ > 0) {
 			prevWorldPosition = targetQueue[prevTargetIndex].worldDestinationPosition;
-			// TODO: check if a different primaryAnimationID exists; if so, modify the old one with our new one (hopefully this prevents the extra tick of animation repeating)
 		} else {
 			prevWorldPosition = WorldPoint.fromLocal(client, rlObject.getLocation());
 		}
@@ -304,7 +303,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				WorldPoint midPoint = new WorldPoint(prevWorldPosition.getX() + dx, prevWorldPosition.getY() + dy, prevWorldPosition.getPlane());
 
 				// handle rotation if we have no interacting target
-				if (!isInteracting) {
+				if (!isInteracting || jauOrientation == null) {
 					// the actor needs to look in the direction being moved toward
 					// the distance between these points should be guaranteed to be 1 here
 					dx = midPoint.getX() - prevWorldPosition.getX();
@@ -324,7 +323,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			}
 
 			// handle rotation if we have no interacting target
-			if (!isInteracting) {
+			if (!isInteracting || jauOrientation == null) {
 				// the actor needs to look in the direction being moved toward
 				// the distance between these points may be up to 2
 				dx = worldPosition.getX() - prevWorldPosition.getX();
@@ -335,7 +334,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 		this.targetQueue[newTargetIndex].worldDestinationPosition = worldPosition;
 		this.targetQueue[newTargetIndex].localDestinationPosition = localPosition;
-		this.targetQueue[newTargetIndex].jauDestinationOrientation = jauOrientation;
+		this.targetQueue[newTargetIndex].jauDestinationOrientation = jauOrientation == null ? 0 : jauOrientation;
 		this.targetQueue[newTargetIndex].isInteracting = isInteracting;
 		this.targetQueue[newTargetIndex].isPoseAnimation = isPoseAnimation;
 		this.targetQueue[newTargetIndex].isMidPoint = false;
@@ -349,63 +348,73 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		if (remarkTimer == 0) {
 			this.activeRemark = null;
 		}
-		if (rlObject.isActive()) {
-			if (targetQueueSize > 0) {
-				int targetPlane = targetQueue[currentTargetIndex].worldDestinationPosition.getPlane();
-				LocalPoint targetPosition = targetQueue[currentTargetIndex].localDestinationPosition;
-				int targetOrientation = targetQueue[currentTargetIndex].jauDestinationOrientation;
+		if (!rlObject.isActive()) {
+			return false;
+		}
+		if (targetQueueSize > 0) {
+			int targetPlane = targetQueue[currentTargetIndex].worldDestinationPosition.getPlane();
+			LocalPoint targetPosition = targetQueue[currentTargetIndex].localDestinationPosition;
+			int targetOrientation = targetQueue[currentTargetIndex].jauDestinationOrientation;
 
-				if (client.getPlane() != targetPlane || targetPosition == null || !targetPosition.isInScene() || targetOrientation < 0) {
-					despawn();
-					return false;
-				}
-
-				LocalPoint currentPosition = getLocalLocation();
-				int dx = targetPosition.getX() - currentPosition.getX();
-				int dy = targetPosition.getY() - currentPosition.getY();
-
-				if (dx != 0 || dy != 0) {
-					if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
-						setAnimation(movingAnimationId.getId());
-					}
-
-					int speed = 4;
-					// only use the delta if it won't send up past the target
-					if (Math.abs(dx) > speed) {
-						dx = Integer.signum(dx) * speed;
-					}
-					if (Math.abs(dy) > speed) {
-						dy = Integer.signum(dy) * speed;
-					}
-
-					LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
-					setLocation(newLocation);
-
-					currentPosition = getLocalLocation();
-					dx = targetPosition.getX() - currentPosition.getX();
-					dy = targetPosition.getY() - currentPosition.getY();
-				}
-
-				LocalPoint localLoc = getLocalLocation();
-				double intx = localLoc.getX() - targetPosition.getX();
-				double inty = localLoc.getY() - targetPosition.getY();
-
-				boolean rotationDone = rotateObject(intx, inty);
-
-				if (dx == 0 && dy == 0 && rotationDone) {
-					currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
-					targetQueueSize--;
-				}
-
-				if (targetQueueSize == 0) {
-					stopMoving();
-				}
+			if (client.getPlane() != targetPlane || targetPosition == null || !targetPosition.isInScene() || targetOrientation < 0) {
+				despawn();
+				return false;
 			}
 
-			return true;
+			LocalPoint currentPosition = getLocalLocation();
+			int dx = targetPosition.getX() - currentPosition.getX();
+			int dy = targetPosition.getY() - currentPosition.getY();
+
+			if (dx != 0 || dy != 0) {
+				if (name == "Gardener") {
+					System.out.println(debugName() + " is moving");
+				}
+				if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
+					setAnimation(movingAnimationId.getId());
+				}
+
+				int speed = 4;
+				// only use the delta if it won't send up past the target
+				if (Math.abs(dx) > speed) {
+					dx = Integer.signum(dx) * speed;
+				}
+				if (Math.abs(dy) > speed) {
+					dy = Integer.signum(dy) * speed;
+				}
+
+				LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
+				setLocation(newLocation);
+
+				currentPosition = getLocalLocation();
+				dx = targetPosition.getX() - currentPosition.getX();
+				dy = targetPosition.getY() - currentPosition.getY();
+			}
+
+			LocalPoint localLoc = getLocalLocation();
+			double intx = localLoc.getX() - targetPosition.getX();
+			double inty = localLoc.getY() - targetPosition.getY();
+
+			boolean rotationDone = rotateObject(intx, inty);
+
+			if (dx == 0 && dy == 0 && rotationDone) {
+				currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
+				targetQueueSize--;
+			}
+
+			if (targetQueueSize == 0) {
+				stopMoving();
+				if (name == "Gardener") {
+					System.out.println(debugName() + " finished moving");
+				}
+			}
+		} else {
+
+			if (name == "Gardener") {
+				System.out.println(debugName() + " is not moving");
+			}
 		}
 
-		return false;
+		return true;
 	}
 
 	public void stopMoving() {

@@ -91,7 +91,9 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
-			moveTo(action.targetPosition, action.targetRotation.getAngle(), false, false);
+			plugin.clientThread.invoke(() -> {
+				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(), false, false);
+			});
 			while (
 				!getWorldLocation().equals(action.targetPosition) ||
 					getAnimationID() != idleAnimationId.getId() ||
@@ -141,8 +143,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 				sleep();
 			}
 
-			System.out.println("Animation finished with " + lastFrame + " frames");
-
+			System.out.println("Animation [" + action.animationId.getId() + "] finished with " + lastFrame + " frames");
 			setAnimation(oldAnimation.getId());
 			setWait(action.secondsTilNextAction);
 		});
