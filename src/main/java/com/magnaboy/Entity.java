@@ -165,7 +165,7 @@ public class Entity<T extends Entity<T>> {
 
 	public T setWorldLocation(WorldPoint location) {
 		this.worldLocation = location;
-		Util.log(debugName() + " Set World Location: " + location);
+		log("Set World Location: " + location);
 		return (T) this;
 	}
 
@@ -180,7 +180,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void update() {
-		Util.log(debugName() + " Update: Current Location: " + getLocalLocation() + " | World Location: " + getWorldLocation() + " | Should Render: " + shouldRender());
+		log(" Update: Current Location: " + getLocalLocation() + " | World Location: " + getWorldLocation() + " | Should Render: " + shouldRender());
 		boolean inScene = shouldRender();
 
 		if (inScene) {
@@ -227,7 +227,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public T setLocation(LocalPoint location) {
-		Util.log("Setting location of " + debugName() + " to " + location + " on plane " + getPlane() + " from " + getLocalLocation() + " to " + location);
+		log("Setting location to " + location + " on plane " + getPlane() + " from " + getLocalLocation() + " to " + location);
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
@@ -238,19 +238,26 @@ public class Entity<T extends Entity<T>> {
 		return (T) this;
 	}
 
+	public void log(String string) {
+		if (name == null) {
+			return;
+		}
+		if (!name.equals("Rufus")) {
+			return;
+		}
+		Util.log(debugName() + " " + string);
+	}
+
 	public int getPlane() {
 		return this.worldLocation.getPlane();
 	}
 
 	public boolean shouldRender() {
 		if (getPlane() != plugin.client.getPlane()) {
-			Util.log(debugName() + " PLANE DIFFERENCE");
 			return false;
 		}
 
 		float distanceFromPlayer = distanceToPlayer();
-
-		Util.log(debugName() + " DIST " + distanceToPlayer() + "x tiles " + getWorldLocation() + " " + getLocalLocation());
 
 		if (distanceFromPlayer > 50) {
 
@@ -258,9 +265,6 @@ public class Entity<T extends Entity<T>> {
 		}
 
 		LocalPoint lp = LocalPoint.fromWorld(plugin.client, worldLocation);
-		if (lp == null) {
-			Util.log(debugName() + " LP NULL");
-		}
 		return lp != null;
 	}
 

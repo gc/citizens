@@ -12,6 +12,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ScriptFile script;
 	private ExecutorService scriptExecutor;
 	public ScriptAction currentAction;
+	private int actionCounter = 0;
 
 	public ScriptedCitizen(CitizensPlugin plugin) {
 		super(plugin);
@@ -21,11 +22,12 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void submitAction(ScriptAction action, Runnable task) {
 		scriptExecutor.submit(() -> {
 			long startTime = System.currentTimeMillis();
-			System.out.println("Executing action: " + action.action);
+			actionCounter++;
+			log("Executing n=" + actionCounter + " action: " + action.action);
 			this.currentAction = action;
 			task.run();
 			long endTime = System.currentTimeMillis();
-			System.out.println("Action " + action.action + " took " + (endTime - startTime) + " milliseconds");
+			log("Action " + action.action + " took " + (endTime - startTime) + " milliseconds");
 		});
 	}
 
@@ -99,8 +101,10 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 					getAnimationID() != idleAnimationId.getId() ||
 					WorldPoint.fromLocal(plugin.client, getLocalLocation()).distanceTo2D(getWorldLocation()) > 1
 			) {
+				log("is waiting to arrive at loc " + action.targetPosition + " target: " + getCurrentTarget());
 				sleep();
 			}
+
 			setWait(action.secondsTilNextAction);
 		});
 	}
@@ -143,7 +147,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 				sleep();
 			}
 
-			System.out.println("Animation [" + action.animationId.getId() + "] finished with " + lastFrame + " frames");
+			log("Animation [" + action.animationId.getId() + "] finished with " + lastFrame + " frames");
 			setAnimation(oldAnimation.getId());
 			setWait(action.secondsTilNextAction);
 		});

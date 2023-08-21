@@ -24,6 +24,18 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		public boolean isPoseAnimation;
 		public boolean isInteracting;
 		public boolean isMidPoint;
+
+		@Override
+		public String toString() {
+			return "Target{" +
+				"worldDestinationPosition=" + worldDestinationPosition +
+				", localDestinationPosition=" + localDestinationPosition +
+				", jauDestinationOrientation=" + jauDestinationOrientation +
+				", isPoseAnimation=" + isPoseAnimation +
+				", isInteracting=" + isInteracting +
+				", isMidPoint=" + isMidPoint +
+				'}';
+		}
 	}
 
 	private final int MAX_TARGET_QUEUE_SIZE = 10;
@@ -188,6 +200,16 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
+	public int getTargetQueueSize() {
+		int size = 0;
+		for (Target target : targetQueue) {
+			if (target != null && target.worldDestinationPosition != null) {
+				size++;
+			}
+		}
+		return size;
+	}
+
 	public void moveTo(WorldPoint worldPosition) {
 		moveTo(worldPosition, 0, false, false);
 	}
@@ -212,9 +234,16 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 //			}
 //		}
 
-		// just clear the queue and move immediately to the destination if many ticks behind
-		if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE - 2) {
-			targetQueueSize = 0;
+//		// just clear the queue and move immediately to the destination if many ticks behind
+//		if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE - 2) {
+//			log("Clearing target queue for " + debugName() + " because it is too long (" + targetQueueSize + " ticks behind).");
+//			targetQueueSize = 0;
+//		}
+
+		if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE) {
+			currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
+			targetQueueSize--;
+			log("Rotating target queue for " + debugName() + ", currentTargetIndex is " + currentTargetIndex);
 		}
 
 		int prevTargetIndex = (currentTargetIndex + targetQueueSize - 1) % MAX_TARGET_QUEUE_SIZE;
@@ -222,15 +251,18 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		LocalPoint localPosition = LocalPoint.fromWorld(client, worldPosition);
 
 		if (localPosition == null) {
+			log("Is ceasing movement because LP is null");
 			return;
 		}
 
 		// use current position if nothing is in queue
 		WorldPoint prevWorldPosition;
 		if (targetQueueSize++ > 0) {
+			log("XG111");
 			prevWorldPosition = targetQueue[prevTargetIndex].worldDestinationPosition;
 		} else {
-			prevWorldPosition = WorldPoint.fromLocal(client, rlObject.getLocation());
+			log("ND333");
+			prevWorldPosition = getWorldLocation();
 		}
 
 		int distance = prevWorldPosition.distanceTo(worldPosition);
@@ -366,9 +398,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			int dy = targetPosition.getY() - currentPosition.getY();
 
 			if (dx != 0 || dy != 0) {
-				if (name == "Gardener") {
-					System.out.println(debugName() + " is moving");
-				}
+				log("Moving to " + targetPosition + " from " + currentPosition + " dx=" + dx + " dy=" + dy);
 				if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
 					setAnimation(movingAnimationId.getId());
 				}
@@ -388,6 +418,8 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				currentPosition = getLocalLocation();
 				dx = targetPosition.getX() - currentPosition.getX();
 				dy = targetPosition.getY() - currentPosition.getY();
+			} else {
+				log("Not moving to " + targetPosition + " from " + currentPosition + " dx=" + dx + " dy=" + dy);
 			}
 
 			LocalPoint localLoc = getLocalLocation();
@@ -397,21 +429,18 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			boolean rotationDone = rotateObject(intx, inty);
 
 			if (dx == 0 && dy == 0 && rotationDone) {
+				log("NL222");
 				currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
 				targetQueueSize--;
 			}
 
 			if (targetQueueSize == 0) {
 				stopMoving();
-				if (name == "Gardener") {
-					System.out.println(debugName() + " finished moving");
-				}
+				log("finished moving");
+				currentTargetIndex = 0;
 			}
 		} else {
-
-			if (name == "Gardener") {
-				System.out.println(debugName() + " is not moving");
-			}
+			log("is not moving because targetQueueSize is " + targetQueueSize + ", currentTargetIndex is " + currentTargetIndex + ", MAX_TARGET_QUEUE_SIZE is " + MAX_TARGET_QUEUE_SIZE + ", currentTarget is " + getCurrentTarget());
 		}
 
 		return true;
