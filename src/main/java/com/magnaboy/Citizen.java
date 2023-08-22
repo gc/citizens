@@ -1,6 +1,8 @@
 package com.magnaboy;
 
 import static com.magnaboy.Util.getRandomItem;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nullable;
 import net.runelite.api.Actor;
 import net.runelite.api.Animation;
@@ -23,7 +25,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		public int jauDestinationOrientation;
 		public boolean isPoseAnimation;
 		public boolean isInteracting;
-		public boolean isMidPoint;
 
 		@Override
 		public String toString() {
@@ -33,15 +34,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				", jauDestinationOrientation=" + jauDestinationOrientation +
 				", isPoseAnimation=" + isPoseAnimation +
 				", isInteracting=" + isInteracting +
-				", isMidPoint=" + isMidPoint +
 				'}';
 		}
 	}
 
-	private final int MAX_TARGET_QUEUE_SIZE = 10;
-	private final Target[] targetQueue = new Target[MAX_TARGET_QUEUE_SIZE];
-	private int currentTargetIndex;
-	private int targetQueueSize;
+	//	private final int MAX_TARGET_QUEUE_SIZE = 10;
+	private final List<Target> targetQueue = new ArrayList<>();
 	Animation[] animationPoses = new Animation[8];
 
 	public String[] remarks;
@@ -80,9 +78,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		this.plugin = plugin;
 		this.client = plugin.client;
 		this.rlObject = client.createRuneLiteObject();
-		for (int i = 0; i < MAX_TARGET_QUEUE_SIZE; i++) {
-			targetQueue[i] = new Target();
-		}
 		setPoseAnimations(plugin.client.getLocalPlayer());
 	}
 
@@ -125,38 +120,18 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 
 		for (String remark : remarks) {
-			if (remark == "") {
+			if (remark.equals("")) {
 				throw new IllegalStateException(debugName() + " has empty remark.");
 			}
 		}
 	}
 
-//	public boolean spawn() {
-//		plugin.clientThread.invoke(() -> {
-////			LocalPoint localPosition = LocalPoint.fromWorld(client, position);
-////			if (localPosition != null && client.getPlane() == position.getPlane()) {
-//////				rlObject.setLocation(localPosition, position.getPlane());
-////				setLocation(localPosition);
-////			}
-//			setAnimation(idleAnimationId.getId());
-//			this.currentTargetIndex = 0;
-//			this.targetQueueSize = 0;
-//			super.spawn();
-//		});
-//		return true;
-//	}
-
 	public boolean despawn() {
-		this.targetQueueSize = 0;
-		this.currentTargetIndex = 0;
+		setAnimation(idleAnimationId.getId());
+		targetQueue.clear();
 		this.activeRemark = null;
 		this.remarkTimer = 0;
-		boolean didDespawn = super.despawn();
-
-		if (didDespawn) {
-			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
-		}
-		return didDespawn;
+		return super.despawn();
 	}
 
 	public void setPoseAnimations(Actor actor) {
@@ -171,11 +146,10 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	}
 
 	public Target getCurrentTarget() {
-		Target target = targetQueue[currentTargetIndex];
-		if (target.localDestinationPosition == null) {
+		if (targetQueue.size() == 0) {
 			return null;
 		}
-		return target;
+		return targetQueue.get(0);
 	}
 
 	public WorldPoint getWorldLocation() {
@@ -200,54 +174,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
-	public int getTargetQueueSize() {
-		int size = 0;
-		for (Target target : targetQueue) {
-			if (target != null && target.worldDestinationPosition != null) {
-				size++;
-			}
-		}
-		return size;
-	}
-
 	public void moveTo(WorldPoint worldPosition) {
 		moveTo(worldPosition, 0, false, false);
 	}
 
-	// moveTo() adds target movement states to the queue for later per-frame updating for rendering in onClientTick()
-	// Set this every game tick for each new position (usually only up to 2 tiles out)
-	// This is not set up for pathfinding to the final destination of distant targets (you will just move there directly)
-	// It will, however, handle nearby collision detection (1-2 tiles away from you) under certain scenarios
-	// jauOrientation is not used if isInteracting is false; it will instead default to the angle being moved towards
 	public void moveTo(WorldPoint worldPosition, Integer jauOrientation, boolean isInteracting, boolean isPoseAnimation) {
 		if (entityType == EntityType.StationaryCitizen) {
 			throw new IllegalStateException(debugName() + " is a stationary citizen and cannot move.");
 		}
 
-		// respawn this actor if it was previously despawned
-//		if (!rlObject.isActive()) {
-//			spawn();
-//
-//			// if still not active, just exit
-//			if (!rlObject.isActive()) {
-//				return;
-//			}
-//		}
-
-//		// just clear the queue and move immediately to the destination if many ticks behind
-//		if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE - 2) {
-//			log("Clearing target queue for " + debugName() + " because it is too long (" + targetQueueSize + " ticks behind).");
-//			targetQueueSize = 0;
-//		}
-
-		if (targetQueueSize >= MAX_TARGET_QUEUE_SIZE) {
-			currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
-			targetQueueSize--;
-			log("Rotating target queue for " + debugName() + ", currentTargetIndex is " + currentTargetIndex);
-		}
-
-		int prevTargetIndex = (currentTargetIndex + targetQueueSize - 1) % MAX_TARGET_QUEUE_SIZE;
-		int newTargetIndex = (currentTargetIndex + targetQueueSize) % MAX_TARGET_QUEUE_SIZE;
 		LocalPoint localPosition = LocalPoint.fromWorld(client, worldPosition);
 
 		if (localPosition == null) {
@@ -256,21 +191,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 
 		// use current position if nothing is in queue
-		WorldPoint prevWorldPosition;
-		if (targetQueueSize++ > 0) {
-			log("XG111");
-			prevWorldPosition = targetQueue[prevTargetIndex].worldDestinationPosition;
-		} else {
-			log("ND333");
-			prevWorldPosition = getWorldLocation();
-		}
+		WorldPoint prevWorldPosition = getWorldLocation();
 
 		int distance = prevWorldPosition.distanceTo(worldPosition);
 		if (distance > 0 && distance <= 2) {
 			int dx = worldPosition.getX() - prevWorldPosition.getX();
 			int dy = worldPosition.getY() - prevWorldPosition.getY();
-
-			boolean useMidPointTile = false;
 
 			if (distance == 1 && dx != 0 && dy != 0) // test for blockage along diagonal
 			{
@@ -285,9 +211,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				int axisYFlag = colliders[localPosition.getSceneX() - dx][localPosition.getSceneY()];
 
 				if ((axisXFlag & axisXTest) != 0 || (axisYFlag & axisYTest) != 0 || (diagonalFlag & diagonalTest) != 0) {
-					// the path along the diagonal is blocked
-					useMidPointTile = true;
-					distance = 2; // we are now running in an L shape
+					distance = 2;
 
 					// if the priority East-West path is clear, we'll default to this direction
 					if ((axisXFlag & axisXTest) == 0) {
@@ -298,7 +222,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				}
 			} else if (distance == 2 && Math.abs(Math.abs(dy) - Math.abs(dx)) == 1) // test for blockage along knight-style moves
 			{
-				useMidPointTile = true; // we will always need a midpoint for these types of moves
 				int[][] colliders = client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
 				final int diagonalTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
 				final int axisXTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 + dx] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 + dy][CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
@@ -331,29 +254,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				}
 			}
 
-			if (useMidPointTile) {
-				WorldPoint midPoint = new WorldPoint(prevWorldPosition.getX() + dx, prevWorldPosition.getY() + dy, prevWorldPosition.getPlane());
-
-				// handle rotation if we have no interacting target
-				if (!isInteracting || jauOrientation == null) {
-					// the actor needs to look in the direction being moved toward
-					// the distance between these points should be guaranteed to be 1 here
-					dx = midPoint.getX() - prevWorldPosition.getX();
-					dy = midPoint.getY() - prevWorldPosition.getY();
-					jauOrientation = JAU_DIRECTIONS_5X5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
-				}
-
-				this.targetQueue[newTargetIndex].worldDestinationPosition = midPoint;
-				this.targetQueue[newTargetIndex].localDestinationPosition = LocalPoint.fromWorld(client, midPoint);
-				this.targetQueue[newTargetIndex].jauDestinationOrientation = jauOrientation;
-				this.targetQueue[newTargetIndex].isPoseAnimation = isPoseAnimation;
-				this.targetQueue[newTargetIndex].isInteracting = isInteracting;
-				this.targetQueue[newTargetIndex].isMidPoint = true;
-
-				newTargetIndex = (currentTargetIndex + targetQueueSize++) % MAX_TARGET_QUEUE_SIZE;
-				prevWorldPosition = midPoint;
-			}
-
 			// handle rotation if we have no interacting target
 			if (!isInteracting || jauOrientation == null) {
 				// the actor needs to look in the direction being moved toward
@@ -364,15 +264,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			}
 		}
 
-		this.targetQueue[newTargetIndex].worldDestinationPosition = worldPosition;
-		this.targetQueue[newTargetIndex].localDestinationPosition = localPosition;
-		this.targetQueue[newTargetIndex].jauDestinationOrientation = jauOrientation == null ? 0 : jauOrientation;
-		this.targetQueue[newTargetIndex].isInteracting = isInteracting;
-		this.targetQueue[newTargetIndex].isPoseAnimation = isPoseAnimation;
-		this.targetQueue[newTargetIndex].isMidPoint = false;
+		Target newTarget = new Target();
+		newTarget.worldDestinationPosition = worldPosition;
+		newTarget.localDestinationPosition = localPosition;
+		newTarget.jauDestinationOrientation = jauOrientation == null ? 0 : jauOrientation;
+		newTarget.isInteracting = isInteracting;
+		newTarget.isPoseAnimation = isPoseAnimation;
+		targetQueue.add(newTarget);
 	}
 
-	// onClientTick() updates the per-frame state needed for rendering actor movement
 	public boolean onClientTick() {
 		if (remarkTimer > 0) {
 			remarkTimer--;
@@ -383,10 +283,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		if (!rlObject.isActive()) {
 			return false;
 		}
-		if (targetQueueSize > 0) {
-			int targetPlane = targetQueue[currentTargetIndex].worldDestinationPosition.getPlane();
-			LocalPoint targetPosition = targetQueue[currentTargetIndex].localDestinationPosition;
-			int targetOrientation = targetQueue[currentTargetIndex].jauDestinationOrientation;
+
+		Target nextTarget = getCurrentTarget();
+		if (nextTarget != null) {
+			int targetPlane = nextTarget.worldDestinationPosition.getPlane();
+			LocalPoint targetPosition = nextTarget.localDestinationPosition;
+			int targetOrientation = nextTarget.jauDestinationOrientation;
 
 			if (client.getPlane() != targetPlane || targetPosition == null || !targetPosition.isInScene() || targetOrientation < 0) {
 				despawn();
@@ -419,6 +321,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 				dx = targetPosition.getX() - currentPosition.getX();
 				dy = targetPosition.getY() - currentPosition.getY();
 			} else {
+				targetQueue.remove(0);
 				log("Not moving to " + targetPosition + " from " + currentPosition + " dx=" + dx + " dy=" + dy);
 			}
 
@@ -430,17 +333,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 			if (dx == 0 && dy == 0 && rotationDone) {
 				log("NL222");
-				currentTargetIndex = (currentTargetIndex + 1) % MAX_TARGET_QUEUE_SIZE;
-				targetQueueSize--;
 			}
 
-			if (targetQueueSize == 0) {
+			if (targetQueue.size() == 0) {
 				stopMoving();
 				log("finished moving");
-				currentTargetIndex = 0;
 			}
-		} else {
-			log("is not moving because targetQueueSize is " + targetQueueSize + ", currentTargetIndex is " + currentTargetIndex + ", MAX_TARGET_QUEUE_SIZE is " + MAX_TARGET_QUEUE_SIZE + ", currentTarget is " + getCurrentTarget());
 		}
 
 		return true;

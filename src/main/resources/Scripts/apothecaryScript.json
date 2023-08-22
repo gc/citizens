@@ -1,0 +1,46 @@
+{
+    "actions": [
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "HerbloreMix",
+            "timesToLoop": 5
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "SlapHead"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3195,
+                "y": 3404,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "West"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "Think"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3197,
+                "y": 3405,
+                "plane": 0
+            }
+        }
+    ]
+}

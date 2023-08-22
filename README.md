@@ -6,16 +6,24 @@ This plugin adds a lot of NPCs (citizens) around runescape to make the world fee
 
 # Guidelines
 
-1. Citizens should 'fit in' with runescape, and look natural for the area that they're in.
+1. Citizens should 'fit in' with runescape, and look natural for the area that they're in (e.g. no zalcano standing in
+   varrock square).
 2. Currently, we do not add "fake players" (e.g. like "CowSlayer37" wearing dharoks armor).
 3. Citizens should not interfere with normal npcs/objects or gameplay.
-4. Citizens should be reasonably thought out and unique; don't just add a bunch quickly in random places with no
-   thought.
+4. Citizens should be reasonably thought out and unique, and feel like they have a purpose/lore behind them. (e.g. don't
+   just add a bunch quickly in random places with no
+   thought.)
+5. There should be no lag or resource issues as a result of the plugin/citizens.
+
+# Citizen Types
+
+- Scenery; plain objects (e.g. a pot of flowers)
+- Stationary Citizens; any citizen which does not ever move tiles.
+- Wandering Citizens; a citizen which wanders randomly around a defined box area.
+- Scripted Citizens; a citizen which has a set script to follow on a loop (e.g. walk here, do something, walk back)
 
 # Thanks
 
 - [Diabolickal](https://github.com/Diabolickal) for significant code contributions, including the ingame editor.
-- Originally forked from https://github.com/skeldoor/duck-duck-goose, which helped in getting me started. Much of
-  their code (particularly for movement) remains.
 - [RuneMonk EntityViewer](https://runemonk.com/tools/entityviewer/?type=item&id=6169#/?type=npc&id=2205&anim=6966&rotation=-1.25_0.21_0&translation=0_-100_-185)
   is very useful for finding models and animations.

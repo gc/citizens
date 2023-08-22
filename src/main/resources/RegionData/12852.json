@@ -145,7 +145,7 @@
             "idleAnimation": "HumanIdle"
         },
         {
-            "name": "Thief",
+            "name": "Nick",
             "examineText": "Up to no good.",
             "remarks": [
                 "We need timing and precision.",
@@ -205,7 +205,7 @@
             "idleAnimation": "ChildPlay2"
         },
         {
-            "name": "Thief",
+            "name": "Jo",
             "examineText": "An inexperienced, young thief.",
             "remarks": [
                 "Are you sure about this?",

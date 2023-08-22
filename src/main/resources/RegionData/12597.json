@@ -39,7 +39,8 @@
             ],
             "uuid": "edd6337c-423e-42b6-ad10-2b0e308b9cd3",
             "regionId": 12597,
-            "entityType": "StationaryCitizen",
+            "entityType": "ScriptedCitizen",
+            "startScript": "apothecaryScript",
             "worldLocation": {
                 "x": 3197,
                 "y": 3405,
@@ -72,7 +73,7 @@
                 5400,
                 5301
             ],
-            "idleAnimation": "HerbloreMix"
+            "idleAnimation": "HumanIdle"
         },
         {
             "name": "Gardener",

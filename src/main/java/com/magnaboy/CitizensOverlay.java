@@ -166,14 +166,14 @@ public class CitizensOverlay extends Overlay {
 				}
 			}
 
-			if (citizen.entityType == EntityType.ScriptedCitizen) {
-				ScriptedCitizen scriptedCitizen = (ScriptedCitizen) citizen;
-				if (scriptedCitizen.currentAction != null) {
-					renderText(graphics, localLocation, scriptedCitizen.currentAction.action.toString() + " A:" + scriptedCitizen.rlObject.getOrientation(), JagexColors.YELLOW_INTERFACE_TEXT);
-				}
-			}
+//			if (citizen.entityType == EntityType.ScriptedCitizen) {
+//				ScriptedCitizen scriptedCitizen = (ScriptedCitizen) citizen;
+//				if (scriptedCitizen.currentAction != null) {
+//					renderText(graphics, localLocation, scriptedCitizen.currentAction.action.toString() + " A:" + scriptedCitizen.rlObject.getOrientation(), JagexColors.YELLOW_INTERFACE_TEXT);
+//				}
+//			}
 
-//			renderText(graphics, localLocation, citizen.debugName(), JagexColors.YELLOW_INTERFACE_TEXT);
+			renderText(graphics, localLocation, citizen.debugName() + " H:" + citizen.rlObject.getModelHeight() + " ", JagexColors.YELLOW_INTERFACE_TEXT);
 		});
 
 		return null;

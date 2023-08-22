@@ -46,6 +46,13 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		return super.despawn();
 	}
 
+	public void update() {
+		if (scriptExecutor.isShutdown()) {
+			buildRoutine();
+		}
+		super.update();
+	}
+
 	private void buildRoutine() {
 		if (script == null) {
 			return;
@@ -133,21 +140,24 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void addAnimationAction(ScriptAction action) {
 		submitAction(action, () -> {
 			Animation oldAnimation = rlObject.getAnimation();
-			setAnimation(action.animationId.getId());
+			int loopCount = action.timesToLoop == null ? 1 : action.timesToLoop;
+			for (int i = 0; i < loopCount; i++) {
+				setAnimation(action.animationId.getId());
 
-			while (rlObject.getAnimation().getId() != action.animationId.getId()) {
-				sleep();
-			}
-
-			int lastFrame = 0;
-			while (lastFrame <= rlObject.getAnimationFrame()) {
-				if (lastFrame != rlObject.getAnimationFrame()) {
-					lastFrame = rlObject.getAnimationFrame();
+				while (rlObject.getAnimation().getId() != action.animationId.getId()) {
+					sleep();
 				}
-				sleep();
-			}
 
-			log("Animation [" + action.animationId.getId() + "] finished with " + lastFrame + " frames");
+				int lastFrame = 0;
+				while (lastFrame <= rlObject.getAnimationFrame()) {
+					if (lastFrame != rlObject.getAnimationFrame()) {
+						lastFrame = rlObject.getAnimationFrame();
+					}
+					sleep();
+				}
+
+				log("Animation [" + action.animationId.getId() + "] finished with " + lastFrame + " frames");
+			}
 			setAnimation(oldAnimation.getId());
 			setWait(action.secondsTilNextAction);
 		});

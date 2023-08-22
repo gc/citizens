@@ -82,6 +82,8 @@ public enum AnimationID {
 	KittenIdle(317),
 	KittenSleep(2159),
 
+	SheepDogIdle(2268),
+
 	// ???
 	FrontalGrab(897),
 	ChestRub(190);

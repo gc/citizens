@@ -180,7 +180,6 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void update() {
-		log(" Update: Current Location: " + getLocalLocation() + " | World Location: " + getWorldLocation() + " | Should Render: " + shouldRender());
 		boolean inScene = shouldRender();
 
 		if (inScene) {
@@ -227,7 +226,6 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public T setLocation(LocalPoint location) {
-		log("Setting location to " + location + " on plane " + getPlane() + " from " + getLocalLocation() + " to " + location);
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
@@ -240,9 +238,6 @@ public class Entity<T extends Entity<T>> {
 
 	public void log(String string) {
 		if (name == null) {
-			return;
-		}
-		if (!name.equals("Rufus")) {
 			return;
 		}
 		Util.log(debugName() + " " + string);
@@ -259,8 +254,7 @@ public class Entity<T extends Entity<T>> {
 
 		float distanceFromPlayer = distanceToPlayer();
 
-		if (distanceFromPlayer > 50) {
-
+		if (distanceFromPlayer >= 30) {
 			return false;
 		}
 
@@ -281,6 +275,8 @@ public class Entity<T extends Entity<T>> {
 		if (!rlObject.isActive()) {
 			return false;
 		}
+
+		Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
 
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
@@ -342,7 +338,8 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public String debugName() {
-		return "N:" + name + " T:" + entityType + " ID:" + uuid.toString().substring(0, 6);
+		float dist = distanceToPlayer();
+		return "N:" + name + " T:" + entityType + " ID:" + uuid.toString().substring(0, 6) + " D:" + dist;
 	}
 
 	public void validate() {
@@ -404,7 +401,6 @@ public class Entity<T extends Entity<T>> {
 				dJau = dJauCW;
 			}
 
-			// only use the delta if it won't send up past the target
 			if (Math.abs(dJau) > JAU_TURN_SPEED) {
 				dJau = Integer.signum(dJau) * JAU_TURN_SPEED;
 			}

@@ -10,7 +10,7 @@ public class ScriptAction {
 	public float secondsTilNextAction;
 
 	// 'Parameters'
-	public boolean loopAnimation;
+	public Integer timesToLoop;
 	public WorldPoint targetPosition;
 	public String message;
 	public AnimationID animationId;
