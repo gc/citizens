@@ -1,134 +1,134 @@
 {
-  "version": 0.8,
-  "regionId": 12854,
-  "citizenRoster": [
-    {
-      "name": "Lily",
-      "examineText": "Farming... such a peaceful life.",
-      "remarks": [
-        "I thought I saw a Tangleroot..."
-      ],
-      "uuid": "8622dc92-f780-4b96-9642-2d9ba33663bd",
-      "regionId": 12854,
-      "entityType": "StationaryCitizen",
-      "worldLocation": {
-        "x": 3227,
-        "y": 3459,
-        "plane": 0
-      },
-      "modelIds": [
-        217,
-        8798,
-        390,
-        7366,
-        471,
-        4392,
-        348,
-        353,
-        46747,
-        437
-      ],
-      "baseOrientation": 1536,
-      "modelRecolorFind": [
-        4550,
-        25238,
-        6798,
-        9096,
-        54397,
-        8741
-      ],
-      "modelRecolorReplace": [
-        4562,
-        5400,
-        7465,
-        5400,
-        8497,
-        12700
-      ],
-      "idleAnimation": "FireCook"
-    },
-    {
-      "name": "Saradomin priest",
-      "examineText": "A holy man wearing ancient clothing.",
-      "remarks": [
-        "May the light of Saradomin guide your path.",
-        "Trust in Saradomin\u0027s divine order.",
-        "Saradomin\u0027s grace is as boundless as the skies.",
-        "Saradomin does not waver so easily.",
-        "There is always light for those who truly seek it."
-      ],
-      "moveAnimation": "HumanWalk",
-      "wanderBoxBL": {
-        "x": 3254,
-        "y": 3472,
-        "plane": 0
-      },
-      "wanderBoxTR": {
-        "x": 3255,
-        "y": 3482,
-        "plane": 0
-      },
-      "uuid": "1a82cb3a-3484-408d-8ffe-7702abacc0bb",
-      "regionId": 12854,
-      "entityType": "WanderingCitizen",
-      "worldLocation": {
-        "x": 3255,
-        "y": 3482,
-        "plane": 0
-      },
-      "modelIds": [
-        27619,
-        27632,
-        27650,
-        27628
-      ],
-      "baseOrientation": 0,
-      "modelRecolorFind": [],
-      "modelRecolorReplace": [],
-      "idleAnimation": "HumanIdle"
-    },
-    {
-      "name": "Saradomin wizard",
-      "examineText": "He looks familiar.",
-      "remarks": [],
-      "moveAnimation": "HumanWalk",
-      "uuid": "e76e7992-ea73-4d29-8a50-71782270f00b",
-      "regionId": 12854,
-      "entityType": "StationaryCitizen",
-      "worldLocation": {
-        "x": 3256,
-        "y": 3479,
-        "plane": 0
-      },
-      "modelIds": [
-        12144,
-        230,
-        181,
-        249,
-        292,
-        170,
-        176,
-        265,
-        539
-      ],
-      "baseOrientation": 0,
-      "modelRecolorFind": [
-        926,
-        7700,
-        11200,
-        25238,
-        8741
-      ],
-      "modelRecolorReplace": [
-        12221,
-        12221,
-        99,
-        99,
-        99
-      ],
-      "idleAnimation": "ChurchSitting"
-    }
-  ],
-  "sceneryRoster": [
-  ]
+    "version": 0.8,
+    "regionId": 12854,
+    "citizenRoster": [
+        {
+            "name": "Lily",
+            "examineText": "Farming... such a peaceful life.",
+            "remarks": [
+                "I thought I saw a Tangleroot..."
+            ],
+            "uuid": "8622dc92-f780-4b96-9642-2d9ba33663bd",
+            "regionId": 12854,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3227,
+                "y": 3459,
+                "plane": 0
+            },
+            "modelIds": [
+                217,
+                8798,
+                390,
+                7366,
+                471,
+                4392,
+                348,
+                353,
+                46747,
+                437
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                4550,
+                25238,
+                6798,
+                9096,
+                54397,
+                8741
+            ],
+            "modelRecolorReplace": [
+                4562,
+                5400,
+                7465,
+                5400,
+                8497,
+                12700
+            ],
+            "idleAnimation": "FireCook"
+        },
+        {
+            "name": "Saradomin priest",
+            "examineText": "A holy man wearing ancient clothing.",
+            "remarks": [
+                "May the light of Saradomin guide your path.",
+                "Trust in Saradomin\u0027s divine order.",
+                "Saradomin\u0027s grace is as boundless as the skies.",
+                "Saradomin does not waver so easily.",
+                "There is always light for those who truly seek it."
+            ],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3254,
+                "y": 3472,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3255,
+                "y": 3482,
+                "plane": 0
+            },
+            "uuid": "1a82cb3a-3484-408d-8ffe-7702abacc0bb",
+            "regionId": 12854,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3255,
+                "y": 3482,
+                "plane": 0
+            },
+            "modelIds": [
+                27619,
+                27632,
+                27650,
+                27628
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Saradomin wizard",
+            "examineText": "He looks familiar.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "e76e7992-ea73-4d29-8a50-71782270f00b",
+            "regionId": 12854,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3256,
+                "y": 3479,
+                "plane": 0
+            },
+            "modelIds": [
+                12144,
+                230,
+                181,
+                249,
+                292,
+                170,
+                176,
+                265,
+                539
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                926,
+                7700,
+                11200,
+                25238,
+                8741
+            ],
+            "modelRecolorReplace": [
+                12221,
+                12221,
+                99,
+                99,
+                99
+            ],
+            "idleAnimation": "ChurchSitting"
+        }
+    ],
+    "sceneryRoster": [
+    ]
 }

@@ -17,144 +17,144 @@ import javax.inject.Inject;
 import java.awt.*;
 
 public class CitizensOverlay extends Overlay {
-    private final CitizensPlugin plugin;
-    private final ModelOutlineRenderer modelOutlineRenderer;
+	private final CitizensPlugin plugin;
+	private final ModelOutlineRenderer modelOutlineRenderer;
 
-    @Inject
-    public CitizensOverlay(CitizensPlugin plugin, ModelOutlineRenderer modelOutlineRenderer) {
-        this.modelOutlineRenderer = modelOutlineRenderer;
-        setPosition(OverlayPosition.DYNAMIC);
-        setLayer(OverlayLayer.ABOVE_SCENE);
-        this.plugin = plugin;
-    }
+	@Inject
+	public CitizensOverlay(CitizensPlugin plugin, ModelOutlineRenderer modelOutlineRenderer) {
+		this.modelOutlineRenderer = modelOutlineRenderer;
+		setPosition(OverlayPosition.DYNAMIC);
+		setLayer(OverlayLayer.ABOVE_SCENE);
+		this.plugin = plugin;
+	}
 
-    private void renderText(Graphics2D graphics, LocalPoint lp, String text) {
-        if (!plugin.getConfig().showOverlay()) {
-            return;
-        }
-        renderText(graphics, lp, text, new Color(0, 255, 3));
-    }
+	private void renderText(Graphics2D graphics, LocalPoint lp, String text) {
+		if (!plugin.getConfig().showOverlay()) {
+			return;
+		}
+		renderText(graphics, lp, text, new Color(0, 255, 3));
+	}
 
-    private void renderText(Graphics2D graphics, LocalPoint lp, String text, Color color) {
-        Font overheadFont = FontManager.getRunescapeSmallFont();
-        graphics.setFont(overheadFont);
+	private void renderText(Graphics2D graphics, LocalPoint lp, String text, Color color) {
+		Font overheadFont = FontManager.getRunescapeSmallFont();
+		graphics.setFont(overheadFont);
 
-        Point p = Perspective.localToCanvas(plugin.client, lp, plugin
-                .client
-                .getPlane(), 0);
-        if (p == null) {
-            return;
-        }
-        FontMetrics metrics = graphics.getFontMetrics(overheadFont);
-        Point shiftedP = new Point(p.getX() - (metrics.stringWidth(text) / 2), p.getY());
-        OverlayUtil.renderTextLocation(graphics, shiftedP, text, color);
-    }
+		Point p = Perspective.localToCanvas(plugin.client, lp, plugin
+			.client
+			.getPlane(), 0);
+		if (p == null) {
+			return;
+		}
+		FontMetrics metrics = graphics.getFontMetrics(overheadFont);
+		Point shiftedP = new Point(p.getX() - (metrics.stringWidth(text) / 2), p.getY());
+		OverlayUtil.renderTextLocation(graphics, shiftedP, text, color);
+	}
 
-    private void highlightTile(Graphics2D graphics, LocalPoint lp, Color color) {
-        if (lp == null) {
-            return;
-        }
-        if (!plugin.getConfig().showOverlay()) {
-            return;
-        }
-        final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
-        if (poly != null) {
-            OverlayUtil.renderPolygon(graphics, poly, color);
-        }
-    }
+	private void highlightTile(Graphics2D graphics, LocalPoint lp, Color color) {
+		if (lp == null) {
+			return;
+		}
+		if (!plugin.getConfig().showOverlay()) {
+			return;
+		}
+		final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
+		if (poly != null) {
+			OverlayUtil.renderPolygon(graphics, poly, color);
+		}
+	}
 
-    private void highlightTile(Graphics2D graphics, WorldPoint wp, Color color) {
-        if (!plugin.getConfig().showOverlay()) {
-            return;
-        }
-        LocalPoint lp = LocalPoint.fromWorld(plugin.client, wp);
-        if (lp == null) {
-            return;
-        }
-        final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
-        if (poly != null) {
-            OverlayUtil.renderPolygon(graphics, poly, color);
-        }
-    }
+	private void highlightTile(Graphics2D graphics, WorldPoint wp, Color color) {
+		if (!plugin.getConfig().showOverlay()) {
+			return;
+		}
+		LocalPoint lp = LocalPoint.fromWorld(plugin.client, wp);
+		if (lp == null) {
+			return;
+		}
+		final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
+		if (poly != null) {
+			OverlayUtil.renderPolygon(graphics, poly, color);
+		}
+	}
 
-    private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, int plane, Color color) {
-        WorldArea boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
-        highlightRegion(graphics, boundingBox, plane, color);
-    }
+	private void highlightRegion(Graphics2D graphics, WorldPoint bottomLeft, WorldPoint topRight, int plane, Color color) {
+		WorldArea boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
+		highlightRegion(graphics, boundingBox, plane, color);
+	}
 
-    private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, int plane, Color color) {
-        int x = boundingBox.getX();
-        int y = boundingBox.getY();
-        for (int i = y; i <= y + boundingBox.getHeight(); i++) {
-            for (int t = 0; t <= boundingBox.getWidth(); t++) {
-                highlightTile(graphics, new WorldPoint(x + t, i, plane), color);
-            }
-        }
-    }
+	private void highlightRegion(Graphics2D graphics, WorldArea boundingBox, int plane, Color color) {
+		int x = boundingBox.getX();
+		int y = boundingBox.getY();
+		for (int i = y; i <= y + boundingBox.getHeight(); i++) {
+			for (int t = 0; t <= boundingBox.getWidth(); t++) {
+				highlightTile(graphics, new WorldPoint(x + t, i, plane), color);
+			}
+		}
+	}
 
-    @Override
-    public Dimension render(Graphics2D graphics) {
-        if (CitizensPlugin.shuttingDown) {
-            return null;
-        }
+	@Override
+	public Dimension render(Graphics2D graphics) {
+		if (CitizensPlugin.shuttingDown) {
+			return null;
+		}
 
-        if (CitizenPanel.selectedPosition != null) {
-            Color selectedColor = new Color(0, 255, 255, 200);
-            highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
-            LocalPoint lp = LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition);
-            if (plugin.getConfig().showOverlay() && lp != null) {
-                renderText(graphics, lp, "Selected Tile", selectedColor);
-            }
-        }
+		if (CitizenPanel.selectedPosition != null) {
+			Color selectedColor = new Color(0, 255, 255, 200);
+			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
+			LocalPoint lp = LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition);
+			if (plugin.getConfig().showOverlay() && lp != null) {
+				renderText(graphics, lp, "Selected Tile", selectedColor);
+			}
+		}
 
-        if (CitizenPanel.selectedEntity != null) {
-            final int outlineWidth = 4;
-            modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
-        }
+		if (CitizenPanel.selectedEntity != null) {
+			final int outlineWidth = 4;
+			modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
+		}
 
-        CitizenRegion.forEachEntity((entity) -> {
-            if (entity == null || !entity.isCitizen()) {
-                return;
-            }
+		CitizenRegion.forEachEntity((entity) -> {
+			if (entity == null || !entity.isCitizen()) {
+				return;
+			}
 
-            Citizen citizen = (Citizen) entity;
-            LocalPoint localLocation = citizen.getLocalLocation();
+			Citizen citizen = (Citizen) entity;
+			LocalPoint localLocation = citizen.getLocalLocation();
 
-            if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
-                return;
-            }
+			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
+				return;
+			}
 
-            // Render remarks
-            if (citizen.activeRemark != null) {
-                Point p = Perspective.localToCanvas(plugin.client, citizen.getLocalLocation(), plugin
-                        .client
-                        .getPlane(), citizen
-                        .rlObject.getModelHeight());
-                if (p != null) {
-                    Font overheadFont = FontManager.getRunescapeBoldFont();
-                    graphics.setFont(overheadFont);
-                    FontMetrics metrics = graphics.getFontMetrics(overheadFont);
-                    Point shiftedP = new Point(p.getX() - (metrics.stringWidth(citizen.activeRemark) / 2), p.getY());
-                    OverlayUtil.renderTextLocation(graphics, shiftedP, citizen.activeRemark,
-                            JagexColors.YELLOW_INTERFACE_TEXT);
-                }
-            }
+			// Render remarks
+			if (citizen.activeRemark != null) {
+				Point p = Perspective.localToCanvas(plugin.client, citizen.getLocalLocation(), plugin
+					.client
+					.getPlane(), citizen
+					.rlObject.getModelHeight());
+				if (p != null) {
+					Font overheadFont = FontManager.getRunescapeBoldFont();
+					graphics.setFont(overheadFont);
+					FontMetrics metrics = graphics.getFontMetrics(overheadFont);
+					Point shiftedP = new Point(p.getX() - (metrics.stringWidth(citizen.activeRemark) / 2), p.getY());
+					OverlayUtil.renderTextLocation(graphics, shiftedP, citizen.activeRemark,
+						JagexColors.YELLOW_INTERFACE_TEXT);
+				}
+			}
 
-            if (plugin.IS_DEVELOPMENT) {
-                String extraString = "";
-                if (citizen.entityType == EntityType.ScriptedCitizen) {
-                    extraString = ((ScriptedCitizen) citizen).currentAction.action.toString() + " ";
-                }
-                String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModelHeight() + " ";
-                renderText(graphics, localLocation, debugText, JagexColors.YELLOW_INTERFACE_TEXT);
+			if (plugin.IS_DEVELOPMENT) {
+				String extraString = "";
+				if (citizen.entityType == EntityType.ScriptedCitizen) {
+					extraString = ((ScriptedCitizen) citizen).currentAction.action.toString() + " ";
+				}
+				String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModelHeight() + " ";
+				renderText(graphics, localLocation, debugText, JagexColors.YELLOW_INTERFACE_TEXT);
 
-                Citizen.Target target = citizen.getCurrentTarget();
-                if (target != null) {
-                    highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));
-                }
-            }
-        });
+				Citizen.Target target = citizen.getCurrentTarget();
+				if (target != null) {
+					highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));
+				}
+			}
+		});
 
-        return null;
-    }
+		return null;
+	}
 }

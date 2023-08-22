@@ -1,72 +1,72 @@
 {
-  "version": 0.8,
-  "regionId": 12596,
-  "citizenRoster": [
-    {
-      "name": "Dwarf miner",
-      "examineText": "He is a dwarf and he\u0027s mining some clay.",
-      "remarks": [],
-      "uuid": "f49ddd7c-6122-4d88-8267-91f9bd5b229e",
-      "regionId": 12596,
-      "entityType": "StationaryCitizen",
-      "worldLocation": {
-        "x": 3184,
-        "y": 3377,
-        "plane": 0
-      },
-      "modelIds": [
-        2973,
-        2986,
-        7061,
-        2978,
-        2990,
-        2981,
-        2985
-      ],
-      "baseOrientation": 512,
-      "modelRecolorFind": [],
-      "modelRecolorReplace": [],
-      "idleAnimation": "DwarfMining2"
-    }
-  ],
-  "sceneryRoster": [
-    {
-      "uuid": "4baf837d-fc68-42b1-b215-02308fd3187d",
-      "regionId": 12596,
-      "entityType": "Scenery",
-      "worldLocation": {
-        "x": 3196,
-        "y": 3387,
-        "plane": 0
-      },
-      "modelIds": [
-        1239
-      ],
-      "baseOrientation": 0,
-      "modelRecolorFind": [],
-      "modelRecolorReplace": [],
-      "idleAnimation": "HumanIdle"
-    },
-    {
-      "uuid": "258d7139-6381-41a0-91f5-ba123a459fce",
-      "regionId": 12596,
-      "entityType": "Scenery",
-      "worldLocation": {
-        "x": 3197,
-        "y": 3389,
-        "plane": 0
-      },
-      "modelIds": [
-        20040
-      ],
-      "baseOrientation": 0,
-      "modelRecolorFind": [
-        44859
-      ],
-      "modelRecolorReplace": [
-        8720
-      ],
-      "idleAnimation": "HumanIdle"
-    }
-  ]
+    "version": 0.8,
+    "regionId": 12596,
+    "citizenRoster": [
+        {
+            "name": "Dwarf miner",
+            "examineText": "He is a dwarf and he\u0027s mining some clay.",
+            "remarks": [],
+            "uuid": "f49ddd7c-6122-4d88-8267-91f9bd5b229e",
+            "regionId": 12596,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3184,
+                "y": 3377,
+                "plane": 0
+            },
+            "modelIds": [
+                2973,
+                2986,
+                7061,
+                2978,
+                2990,
+                2981,
+                2985
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "DwarfMining2"
+        }
+    ],
+    "sceneryRoster": [
+        {
+            "uuid": "4baf837d-fc68-42b1-b215-02308fd3187d",
+            "regionId": 12596,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3196,
+                "y": 3387,
+                "plane": 0
+            },
+            "modelIds": [
+                1239
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "258d7139-6381-41a0-91f5-ba123a459fce",
+            "regionId": 12596,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3197,
+                "y": 3389,
+                "plane": 0
+            },
+            "modelIds": [
+                20040
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                44859
+            ],
+            "modelRecolorReplace": [
+                8720
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ]
 }
