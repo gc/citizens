@@ -1,37 +1,37 @@
 {
-    "version": 0.8,
-    "regionId": 11318,
-    "citizenRoster": [
-        {
-            "name": "Smokey",
-            "examineText": "Puffin.",
-            "moveAnimation": "PuffinWalk",
-            "wanderBoxBL": {
-                "x": 2830,
-                "y": 3498,
-                "plane": 0
-            },
-            "wanderBoxTR": {
-                "x": 2833,
-                "y": 3505,
-                "plane": 0
-            },
-            "uuid": "355a9b7f-8c49-4b09-be53-8479d610d7c5",
-            "regionId": 11318,
-            "entityType": "WanderingCitizen",
-            "worldLocation": {
-                "x": 2832,
-                "y": 3502,
-                "plane": 0
-            },
-            "modelIds": [
-                22792
-            ],
-            "baseOrientation": 0,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
-            "idleAnimation": "PuffinIdle"
-        }
-    ],
-    "sceneryRoster": []
+  "version": 0.8,
+  "regionId": 11318,
+  "citizenRoster": [
+    {
+      "name": "Smokey",
+      "examineText": "Puffin.",
+      "moveAnimation": "PuffinWalk",
+      "wanderBoxBL": {
+        "x": 2830,
+        "y": 3498,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 2833,
+        "y": 3505,
+        "plane": 0
+      },
+      "uuid": "355a9b7f-8c49-4b09-be53-8479d610d7c5",
+      "regionId": 11318,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 2832,
+        "y": 3502,
+        "plane": 0
+      },
+      "modelIds": [
+        22792
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "PuffinIdle"
+    }
+  ],
+  "sceneryRoster": []
 }

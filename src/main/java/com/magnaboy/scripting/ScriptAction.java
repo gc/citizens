@@ -6,15 +6,15 @@ import net.runelite.api.coords.WorldPoint;
 
 public class ScriptAction {
 
-	public ActionType action;
-	public float secondsTilNextAction;
+    public ActionType action;
+    public float secondsTilNextAction;
 
-	// 'Parameters'
-	public Integer timesToLoop;
-	public WorldPoint targetPosition;
-	public String message;
-	public AnimationID animationId;
-	public String scriptName;
-	public CardinalDirection targetRotation;
+    // 'Parameters'
+    public Integer timesToLoop;
+    public WorldPoint targetPosition;
+    public String message;
+    public AnimationID animationId;
+    public String scriptName;
+    public CardinalDirection targetRotation;
 }
 

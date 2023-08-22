@@ -1,9 +1,9 @@
 package com.magnaboy.scripting;
 
 public enum ActionType {
-	Idle,
-	WalkTo,
-	Animation,
-	Say,
-	FaceDirection,
+    Idle,
+    WalkTo,
+    Animation,
+    Say,
+    FaceDirection,
 }
