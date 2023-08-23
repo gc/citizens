@@ -20,6 +20,8 @@ public class CitizensOverlay extends Overlay {
 	private final CitizensPlugin plugin;
 	private final ModelOutlineRenderer modelOutlineRenderer;
 
+	Font overheadFont = FontManager.getRunescapeBoldFont();
+
 	@Inject
 	public CitizensOverlay(CitizensPlugin plugin, ModelOutlineRenderer modelOutlineRenderer) {
 		this.modelOutlineRenderer = modelOutlineRenderer;
@@ -112,15 +114,15 @@ public class CitizensOverlay extends Overlay {
 			modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
 		}
 
-		CitizenRegion.forEachEntity((entity) -> {
-			if (entity == null || !entity.isCitizen()) {
+		CitizenRegion.forEachActiveEntity((entity) -> {
+			if (!entity.isCitizen()) {
 				return;
 			}
 
 			Citizen citizen = (Citizen) entity;
 			LocalPoint localLocation = citizen.getLocalLocation();
 
-			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
+			if (!citizen.shouldRender() || localLocation == null) {
 				return;
 			}
 
@@ -131,7 +133,6 @@ public class CitizensOverlay extends Overlay {
 					.getPlane(), citizen
 					.rlObject.getModelHeight());
 				if (p != null) {
-					Font overheadFont = FontManager.getRunescapeBoldFont();
 					graphics.setFont(overheadFont);
 					FontMetrics metrics = graphics.getFontMetrics(overheadFont);
 					Point shiftedP = new Point(p.getX() - (metrics.stringWidth(citizen.activeRemark) / 2), p.getY());
@@ -140,14 +141,13 @@ public class CitizensOverlay extends Overlay {
 				}
 			}
 
-			if (plugin.IS_DEVELOPMENT) {
+			if (plugin.IS_DEVELOPMENT && citizen.distanceToPlayer() < 15) {
 				String extraString = "";
 				if (citizen.entityType == EntityType.ScriptedCitizen) {
 					extraString = ((ScriptedCitizen) citizen).currentAction.action.toString() + " ";
 				}
 				String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModelHeight() + " ";
 				renderText(graphics, localLocation, debugText, JagexColors.YELLOW_INTERFACE_TEXT);
-
 				Citizen.Target target = citizen.getCurrentTarget();
 				if (target != null) {
 					highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));

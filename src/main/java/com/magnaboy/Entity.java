@@ -148,7 +148,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void setAnimation(int animationID) {
-		plugin.clientThread.invoke(() -> {
+		plugin.clientThread.invokeLater(() -> {
 			Animation anim = plugin.client.loadAnimation(animationID);
 			rlObject.setAnimation(anim);
 		});
@@ -156,7 +156,6 @@ public class Entity<T extends Entity<T>> {
 
 	public T setWorldLocation(WorldPoint location) {
 		this.worldLocation = location;
-		log("Set World Location: " + location);
 		return (T) this;
 	}
 
@@ -217,10 +216,11 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public T setLocation(LocalPoint location) {
+		log("Set World Location: " + location);
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
-		plugin.clientThread.invoke(() -> {
+		plugin.clientThread.invokeLater(() -> {
 			rlObject.setLocation(location, getPlane());
 			setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
 		});

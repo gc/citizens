@@ -1,7 +1,5 @@
 package com.magnaboy;
 
-import net.runelite.api.Actor;
-import net.runelite.api.Animation;
 import net.runelite.api.Client;
 import net.runelite.api.CollisionDataFlag;
 import net.runelite.api.coords.LocalPoint;
@@ -20,6 +18,28 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	@Nullable
 	public String activeRemark = null;
 	private int remarkTimer = 0;
+
+	private final List<Target> targetQueue = new ArrayList<>();
+
+	public String[] remarks;
+	@Nullable
+	public AnimationID movingAnimationId = AnimationID.HumanWalk;
+
+	private static final int[][] BLOCKING_DIRECTIONS_5x5 = {
+		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_EAST, CollisionDataFlag.BLOCK_MOVEMENT_EAST, 0, CollisionDataFlag.BLOCK_MOVEMENT_WEST, CollisionDataFlag.BLOCK_MOVEMENT_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST}};
+
+	private static final int[][] JAU_DIRECTIONS_5X5 = {
+		{768, 768, 1024, 1280, 1280},
+		{768, 768, 1024, 1280, 1280},
+		{512, 512, 0, 1536, 1536},
+		{256, 256, 0, 1792, 1792},
+		{256, 256, 0, 1792, 1792}};
+	private static final int CENTER_INDEX_5X5 = 2;
+
 
 	public static class Target {
 		public WorldPoint worldDestinationPosition;
@@ -40,47 +60,12 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
-	//	private final int MAX_TARGET_QUEUE_SIZE = 10;
-	private final List<Target> targetQueue = new ArrayList<>();
-	Animation[] animationPoses = new Animation[8];
-
-	public String[] remarks;
-	@Nullable
-	public AnimationID movingAnimationId = AnimationID.HumanWalk;
-	@Nullable()
-
-	private static final int[][] BLOCKING_DIRECTIONS_5x5 = {
-		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
-		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
-		{CollisionDataFlag.BLOCK_MOVEMENT_EAST, CollisionDataFlag.BLOCK_MOVEMENT_EAST, 0, CollisionDataFlag.BLOCK_MOVEMENT_WEST, CollisionDataFlag.BLOCK_MOVEMENT_WEST},
-		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST},
-		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST}};
-
-	private static final int[][] JAU_DIRECTIONS_5X5 = {
-		{768, 768, 1024, 1280, 1280},
-		{768, 768, 1024, 1280, 1280},
-		{512, 512, 0, 1536, 1536},
-		{256, 256, 0, 1792, 1792},
-		{256, 256, 0, 1792, 1792}};
-	private static final int CENTER_INDEX_5X5 = 2;
-
-	private enum POSE_ANIM {
-		IDLE,
-		WALK,
-		RUN,
-		WALK_ROTATE_180,
-		WALK_STRAFE_LEFT,
-		WALK_STRAFE_RIGHT,
-		IDLE_ROTATE_LEFT,
-		IDLE_ROTATE_RIGHT
-	}
 
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);
 		this.plugin = plugin;
 		this.client = plugin.client;
 		this.rlObject = client.createRuneLiteObject();
-		setPoseAnimations(plugin.client.getLocalPlayer());
 	}
 
 	public T setName(String name) {
@@ -122,7 +107,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 
 		for (String remark : remarks) {
-			if (remark.equals("")) {
+			if (remark.isEmpty()) {
 				throw new IllegalStateException(debugName() + " has empty remark.");
 			}
 		}
@@ -136,19 +121,8 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		return super.despawn();
 	}
 
-	public void setPoseAnimations(Actor actor) {
-		this.animationPoses[POSE_ANIM.IDLE.ordinal()] = client.loadAnimation(actor.getIdlePoseAnimation());
-		this.animationPoses[POSE_ANIM.WALK.ordinal()] = client.loadAnimation(actor.getWalkAnimation());
-		this.animationPoses[POSE_ANIM.RUN.ordinal()] = client.loadAnimation(actor.getRunAnimation());
-		this.animationPoses[POSE_ANIM.WALK_ROTATE_180.ordinal()] = client.loadAnimation(actor.getWalkRotate180());
-		this.animationPoses[POSE_ANIM.WALK_STRAFE_LEFT.ordinal()] = client.loadAnimation(actor.getWalkRotateLeft()); // rotate is a misnomer here
-		this.animationPoses[POSE_ANIM.WALK_STRAFE_RIGHT.ordinal()] = client.loadAnimation(actor.getWalkRotateRight()); // rotate is a misnomer here
-		this.animationPoses[POSE_ANIM.IDLE_ROTATE_LEFT.ordinal()] = client.loadAnimation(actor.getIdleRotateLeft());
-		this.animationPoses[POSE_ANIM.IDLE_ROTATE_RIGHT.ordinal()] = client.loadAnimation(actor.getIdleRotateRight());
-	}
-
 	public Target getCurrentTarget() {
-		if (targetQueue.size() == 0) {
+		if (targetQueue.isEmpty()) {
 			return null;
 		}
 		return targetQueue.get(0);
@@ -163,7 +137,7 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	}
 
 	public void say(String message) {
-		if (distanceToPlayer() > 30) {
+		if (distanceToPlayer() > Util.MAX_ENTITY_RENDER_DISTANCE) {
 			return;
 		}
 		this.activeRemark = message;
@@ -303,7 +277,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			int dy = targetPosition.getY() - currentPosition.getY();
 
 			if (dx != 0 || dy != 0) {
-				log("Moving to " + targetPosition + " from " + currentPosition + " dx=" + dx + " dy=" + dy);
 				if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
 					setAnimation(movingAnimationId.getId());
 				}
@@ -319,28 +292,17 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 				LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
 				setLocation(newLocation);
-
-				currentPosition = getLocalLocation();
-				dx = targetPosition.getX() - currentPosition.getX();
-				dy = targetPosition.getY() - currentPosition.getY();
 			} else {
 				targetQueue.remove(0);
-				log("Not moving to " + targetPosition + " from " + currentPosition + " dx=" + dx + " dy=" + dy);
 			}
 
 			LocalPoint localLoc = getLocalLocation();
 			double intx = localLoc.getX() - targetPosition.getX();
 			double inty = localLoc.getY() - targetPosition.getY();
+			rotateObject(intx, inty);
 
-			boolean rotationDone = rotateObject(intx, inty);
-
-			if (dx == 0 && dy == 0 && rotationDone) {
-				log("NL222");
-			}
-
-			if (targetQueue.size() == 0) {
+			if (targetQueue.isEmpty()) {
 				stopMoving();
-				log("finished moving");
 			}
 		}
 	}

@@ -24,6 +24,7 @@ import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -44,9 +45,9 @@ public class CitizensPlugin extends Plugin {
 	@Inject
 	public ClientThread clientThread;
 	public CitizenPanel panel;
-	//	@Inject
-//	@Named("developerMode")
-	public boolean IS_DEVELOPMENT = false;
+	@Inject
+	@Named("developerMode")
+	public boolean IS_DEVELOPMENT;
 	public boolean entitiesAreReady = false;
 	@Inject
 	ChatMessageManager chatMessageManager;
@@ -98,11 +99,9 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	protected void updateAll() {
-		clientThread.invokeLater(() -> {
-			for (CitizenRegion r : activeRegions.values()) {
-				r.updateEntities();
-			}
-		});
+		for (CitizenRegion r : activeRegions.values()) {
+			r.updateEntities();
+		}
 	}
 
 	@Subscribe
@@ -133,22 +132,20 @@ public class CitizensPlugin extends Plugin {
 			return;
 		}
 
-		clientThread.invokeLater(() -> {
-			for (CitizenRegion r : activeRegions.values()) {
-				r.updateEntities();
-				r.percentileAction(75, 4, entity -> {
-					if (entity instanceof WanderingCitizen) {
-						((WanderingCitizen) entity).wander();
-					}
-				});
+		for (CitizenRegion r : activeRegions.values()) {
+			r.updateEntities();
+			r.percentileAction(75, 4, entity -> {
+				if (entity instanceof WanderingCitizen) {
+					((WanderingCitizen) entity).wander();
+				}
+			});
 
-				r.percentileAction(20, 4, entity -> {
-					if (entity instanceof Citizen) {
-						((Citizen) entity).sayRandomRemark();
-					}
-				});
-			}
-		});
+			r.percentileAction(20, 4, entity -> {
+				if (entity instanceof Citizen) {
+					((Citizen) entity).sayRandomRemark();
+				}
+			});
+		}
 	}
 
 	@Subscribe

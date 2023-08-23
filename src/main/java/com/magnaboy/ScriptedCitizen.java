@@ -101,7 +101,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
-			plugin.clientThread.invoke(() -> {
+			plugin.clientThread.invokeLater(() -> {
 				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(), false, false);
 			});
 			while (
@@ -119,20 +119,16 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addRotateAction(ScriptAction action) {
 		submitAction(action, () -> {
-			plugin.clientThread.invoke(() -> {
+			plugin.clientThread.invokeLater(() -> {
 				rlObject.setOrientation(action.targetRotation.getAngle());
 			});
-////			moveTo(worldLocation, action.targetRotation.getAngle(), currentAnimationID, false, false);
-//			while (!getWorldLocation().equals(action.targetPosition) || getOrientation() != action.targetRotation.getAngle()) {
-//				Thread.yield();
-//			}
 			setWait(action.secondsTilNextAction);
 		});
 	}
 
 	private void sleep() {
 		try {
-			Thread.sleep(10);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
