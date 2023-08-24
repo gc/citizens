@@ -148,7 +148,11 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void setAnimation(int animationID) {
+		if (distanceToPlayer() > Util.MAX_ENTITY_RENDER_DISTANCE) {
+			throw new RuntimeException(debugName() + "tried to set anim but far away");
+		}
 		plugin.clientThread.invokeLater(() -> {
+			Util.sysLog("Setting animation for " + debugName() + "...");
 			Animation anim = plugin.client.loadAnimation(animationID);
 			rlObject.setAnimation(anim);
 		});
@@ -216,12 +220,13 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public T setLocation(LocalPoint location) {
-		log("Set World Location: " + location);
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
 		rlObject.setLocation(location, getPlane());
-		setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
+		WorldPoint wp = WorldPoint.fromLocal(plugin.client, location);
+		setWorldLocation(wp);
+		log("Set Location: " + location + " " + wp);
 		return (T) this;
 	}
 
@@ -268,6 +273,7 @@ public class Entity<T extends Entity<T>> {
 		Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
 
 		plugin.clientThread.invokeLater(() -> {
+			Util.sysLog("Setting false active...");
 			rlObject.setActive(false);
 		});
 

@@ -99,6 +99,7 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	protected void updateAll() {
+		Util.sysLog("updateAll");
 		for (CitizenRegion r : activeRegions.values()) {
 			r.updateEntities();
 		}
@@ -264,6 +265,7 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	private void checkRegions() throws IOException {
+		Util.sysLog("Check regions");
 		List<Integer> loaded = Arrays.stream(client.getMapRegions()).boxed().collect(Collectors.toList());
 		// Check for newly loaded regions
 		for (int i : loaded) {

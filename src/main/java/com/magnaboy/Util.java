@@ -60,6 +60,10 @@ public final class Util {
 		return String.format("%d, %d, %d", point.getX(), point.getY(), point.getPlane());
 	}
 
+	public static void sysLog(String message) {
+		System.out.println(message);
+	}
+
 	public static String intArrayToString(int[] array) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < array.length; i++) {

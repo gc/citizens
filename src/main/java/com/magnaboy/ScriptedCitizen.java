@@ -99,6 +99,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
 			plugin.clientThread.invokeLater(() -> {
+				Util.sysLog("Moving action...");
 				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(),
 					false, false);
 			});
