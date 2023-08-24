@@ -1,18 +1,17 @@
 package com.magnaboy;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.runelite.api.Perspective;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Random;
-import java.util.logging.Logger;
 
 public final class Util {
-	private final static Logger logger = Logger.getLogger("Citizens");
 	public static Random rng = new Random();
 	public final static int JAU_FULL_ROTATION = 2048;
 
@@ -75,7 +74,8 @@ public final class Util {
 	public static WorldArea calculateBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
 		int width = Math.abs(bottomLeft.getX() - topRight.getX());
 		int height = Math.abs(bottomLeft.getY() - topRight.getY());
-		String debugString = "BottomLeft[" + bottomLeft + "] TopRight[" + topRight + "] Width[" + width + "] Height[" + height + "]";
+		String debugString = "BottomLeft[" + bottomLeft + "] TopRight[" + topRight + "] Width[" + width + "] Height["
+			+ height + "]";
 
 		if (bottomLeft.getX() > topRight.getX() || bottomLeft.getY() > topRight.getY()) {
 			throw new IllegalArgumentException("BottomLeft must be to the bottom/left of topRight. " + debugString);
@@ -87,4 +87,37 @@ public final class Util {
 
 		return new WorldArea(bottomLeft, width, height);
 	}
+
+	private final static String animDataFilePath = "src/main/resources/animationData.json";
+
+	private static final Map<String, AnimData> animData;
+
+	public static class AnimData {
+		public int id;
+		public int frameCount;
+		public int clientTicks;
+		public int realDurationMillis;
+	}
+
+	static {
+		try {
+			animData = readAnimData();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static AnimData getAnimData(int id) {
+		return animData.get(String.valueOf(id));
+	}
+
+	private static Map<String, AnimData> readAnimData() throws IOException {
+		Gson gson = new Gson();
+		Type type = new TypeToken<Map<String, AnimData>>() {
+		}.getType();
+		Map<String, AnimData> map = gson.fromJson(new FileReader(animDataFilePath), type);
+
+		return map;
+	}
+
 }

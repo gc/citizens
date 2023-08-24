@@ -1,9 +1,9 @@
 package com.magnaboy;
 
+import com.magnaboy.Util.AnimData;
 import com.magnaboy.scripting.ScriptAction;
 import com.magnaboy.scripting.ScriptFile;
 import com.magnaboy.scripting.ScriptLoader;
-import net.runelite.api.Animation;
 import net.runelite.api.coords.WorldPoint;
 
 import java.util.concurrent.ExecutorService;
@@ -13,7 +13,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ScriptFile script;
 	private ExecutorService scriptExecutor;
 	public ScriptAction currentAction;
-	private int actionCounter = 0;
 
 	public ScriptedCitizen(CitizensPlugin plugin) {
 		super(plugin);
@@ -23,8 +22,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void submitAction(ScriptAction action, Runnable task) {
 		scriptExecutor.submit(() -> {
 			long startTime = System.currentTimeMillis();
-			actionCounter++;
-			log("Executing n=" + actionCounter + " action: " + action.action);
 			this.currentAction = action;
 			task.run();
 			long endTime = System.currentTimeMillis();
@@ -102,14 +99,12 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
 			plugin.clientThread.invokeLater(() -> {
-				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(), false, false);
+				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(),
+					false, false);
 			});
-			while (
-				!getWorldLocation().equals(action.targetPosition) ||
-					getAnimationID() != idleAnimationId.getId() ||
-					WorldPoint.fromLocal(plugin.client, getLocalLocation()).distanceTo2D(getWorldLocation()) > 1
-			) {
-				log("is waiting to arrive at loc " + action.targetPosition + " target: " + getCurrentTarget());
+			while (!getWorldLocation().equals(action.targetPosition) ||
+				getAnimationID() != idleAnimationId.getId() ||
+				WorldPoint.fromLocal(plugin.client, getLocalLocation()).distanceTo2D(getWorldLocation()) > 1) {
 				sleep();
 			}
 
@@ -119,43 +114,32 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addRotateAction(ScriptAction action) {
 		submitAction(action, () -> {
-			plugin.clientThread.invokeLater(() -> {
-				rlObject.setOrientation(action.targetRotation.getAngle());
-			});
+			rlObject.setOrientation(action.targetRotation.getAngle());
 			setWait(action.secondsTilNextAction);
 		});
 	}
 
 	private void sleep() {
 		try {
-			Thread.sleep(200);
+			Thread.sleep(30);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 
 	private void addAnimationAction(ScriptAction action) {
 		submitAction(action, () -> {
-			Animation oldAnimation = rlObject.getAnimation();
+			AnimData animData = Util.getAnimData(action.animationId.getId());
 			int loopCount = action.timesToLoop == null ? 1 : action.timesToLoop;
 			for (int i = 0; i < loopCount; i++) {
 				setAnimation(action.animationId.getId());
-
-				while (rlObject.getAnimation().getId() != action.animationId.getId()) {
-					sleep();
+				try {
+					Thread.sleep(animData.realDurationMillis);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-
-				int lastFrame = 0;
-				while (lastFrame <= rlObject.getAnimationFrame()) {
-					if (lastFrame != rlObject.getAnimationFrame()) {
-						lastFrame = rlObject.getAnimationFrame();
-					}
-					sleep();
-				}
-
-				log("Animation [" + action.animationId.getId() + "] finished with " + lastFrame + " frames");
 			}
-			setAnimation(oldAnimation.getId());
+			setAnimation(idleAnimationId.getId());
 			setWait(action.secondsTilNextAction);
 		});
 	}

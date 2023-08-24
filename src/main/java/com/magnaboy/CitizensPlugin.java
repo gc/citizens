@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
 public class CitizensPlugin extends Plugin {
-	public static HashMap<Integer, CitizenRegion> activeRegions;
+	public static HashMap<Integer, CitizenRegion> activeRegions 
 	public static boolean shuttingDown;
 	@Inject
 	public Client client;
@@ -73,7 +73,7 @@ public class CitizensPlugin extends Plugin {
 	@Override
 	protected void startUp() {
 		CitizenRegion.init(this);
-		activeRegions = new HashMap<>();
+		activeRegions =
 
 		// For now, the only thing in the panel is dev stuff
 		if (IS_DEVELOPMENT) {
@@ -160,12 +160,6 @@ public class CitizensPlugin extends Plugin {
 				((Citizen) entity).onClientTick();
 			}
 		});
-		try {
-			//TODO: Try to find a better way of checking for regions. Could not find some sort region loaded event or similiar
-			checkRegions();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Subscribe

@@ -259,7 +259,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		if (!rlObject.isActive()) {
 			return;
 		}
-		if (entityType == EntityType.StationaryCitizen) return;
 
 		Target nextTarget = getCurrentTarget();
 		if (nextTarget != null) {

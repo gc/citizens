@@ -220,10 +220,8 @@ public class Entity<T extends Entity<T>> {
 		if (location == null) {
 			throw new IllegalStateException("Tried to set null location");
 		}
-		plugin.clientThread.invokeLater(() -> {
-			rlObject.setLocation(location, getPlane());
-			setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
-		});
+		rlObject.setLocation(location, getPlane());
+		setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
 		return (T) this;
 	}
 

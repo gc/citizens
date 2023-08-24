@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class CitizenRegion {
 
@@ -29,10 +28,6 @@ public class CitizenRegion {
 	public int regionId;
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
 	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
-
-	public int size() {
-		return entities.size();
-	}
 
 	public static void init(CitizensPlugin p) {
 		plugin = p;
@@ -192,21 +187,15 @@ public class CitizenRegion {
 	}
 
 	public static void forEachActiveEntity(Consumer<Entity> function) {
-		regionCache.forEach((regionId, r) -> {
+		for (CitizenRegion r : regionCache.values()) {
 			if (r != null) {
-				r.getActiveEntities().forEach((e) -> {
-					if (e.distanceToPlayer() <= Util.MAX_ENTITY_RENDER_DISTANCE) {
-						if (e != null) {
-							function.accept(e);
-						}
+				for (Entity e : r.entities.values()) {
+					if (e != null && e.distanceToPlayer() <= Util.MAX_ENTITY_RENDER_DISTANCE) {
+						function.accept(e);
 					}
-				});
+				}
 			}
-		});
-	}
-
-	public Collection<Entity> getActiveEntities() {
-		return entities.values().stream().filter(entity -> entity.distanceToPlayer() <= Util.MAX_ENTITY_RENDER_DISTANCE && entity.isActive()).collect(Collectors.toList());
+		}
 	}
 
 	public static void forEachEntity(Consumer<Entity> function) {
