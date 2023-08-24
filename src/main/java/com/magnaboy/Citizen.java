@@ -114,7 +114,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	}
 
 	public boolean despawn() {
-		setAnimation(idleAnimationId.getId());
 		targetQueue.clear();
 		this.activeRemark = null;
 		this.remarkTimer = 0;
@@ -257,6 +256,10 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 			this.activeRemark = null;
 		}
 		if (!rlObject.isActive()) {
+			return;
+		}
+
+		if (entityType != EntityType.ScriptedCitizen && entityType != EntityType.WanderingCitizen) {
 			return;
 		}
 
