@@ -341,12 +341,11 @@ public class CitizenRegion {
 		}
 	}
 
-	public void despawnRegion() {
-		entities.values().forEach(Entity::despawn);
-	}
-
 	public void updateEntities() {
-		entities.values().forEach(Entity::update);
+		plugin.clientThread.invokeLater(() -> {
+			Util.sysLog("updateEntities()");
+			entities.values().forEach(Entity::update);
+		});
 	}
 
 	public transient ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
@@ -361,9 +360,9 @@ public class CitizenRegion {
 
 		for (int i = 0; i < selectedCount; i++) {
 			Entity entity = entityList.get(i);
+			if (!entity.isActive()) continue;
 			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelayMillis), TimeUnit.MILLISECONDS);
 		}
 	}
-
 
 }

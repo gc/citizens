@@ -170,23 +170,32 @@ public class CitizensPlugin extends Plugin {
 		Point mousePos = client.getMouseCanvasPosition();
 		final AtomicBoolean[] clickedCitizen = {new AtomicBoolean(false)};
 		CitizenRegion.forEachActiveEntity(entity -> {
-			SimplePolygon clickbox = entity.getClickbox();
-			if (clickbox == null) {
-				return;
-			}
-			boolean doesClickBoxContainMousePos = clickbox.contains(mousePos.getX(), mousePos.getY());
-			if (doesClickBoxContainMousePos) {
-				if ((entity.name != null && entity.examine != null) || IS_DEVELOPMENT) {
-					client.createMenuEntry(firstMenuIndex[0])
-						.setOption("Examine")
-						.setTarget("<col=fffe00>" + entity.name + "</col>")
-						.setType(MenuAction.RUNELITE)
-						.setParam0(0)
-						.setParam1(0)
-						.setDeprioritized(true);
+			if (entity.entityType == EntityType.Scenery && !IS_DEVELOPMENT) return;
+			if ((entity.name != null && entity.examine != null) || IS_DEVELOPMENT) {
+				SimplePolygon clickbox;
+				try {
+					clickbox = entity.getClickbox();
+				} catch (IllegalStateException err) {
+					return;
+				}
+				if (clickbox == null) {
+					return;
+				}
+				boolean doesClickBoxContainMousePos = clickbox.contains(mousePos.getX(), mousePos.getY());
+				if (doesClickBoxContainMousePos) {
+					if (doesClickBoxContainMousePos) {
+						client.createMenuEntry(firstMenuIndex[0])
+							.setOption("Examine")
+							.setTarget("<col=fffe00>" + entity.name + "</col>")
+							.setType(MenuAction.RUNELITE)
+							.setParam0(0)
+							.setParam1(0)
+							.setDeprioritized(true);
+					}
 				}
 
-				if (IS_DEVELOPMENT) {
+				// Select/Deselect
+				if (IS_DEVELOPMENT && doesClickBoxContainMousePos) {
 					String action = "Select";
 					if (CitizenPanel.selectedEntity == entity) {
 						action = "Deselect";
@@ -259,12 +268,11 @@ public class CitizensPlugin extends Plugin {
 				chatMessageManager.queue(QueuedMessage.builder().type(ChatMessageType.NPC_EXAMINE)
 					.runeLiteFormattedMessage(chatMessage)
 					.timestamp((int) (System.currentTimeMillis() / 1000)).build());
-
 			}
 		});
 	}
 
-	private void checkRegions() throws IOException {
+	private void checkRegions() {
 		Util.sysLog("Check regions");
 		List<Integer> loaded = Arrays.stream(client.getMapRegions()).boxed().collect(Collectors.toList());
 		// Check for newly loaded regions
@@ -276,6 +284,7 @@ public class CitizensPlugin extends Plugin {
 				}
 			}
 		}
+		entitiesAreReady = true;
 	}
 
 	public void cleanup() {

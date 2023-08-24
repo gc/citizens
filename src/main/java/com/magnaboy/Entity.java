@@ -364,7 +364,15 @@ public class Entity<T extends Entity<T>> {
 		if (objectToRemove != null) {
 			removeOtherObjects();
 		}
-		rlObject.setActive(true);
+
+		if (idleAnimationId != null) {
+			setAnimation(idleAnimationId.getId());
+		}
+
+		plugin.clientThread.invokeLater(() -> {
+			Util.sysLog("Setting active true...");
+			rlObject.setActive(true);
+		});
 
 		if (plugin.IS_DEVELOPMENT) {
 			plugin.panel.update();
