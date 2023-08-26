@@ -124,7 +124,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		try {
 			Thread.sleep(30);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			// Ignored, because this happens if the citizen despawns.
 		}
 	}
 
@@ -137,7 +137,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 				try {
 					Thread.sleep(animData.realDurationMillis);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					// Ignored, because this happens if the citizen despawns.
 				}
 			}
 			setAnimation(idleAnimationId.getId());
@@ -154,7 +154,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		try {
 			Thread.sleep((long) (seconds * 1000L));
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			// Ignored, because this happens if the citizen despawns.
 		}
 	}
 }
