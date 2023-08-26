@@ -532,8 +532,8 @@
             "idleAnimation": "Woodcutting"
         },
         {
-            "name": "ScriptedEmme",
-            "examineText": "TODO",
+            "name": "Emme",
+            "examineText": "A protesting H.A.M member.",
             "remarks": [],
             "startScript": "testScript",
             "uuid": "bb076237-1858-42e1-8346-21b5d4f45997",
@@ -545,11 +545,29 @@
                 "plane": 0
             },
             "modelIds": [
-                38135
+                348,
+                353,
+                358,
+                428,
+                456,
+                5434,
+                398,
+                5433,
+                317
             ],
             "baseOrientation": 1024,
-            "modelRecolorFind": [],
-            "modelRecolorReplace": [],
+            "modelRecolorFind": [
+                8741,
+                25238,
+                7952,
+                4550
+            ],
+            "modelRecolorReplace": [
+                61347,
+                61347,
+                61347,
+                4564
+            ],
             "idleAnimation": "HumanIdle"
         },
         {

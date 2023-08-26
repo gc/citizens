@@ -159,7 +159,7 @@ public class CitizenRegion {
 			.setWorldLocation(info.worldLocation)
 			.setBoundingBox(info.wanderBoxBL, info.wanderBoxTR)
 			.setBaseOrientation(getRandomItem(new CardinalDirection[]{CardinalDirection.North, CardinalDirection.South, CardinalDirection.East, CardinalDirection.West}));
-        return citizen;
+		return citizen;
 	}
 
 	private static ScriptedCitizen loadScriptedCitizen(CitizensPlugin plugin, CitizenInfo info) {
