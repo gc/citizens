@@ -15,6 +15,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import static com.magnaboy.Util.getRandomItem;
+
 public class CitizenRegion {
 
 	private static final float VALID_REGION_VERSION = 0.8f;
@@ -155,8 +157,9 @@ public class CitizenRegion {
 		citizen.setWanderRegionBL(info.wanderBoxBL)
 			.setWanderRegionTR(info.wanderBoxTR)
 			.setWorldLocation(info.worldLocation)
-			.setBoundingBox(info.wanderBoxBL, info.wanderBoxTR);
-		return citizen;
+			.setBoundingBox(info.wanderBoxBL, info.wanderBoxTR)
+			.setBaseOrientation(getRandomItem(new CardinalDirection[]{CardinalDirection.North, CardinalDirection.South, CardinalDirection.East, CardinalDirection.West}));
+        return citizen;
 	}
 
 	private static ScriptedCitizen loadScriptedCitizen(CitizensPlugin plugin, CitizenInfo info) {
@@ -211,7 +214,7 @@ public class CitizenRegion {
 	}
 
 	public static void cleanUp() {
-		forEachActiveEntity(Entity::despawn);
+		forEachEntity(Entity::despawn);
 
 		for (CitizenRegion r : regionCache.values()) {
 			r.citizenRoster.clear();
@@ -229,7 +232,7 @@ public class CitizenRegion {
 		region.entities.put(info.uuid, citizen);
 		region.citizenRoster.add(info);
 		dirtyRegion(region);
-		plugin.updateAll();
+		updateAllEntities();
 		return citizen;
 	}
 
@@ -239,7 +242,7 @@ public class CitizenRegion {
 		region.entities.put(info.uuid, scenery);
 		region.sceneryRoster.add(info);
 		dirtyRegion(region);
-		plugin.updateAll();
+		updateAllEntities();
 		return scenery;
 	}
 
@@ -346,6 +349,13 @@ public class CitizenRegion {
 			Util.sysLog("updateEntities()");
 			entities.values().forEach(Entity::update);
 		});
+	}
+
+	public static void updateAllEntities() {
+		for (CitizenRegion region : regionCache.values()) {
+			region.updateEntities();
+		}
+		plugin.panel.update();
 	}
 
 	public transient ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);

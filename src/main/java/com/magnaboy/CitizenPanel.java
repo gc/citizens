@@ -99,7 +99,6 @@ class CitizenPanel extends PluginPanel {
 		});
 
 		int totalEntities = activeEntities.get() + inactiveEntities.get();
-
 		label.setText(activeEntities + "/" + totalEntities + " entities are active");
 
 		UpdateEditorFields();
@@ -208,8 +207,8 @@ class CitizenPanel extends PluginPanel {
 
 			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
-				CitizenRegion.cleanUp();
-				plugin.cleanup();
+				plugin.shutDown();
+				plugin.startUp();
 			});
 			layoutPanel.add(reloadButton, gbc);
 

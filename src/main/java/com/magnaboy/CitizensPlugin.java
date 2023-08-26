@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
 public class CitizensPlugin extends Plugin {
-	public static HashMap<Integer, CitizenRegion> activeRegions 
+	public static HashMap<Integer, CitizenRegion> activeRegions = new HashMap<>();
 	public static boolean shuttingDown;
 	@Inject
 	public Client client;
@@ -72,8 +71,8 @@ public class CitizensPlugin extends Plugin {
 
 	@Override
 	protected void startUp() {
+		Util.sysLog("startUp");
 		CitizenRegion.init(this);
-		activeRegions =
 
 		// For now, the only thing in the panel is dev stuff
 		if (IS_DEVELOPMENT) {
@@ -91,35 +90,38 @@ public class CitizensPlugin extends Plugin {
 
 			overlayManager.add(citizensOverlay);
 		}
+
+		if (isReady()) {
+			checkRegions();
+		}
+		CitizenRegion.updateAllEntities();
 	}
 
 	@Override
 	protected void shutDown() {
+		Util.sysLog("shutDown");
 		cleanupAll();
 	}
 
-	protected void updateAll() {
-		Util.sysLog("updateAll");
+	protected void despawnAll() {
+		Util.sysLog("despawnAll");
 		for (CitizenRegion r : activeRegions.values()) {
-			r.updateEntities();
+			CitizenRegion.forEachActiveEntity((Entity::despawn));
 		}
 	}
 
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged) {
 		GameState newState = gameStateChanged.getGameState();
+		System.out.println(gameStateChanged.getGameState());
 
 		if (newState == GameState.LOGGED_IN) {
-			try {
-				checkRegions();
-				entitiesAreReady = true;
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			checkRegions();
 		}
 
 		if (newState == GameState.LOADING) {
-			CitizenRegion.forEachActiveEntity((Entity::despawn));
+			despawnAll();
+			CitizenRegion.updateAllEntities();
 		}
 	}
 
@@ -134,7 +136,6 @@ public class CitizensPlugin extends Plugin {
 		}
 
 		for (CitizenRegion r : activeRegions.values()) {
-			r.updateEntities();
 			r.percentileAction(75, 4, entity -> {
 				if (entity instanceof WanderingCitizen) {
 					((WanderingCitizen) entity).wander();
@@ -151,7 +152,7 @@ public class CitizensPlugin extends Plugin {
 
 	@Subscribe
 	public void onGameTick(GameTick tick) {
-		updateAll();
+		CitizenRegion.updateAllEntities();
 	}
 
 	@Subscribe
@@ -287,14 +288,11 @@ public class CitizensPlugin extends Plugin {
 		entitiesAreReady = true;
 	}
 
-	public void cleanup() {
-		activeRegions.clear();
-	}
-
 	private void cleanupAll() {
 		shuttingDown = true;
+		despawnAll();
+		activeRegions.clear();
 		overlayManager.remove(citizensOverlay);
-		this.cleanup();
 		CitizenRegion.cleanUp();
 		if (IS_DEVELOPMENT) {
 			panel.cleanup();
