@@ -6,7 +6,8 @@ import net.runelite.api.Perspective;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Random;
@@ -15,7 +16,7 @@ public final class Util {
 	public static Random rng = new Random();
 	public final static int JAU_FULL_ROTATION = 2048;
 
-	public final static int MAX_ENTITY_RENDER_DISTANCE = 30;
+	public final static int MAX_ENTITY_RENDER_DISTANCE = 25;
 
 	private Util() throws IOException {
 	}
@@ -42,26 +43,8 @@ public final class Util {
 		return j & 2047;
 	}
 
-	static PrintWriter out;
-
-	static {
-		try {
-			out = new PrintWriter(new BufferedWriter(new FileWriter("citizens.log", true)));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static void log(String message) {
-		out.println(message);
-	}
-
 	public static String worldPointToShortCoord(WorldPoint point) {
 		return String.format("%d, %d, %d", point.getX(), point.getY(), point.getPlane());
-	}
-
-	public static void sysLog(String message) {
-		System.out.println(message);
 	}
 
 	public static String intArrayToString(int[] array) {

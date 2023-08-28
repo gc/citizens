@@ -71,7 +71,6 @@ public class CitizensPlugin extends Plugin {
 
 	@Override
 	protected void startUp() {
-		Util.sysLog("startUp");
 		CitizenRegion.init(this);
 
 		// For now, the only thing in the panel is dev stuff
@@ -99,12 +98,10 @@ public class CitizensPlugin extends Plugin {
 
 	@Override
 	protected void shutDown() {
-		Util.sysLog("shutDown");
 		cleanupAll();
 	}
 
 	protected void despawnAll() {
-		Util.sysLog("despawnAll");
 		for (CitizenRegion r : activeRegions.values()) {
 			CitizenRegion.forEachActiveEntity((Entity::despawn));
 		}
@@ -113,7 +110,6 @@ public class CitizensPlugin extends Plugin {
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged) {
 		GameState newState = gameStateChanged.getGameState();
-		System.out.println(gameStateChanged.getGameState());
 
 		if (newState == GameState.LOGGED_IN) {
 			checkRegions();
@@ -274,7 +270,6 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	private void checkRegions() {
-		Util.sysLog("Check regions");
 		List<Integer> loaded = Arrays.stream(client.getMapRegions()).boxed().collect(Collectors.toList());
 		// Check for newly loaded regions
 		for (int i : loaded) {

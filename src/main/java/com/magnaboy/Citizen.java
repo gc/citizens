@@ -161,7 +161,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		LocalPoint localPosition = LocalPoint.fromWorld(client, worldPosition);
 
 		if (localPosition == null) {
-			log("Is ceasing movement because LP is null");
 			return;
 		}
 

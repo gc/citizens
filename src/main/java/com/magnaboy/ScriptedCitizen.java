@@ -7,7 +7,9 @@ import com.magnaboy.scripting.ScriptLoader;
 import net.runelite.api.coords.WorldPoint;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ScriptFile script;
@@ -25,7 +27,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 			this.currentAction = action;
 			task.run();
 			long endTime = System.currentTimeMillis();
-			log("Action " + action.action + " took " + (endTime - startTime) + " milliseconds");
 		});
 	}
 
@@ -44,10 +45,16 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		return super.despawn();
 	}
 
-	public void update() {
-		if (scriptExecutor.isShutdown()) {
+	public boolean spawn() {
+		boolean didSpawn = super.spawn();
+		if (scriptExecutor.isShutdown() && didSpawn) {
 			buildRoutine();
 		}
+		return didSpawn;
+	}
+
+	public void update() {
+
 		super.update();
 	}
 
@@ -55,7 +62,8 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		if (script == null) {
 			return;
 		}
-		scriptExecutor = Executors.newSingleThreadExecutor();
+		scriptExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+
 		for (ScriptAction action : script.actions) {
 			addAction(action);
 		}
@@ -82,9 +90,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 				case FaceDirection:
 					addRotateAction(action);
 					break;
-				default:
-					Util.log("Unknown action type");
-					break;
 			}
 		}
 	}
@@ -99,7 +104,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
 			plugin.clientThread.invokeLater(() -> {
-				Util.sysLog("Moving action...");
 				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(),
 					false, false);
 			});

@@ -32,7 +32,6 @@ public class Entity<T extends Entity<T>> {
 	private int[] modelIDs;
 	private int[] recolorsToFind;
 	private int[] recolorsToReplace;
-	private SimplePolygon clickbox;
 	private Integer objectToRemove;
 	public List<MergedObject> mergedObjects = new ArrayList<>();
 
@@ -148,11 +147,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public void setAnimation(int animationID) {
-		if (distanceToPlayer() > Util.MAX_ENTITY_RENDER_DISTANCE) {
-			throw new RuntimeException(debugName() + "tried to set anim but far away");
-		}
 		plugin.clientThread.invokeLater(() -> {
-			Util.sysLog("Setting animation for " + debugName() + "...");
 			Animation anim = plugin.client.loadAnimation(animationID);
 			rlObject.setAnimation(anim);
 		});
@@ -230,13 +225,6 @@ public class Entity<T extends Entity<T>> {
 		return (T) this;
 	}
 
-	public void log(String string) {
-		if (name == null) {
-			return;
-		}
-		Util.log(debugName() + " " + string);
-	}
-
 	public int getPlane() {
 		return this.worldLocation.getPlane();
 	}
@@ -248,7 +236,7 @@ public class Entity<T extends Entity<T>> {
 
 		float distanceFromPlayer = distanceToPlayer();
 
-		if (distanceFromPlayer >= Util.MAX_ENTITY_RENDER_DISTANCE) {
+		if (distanceFromPlayer > Util.MAX_ENTITY_RENDER_DISTANCE) {
 			return false;
 		}
 
@@ -270,10 +258,8 @@ public class Entity<T extends Entity<T>> {
 			return false;
 		}
 
-		Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
 
 		plugin.clientThread.invokeLater(() -> {
-			Util.sysLog("Setting false active...");
 			rlObject.setActive(false);
 		});
 
@@ -370,7 +356,6 @@ public class Entity<T extends Entity<T>> {
 		}
 
 		plugin.clientThread.invokeLater(() -> {
-			Util.sysLog("Setting active true...");
 			rlObject.setActive(true);
 		});
 

@@ -41,7 +41,6 @@ public class CitizenRegion {
 
 	public static CitizenRegion loadRegion(int regionId, Boolean createIfNotExists) {
 		if (regionCache.containsKey(regionId)) {
-			Util.log("Loaded Region: " + regionId + " from cache");
 			return regionCache.get(regionId);
 		}
 
@@ -69,11 +68,9 @@ public class CitizenRegion {
 			Gson gson = new Gson();
 			CitizenRegion region = gson.fromJson(reader, CitizenRegion.class);
 			if (region == null) {
-				Util.log("Region file found but didn't deserialize");
 				return null;
 			}
 			if (region.version != VALID_REGION_VERSION) {
-				Util.log(String.format("Incompatible region version. Expected: %f Received: %f", VALID_REGION_VERSION, region.version));
 				return null;
 			}
 			for (CitizenInfo cInfo : region.citizenRoster) {
@@ -90,7 +87,6 @@ public class CitizenRegion {
 				region.entities.values().forEach(Entity::validate);
 			}
 			regionCache.put(regionId, region);
-			Util.log("Loaded Region: " + regionId + " from file");
 			return region;
 		} catch (IOException e) {
 			return null;
@@ -325,7 +321,6 @@ public class CitizenRegion {
 				throw new RuntimeException(e);
 			}
 		}
-		Util.log("Saved " + dirtyRegions.size() + " dirty regions");
 		clearDirtyRegions();
 	}
 
@@ -346,7 +341,6 @@ public class CitizenRegion {
 
 	public void updateEntities() {
 		plugin.clientThread.invokeLater(() -> {
-			Util.sysLog("updateEntities()");
 			entities.values().forEach(Entity::update);
 		});
 	}
@@ -355,7 +349,9 @@ public class CitizenRegion {
 		for (CitizenRegion region : regionCache.values()) {
 			region.updateEntities();
 		}
-		plugin.panel.update();
+		if (plugin.IS_DEVELOPMENT) {
+			plugin.panel.update();
+		}
 	}
 
 	public transient ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
