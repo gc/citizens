@@ -1,6 +1,11 @@
 {
     "actions": [
         {
+            "action": "Say",
+            "secondsTilNextAction": 0,
+            "message": "Humans against monsters, stand strong!"
+        },
+        {
             "action": "Idle",
             "secondsTilNextAction": 3
         },
@@ -14,14 +19,14 @@
             }
         },
         {
+            "action": "Say",
+            "secondsTilNextAction": 0,
+            "message": "Fight back, join H.A.M.!"
+        },
+        {
             "action": "Animation",
             "secondsTilNextAction": 0,
             "animationId": "Flex"
-        },
-        {
-            "action": "Say",
-            "secondsTilNextAction": 0,
-            "message": "Hello World"
         },
         {
             "action": "WalkTo",

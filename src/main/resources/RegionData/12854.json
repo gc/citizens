@@ -51,10 +51,10 @@
             "name": "Saradomin priest",
             "examineText": "A holy man wearing ancient clothing.",
             "remarks": [
-                "May the light of Saradomin guide your path, for his wisdom transcends the temporal, illuminating the path of righteousness and harmony.",
-                "Trust in Saradomin\u0027s divine order, where virtue is rewarded and vice finds no sanctuary.",
-                "Saradomin\u0027s grace is as boundless as the skies, and so is his capacity to forgive those who truly seek redemption.",
-                "The strength of Saradomin does not reside solely in might, but in the virtuous heart, the discerning mind, and the outstretched hand.",
+                "May the light of Saradomin guide your path.",
+                "Trust in Saradomin\u0027s divine order.",
+                "Saradomin\u0027s grace is as boundless as the skies.",
+                "Saradomin does not waver so easily.",
                 "There is always light for those who truly seek it."
             ],
             "moveAnimation": "HumanWalk",
@@ -90,6 +90,7 @@
         {
             "name": "Saradomin wizard",
             "examineText": "He looks familiar.",
+            "remarks": [],
             "moveAnimation": "HumanWalk",
             "uuid": "e76e7992-ea73-4d29-8a50-71782270f00b",
             "regionId": 12854,
@@ -128,5 +129,6 @@
             "idleAnimation": "ChurchSitting"
         }
     ],
-    "sceneryRoster": []
+    "sceneryRoster": [
+    ]
 }

@@ -3,9 +3,10 @@ package com.magnaboy.serialization;
 import com.magnaboy.AnimationID;
 import com.magnaboy.EntityType;
 import com.magnaboy.MergedObject;
+import net.runelite.api.coords.WorldPoint;
+
 import java.util.List;
 import java.util.UUID;
-import net.runelite.api.coords.WorldPoint;
 
 public class EntityInfo {
 	public UUID uuid;

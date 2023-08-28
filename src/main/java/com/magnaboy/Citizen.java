@@ -1,26 +1,61 @@
 package com.magnaboy;
 
-import static com.magnaboy.Util.getRandomItem;
-import java.util.Timer;
-import java.util.TimerTask;
-import javax.annotation.Nullable;
-import net.runelite.api.Animation;
+import net.runelite.api.Client;
+import net.runelite.api.CollisionDataFlag;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.magnaboy.Util.getRandomItem;
+
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
-	public String[] remarks;
+	private static final int[][] BLOCKING_DIRECTIONS_5x5 = {
+		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_EAST, CollisionDataFlag.BLOCK_MOVEMENT_EAST, 0, CollisionDataFlag.BLOCK_MOVEMENT_WEST, CollisionDataFlag.BLOCK_MOVEMENT_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST},
+		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST}};
+	private static final int[][] JAU_DIRECTIONS_5X5 = {
+		{768, 768, 1024, 1280, 1280},
+		{768, 768, 1024, 1280, 1280},
+		{512, 512, 0, 1536, 1536},
+		{256, 256, 0, 1792, 1792},
+		{256, 256, 0, 1792, 1792}};
+	private static final int CENTER_INDEX_5X5 = 2;
+	public final CitizensPlugin plugin;
+	private final Client client;
+	private final List<Target> targetQueue = new ArrayList<>();
 	@Nullable
 	public String activeRemark = null;
-	public int speed = 4;
-	public AnimationID[] randomAnimations;
+	public String[] remarks;
+	@Nullable
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
-	@Nullable()
-	Target currentTarget;
 	private int remarkTimer = 0;
+
 
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);
+		this.plugin = plugin;
+		this.client = plugin.client;
+		this.rlObject = client.createRuneLiteObject();
+	}
+
+	public T setName(String name) {
+		this.name = name;
+		return (T) this;
+	}
+
+	public T setExamine(String examine) {
+		this.examine = examine;
+		return (T) this;
+	}
+
+	public T setRemarks(String[] remarks) {
+		this.remarks = remarks;
+		return (T) this;
 	}
 
 	public void validate() {
@@ -47,63 +82,40 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 
 		for (String remark : remarks) {
-			if (remark == "") {
+			if (remark.isEmpty()) {
 				throw new IllegalStateException(debugName() + " has empty remark.");
 			}
 		}
 	}
 
-	public T setName(String name) {
-		this.name = name;
-		return (T) this;
-	}
-
-	public T setExamine(String examine) {
-		this.examine = examine;
-		return (T) this;
-	}
-
-	public T setRemarks(String[] remarks) {
-		this.remarks = remarks;
-		return (T) this;
-	}
-
-	public void triggerIdleAnimation() {
-		if (randomAnimations == null) {
-			return;
-		}
-		AnimationID animID = getRandomItem(randomAnimations);
-		Animation anim = plugin.getAnimation(animID);
-		rlObject.setAnimation(anim);
-		// TODO: cancel this timer on plugin shutdown
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				rlObject.setAnimation(plugin.getAnimation(idleAnimationId));
-			}
-			// TODO: this delay is random
-		}, 600 * 8);
-	}
-
 	public boolean despawn() {
-		this.currentTarget = null;
+		targetQueue.clear();
 		this.activeRemark = null;
 		this.remarkTimer = 0;
-		boolean didDespawn = super.despawn();
-
-		if (didDespawn) {
-			Util.log("Despawning " + name + ", they are " + distanceToPlayer() + "x tiles away");
-		}
-		return didDespawn;
+		return super.despawn();
 	}
 
-	public boolean spawn() {
-		boolean didSpawn = super.spawn();
-		if (didSpawn) {
-			Util.log(name + " spawned " + distanceToPlayer() + "x tiles from player");
+	public Target getCurrentTarget() {
+		if (targetQueue.isEmpty()) {
+			return null;
 		}
+		return targetQueue.get(0);
+	}
 
-		return didSpawn;
+	public WorldPoint getWorldLocation() {
+		Target currentTarget = getCurrentTarget();
+		if (currentTarget != null) {
+			return currentTarget.worldDestinationPosition;
+		}
+		return super.getWorldLocation();
+	}
+
+	public void say(String message) {
+		if (distanceToPlayer() > Util.MAX_ENTITY_RENDER_DISTANCE) {
+			return;
+		}
+		this.activeRemark = message;
+		this.remarkTimer = 120;
 	}
 
 	public void sayRandomRemark() {
@@ -112,34 +124,102 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		}
 	}
 
-	public void say(String message) {
-		if (distanceToPlayer() > 30) {
-			return;
-		}
-		this.activeRemark = message;
-		this.remarkTimer = 80;
+	public void moveTo(WorldPoint worldPosition) {
+		moveTo(worldPosition, 0, false, false);
 	}
 
-	public void moveTo(WorldPoint worldPosition) {
-		if (!rlObject.isActive()) {
-			spawn();
+	public void moveTo(WorldPoint worldPosition, Integer jauOrientation, boolean isInteracting, boolean isPoseAnimation) {
+		if (entityType == EntityType.StationaryCitizen) {
+			throw new IllegalStateException(debugName() + " is a stationary citizen and cannot move.");
 		}
 
-		LocalPoint localPosition = LocalPoint.fromWorld(plugin.client, worldPosition);
+		LocalPoint localPosition = LocalPoint.fromWorld(client, worldPosition);
 
-		WorldPoint prevWorldPosition;
-		if (currentTarget != null) {
-			prevWorldPosition = currentTarget.worldDestinationPosition;
-		} else {
-			prevWorldPosition = WorldPoint.fromLocal(plugin.client, getLocalLocation());
+		if (localPosition == null) {
+			return;
 		}
+
+		// use current position if nothing is in queue
+		WorldPoint prevWorldPosition = getWorldLocation();
 
 		int distance = prevWorldPosition.distanceTo(worldPosition);
+		if (distance > 0 && distance <= 2) {
+			int dx = worldPosition.getX() - prevWorldPosition.getX();
+			int dy = worldPosition.getY() - prevWorldPosition.getY();
 
-		currentTarget = new Target();
-		currentTarget.worldDestinationPosition = worldPosition;
-		currentTarget.localDestinationPosition = localPosition;
-		currentTarget.currentDistance = distance;
+			if (distance == 1 && dx != 0 && dy != 0) // test for blockage along diagonal
+			{
+				// if blocked diagonally, go around in an L shape (2 options)
+				int[][] colliders = client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
+				final int diagonalTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
+				final int axisXTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 + dx] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 + dy][CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+				final int axisYTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 - dx] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+
+				int diagonalFlag = colliders[localPosition.getSceneX()][localPosition.getSceneY()];
+				int axisXFlag = colliders[localPosition.getSceneX()][localPosition.getSceneY() - dy];
+				int axisYFlag = colliders[localPosition.getSceneX() - dx][localPosition.getSceneY()];
+
+				if ((axisXFlag & axisXTest) != 0 || (axisYFlag & axisYTest) != 0 || (diagonalFlag & diagonalTest) != 0) {
+					distance = 2;
+
+					// if the priority East-West path is clear, we'll default to this direction
+					if ((axisXFlag & axisXTest) == 0) {
+						dy = 0;
+					} else {
+						dx = 0;
+					}
+				}
+			} else if (distance == 2 && Math.abs(Math.abs(dy) - Math.abs(dx)) == 1) // test for blockage along knight-style moves
+			{
+				int[][] colliders = client.getCollisionMaps()[worldPosition.getPlane()].getFlags();
+				final int diagonalTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
+				final int axisXTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 + dx] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 + dy][CENTER_INDEX_5X5] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+				final int axisYTest = BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5] | BLOCKING_DIRECTIONS_5x5[CENTER_INDEX_5X5][CENTER_INDEX_5X5 - dx] | CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+
+				int dxSign = Integer.signum(dx);
+				int dySign = Integer.signum(dy);
+				int diagonalFlag = colliders[localPosition.getSceneX()][localPosition.getSceneY()];
+				int axisXFlag = colliders[localPosition.getSceneX()][localPosition.getSceneY() - Integer.signum(dySign)];
+				int axisYFlag = colliders[localPosition.getSceneX() - Integer.signum(dxSign)][localPosition.getSceneY()];
+
+				// do we go straight or diagonal? test straight first and fall back to diagonal if it fails
+				// priority is West > East > South > North > Southwest > Southeast > Northwest > Northeast
+				if ((axisXFlag & axisXTest) == 0 && (axisYFlag & axisYTest) == 0 && (diagonalFlag & diagonalTest) == 0) {
+					// the cardinal direction is clear (or we glitched), so let's go straight
+					if (Math.abs(dx) == 2) {
+						dx = dxSign;
+						dy = 0;
+					} else {
+						dx = 0;
+						dy = dySign;
+					}
+				} else {
+					// we've established that the cardinal direction is blocked, so let's go along the diagonal
+					if (Math.abs(dx) == 2) {
+						dx = dxSign;
+					} else {
+						dy = dySign;
+					}
+				}
+			}
+
+			// handle rotation if we have no interacting target
+			if (!isInteracting || jauOrientation == null) {
+				// the actor needs to look in the direction being moved toward
+				// the distance between these points may be up to 2
+				dx = worldPosition.getX() - prevWorldPosition.getX();
+				dy = worldPosition.getY() - prevWorldPosition.getY();
+				jauOrientation = JAU_DIRECTIONS_5X5[CENTER_INDEX_5X5 - dy][CENTER_INDEX_5X5 + dx];
+			}
+		}
+
+		Target newTarget = new Target();
+		newTarget.worldDestinationPosition = worldPosition;
+		newTarget.localDestinationPosition = localPosition;
+		newTarget.jauDestinationOrientation = jauOrientation == null ? 0 : jauOrientation;
+		newTarget.isInteracting = isInteracting;
+		newTarget.isPoseAnimation = isPoseAnimation;
+		targetQueue.add(newTarget);
 	}
 
 	public void onClientTick() {
@@ -149,72 +229,80 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		if (remarkTimer == 0) {
 			this.activeRemark = null;
 		}
-		movementTick();
-	}
-
-	public void movementTick() {
-		if (entityType == EntityType.StationaryCitizen) {
+		if (!rlObject.isActive()) {
 			return;
 		}
-		if (currentTarget != null) {
-			if (currentTarget.worldDestinationPosition == null) {
+
+		if (entityType != EntityType.ScriptedCitizen && entityType != EntityType.WanderingCitizen) {
+			return;
+		}
+
+		Target nextTarget = getCurrentTarget();
+		if (nextTarget != null) {
+			int targetPlane = nextTarget.worldDestinationPosition.getPlane();
+			LocalPoint targetPosition = nextTarget.localDestinationPosition;
+			int targetOrientation = nextTarget.jauDestinationOrientation;
+
+			if (client.getPlane() != targetPlane || targetPosition == null || !targetPosition.isInScene() || targetOrientation < 0) {
+				despawn();
 				return;
 			}
-			LocalPoint targetPosition = currentTarget.localDestinationPosition;
 
-			LocalPoint localLoc = getLocalLocation();
-			if (localLoc == null) {
-				throw new RuntimeException("Tried to movement tick for citizen with no local location: " + debugName());
-			}
-
-			double intx = localLoc.getX() - targetPosition.getX();
-			double inty = localLoc.getY() - targetPosition.getY();
-
-			boolean rotationDone = rotateObject(intx, inty);
-
-			LocalPoint currentPosition = rlObject.getLocation();
+			LocalPoint currentPosition = getLocalLocation();
 			int dx = targetPosition.getX() - currentPosition.getX();
 			int dy = targetPosition.getY() - currentPosition.getY();
 
 			if (dx != 0 || dy != 0) {
 				if (rlObject.getAnimation().getId() != movingAnimationId.getId()) {
-					rlObject.setAnimation(plugin.getAnimation(movingAnimationId));
+					setAnimation(movingAnimationId.getId());
 				}
 
+				int speed = 4;
+				// only use the delta if it won't send up past the target
 				if (Math.abs(dx) > speed) {
 					dx = Integer.signum(dx) * speed;
 				}
-
 				if (Math.abs(dy) > speed) {
 					dy = Integer.signum(dy) * speed;
 				}
 
 				LocalPoint newLocation = new LocalPoint(currentPosition.getX() + dx, currentPosition.getY() + dy);
-
 				setLocation(newLocation);
-
-				int currentX = rlObject
-					.getLocation()
-					.getX();
-				int currentY = rlObject
-					.getLocation()
-					.getY();
-				dx = targetPosition.getX() - currentX;
-				dy = targetPosition.getY() - currentY;
+			} else {
+				targetQueue.remove(0);
 			}
 
-			if (dx == 0 && dy == 0 && rotationDone) {
-				currentTarget = null;
-				rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
+			LocalPoint localLoc = getLocalLocation();
+			double intx = localLoc.getX() - targetPosition.getX();
+			double inty = localLoc.getY() - targetPosition.getY();
+			rotateObject(intx, inty);
+
+			if (targetQueue.isEmpty()) {
+				stopMoving();
 			}
 		}
 	}
 
-	public class Target {
-		public WorldPoint worldDestinationPosition;
-		public LocalPoint localDestinationPosition;
-		public int currentDistance;
+	public void stopMoving() {
+		setAnimation(idleAnimationId.getId());
 	}
 
+	public static class Target {
+		public WorldPoint worldDestinationPosition;
+		public LocalPoint localDestinationPosition;
+		public int jauDestinationOrientation;
+		public boolean isPoseAnimation;
+		public boolean isInteracting;
 
+		@Override
+		public String toString() {
+			return "Target{" +
+				"worldDestinationPosition=" + worldDestinationPosition +
+				", localDestinationPosition=" + localDestinationPosition +
+				", jauDestinationOrientation=" + jauDestinationOrientation +
+				", isPoseAnimation=" + isPoseAnimation +
+				", isInteracting=" + isInteracting +
+				'}';
+		}
+	}
 }

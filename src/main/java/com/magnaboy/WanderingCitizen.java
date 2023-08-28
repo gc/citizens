@@ -1,8 +1,9 @@
 package com.magnaboy;
 
-import static com.magnaboy.Util.getRandom;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
+
+import static com.magnaboy.Util.getRandom;
 
 public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WorldArea boundingBox;
@@ -12,11 +13,12 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WanderingCitizen(CitizensPlugin plugin) {
 		super(plugin);
 		entityType = EntityType.WanderingCitizen;
+
 	}
 
 	public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
 		this.boundingBox = Util.calculateBoundingBox(bottomLeft, topRight);
-		worldLocation = getRandomInBoundingBox();
+		setWorldLocation(getRandomInBoundingBox());
 		return this;
 	}
 
@@ -36,12 +38,15 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 			final int x = getRandom(this.boundingBox.getX(), this.boundingBox.getX() + this.boundingBox.getWidth());
 			final int y = getRandom(this.boundingBox.getY(), this.boundingBox.getY() + this.boundingBox.getHeight());
 			randomPoint = new WorldPoint(x, y, getPlane());
-		} while (randomPoint.equals(worldLocation));
+		} while (randomPoint.equals(getWorldLocation()));
 
 		return randomPoint;
 	}
 
 	public void wander() {
+		if (getCurrentTarget() != null) {
+			return;
+		}
 		WorldPoint randomSpot = getRandomInBoundingBox();
 		this.moveTo(randomSpot);
 	}

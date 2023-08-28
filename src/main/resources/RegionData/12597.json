@@ -3,10 +3,11 @@
     "regionId": 12597,
     "citizenRoster": [
         {
-            "name": "Benny",
-            "examineText": "Chop chop chop!",
+            "name": "Drunken peasant",
+            "examineText": "He had a long night.",
             "remarks": [
-                "Chop chop!"
+                "I\u0027m just resting my eyes... and my legs... and my everything.",
+                "Hey, have you met the floor? We\u0027re real close."
             ],
             "uuid": "f5adc6b8-f06e-4644-b0d7-f0163ac4f7e6",
             "regionId": 12597,
@@ -30,13 +31,16 @@
         },
         {
             "name": "Assistant Apothecary",
-            "examineText": "Chop chop chop!",
+            "examineText": "He\u0027s learning to make potions",
             "remarks": [
-                "Chop chop!"
+                "It\u0027s more than science, it\u0027s an art.",
+                "It\u0027s all about balance...",
+                "Is this safe?"
             ],
             "uuid": "edd6337c-423e-42b6-ad10-2b0e308b9cd3",
             "regionId": 12597,
-            "entityType": "StationaryCitizen",
+            "entityType": "ScriptedCitizen",
+            "startScript": "apothecaryScript",
             "worldLocation": {
                 "x": 3197,
                 "y": 3405,
@@ -69,7 +73,48 @@
                 5400,
                 5301
             ],
-            "idleAnimation": "HerbloreMix"
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Gardener",
+            "examineText": "A gardener.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "f1b99e86-4365-4cde-ae0a-bed5263aa418",
+            "regionId": 12597,
+            "entityType": "ScriptedCitizen",
+            "startScript": "gardenerScript",
+            "worldLocation": {
+                "x": 3163,
+                "y": 3446,
+                "plane": 0
+            },
+            "modelIds": [
+                230,
+                251,
+                292,
+                4391,
+                170,
+                179,
+                254,
+                183,
+                7368,
+                4843,
+                11812
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                4550,
+                8741,
+                25238,
+                123
+            ],
+            "modelRecolorReplace": [
+                3507,
+                16026,
+                37394,
+                5572
+            ],
+            "idleAnimation": "HumanIdle"
         }
     ],
     "sceneryRoster": [

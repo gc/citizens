@@ -4,5 +4,6 @@ public enum ActionType {
 	Idle,
 	WalkTo,
 	Animation,
-	Say
+	Say,
+	FaceDirection,
 }

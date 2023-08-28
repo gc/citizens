@@ -1,0 +1,148 @@
+{
+    "actions": [
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3226,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3225,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3224,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3213,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3212,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3211,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3210,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3225,
+                "y": 3227,
+                "plane": 0
+            }
+        }
+    ]
+}

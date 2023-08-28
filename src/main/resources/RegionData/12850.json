@@ -1,0 +1,93 @@
+{
+  "version": 0.8,
+  "regionId": 12850,
+  "citizenRoster": [
+    {
+      "name": "Mike",
+      "examineText": "A gardener.",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "startScript": "lumbridgeGardenerScript",
+      "uuid": "8fcb62b4-b275-49e8-8e89-b68c02b998fe",
+      "regionId": 12850,
+      "entityType": "ScriptedCitizen",
+      "worldLocation": {
+        "x": 3225,
+        "y": 3227,
+        "plane": 0
+      },
+      "modelIds": [
+        230,
+        251,
+        292,
+        4391,
+        170,
+        179,
+        254,
+        183,
+        7368,
+        4843,
+        11812
+      ],
+      "baseOrientation": 1536,
+      "modelRecolorFind": [
+        4550,
+        8741,
+        25238,
+        123
+      ],
+      "modelRecolorReplace": [
+        3507,
+        16026,
+        37394,
+        5572
+      ],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Fisherman",
+      "examineText": "A man who is fishing.",
+      "moveAnimation": "HumanWalk",
+      "uuid": "5081d41b-dae3-41c5-a653-c285c0498fc2",
+      "regionId": 12850,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3245,
+        "y": 3225,
+        "plane": 0
+      },
+      "modelIds": [
+        230,
+        299,
+        151,
+        179,
+        267,
+        185,
+        194,
+        251,
+        562,
+        236,
+        320
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [
+        8741,
+        25238,
+        43569,
+        6798,
+        4550,
+        54397
+      ],
+      "modelRecolorReplace": [
+        4626,
+        8472,
+        4626,
+        103,
+        6709,
+        33694
+      ],
+      "idleAnimation": "Fishing"
+    }
+  ],
+  "sceneryRoster": []
+}

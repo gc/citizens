@@ -4,6 +4,7 @@ import java.util.Queue;
 
 public class ScriptFile {
 	public Queue<ScriptAction> actions;
+	public String name;
 
 	public ScriptAction nextAction() {
 		ScriptAction action = actions.poll();

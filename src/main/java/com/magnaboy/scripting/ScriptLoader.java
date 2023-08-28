@@ -2,15 +2,8 @@ package com.magnaboy.scripting;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.magnaboy.Util;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+
+import java.io.*;
 import java.util.HashMap;
 
 public final class ScriptLoader {
@@ -23,7 +16,6 @@ public final class ScriptLoader {
 	public static ScriptFile loadScript(String scriptName) {
 		ScriptFile script;
 		if (scriptCache.containsKey(scriptName)) {
-			Util.log("Loaded Script: " + scriptName + " from cache");
 			script = scriptCache.get(scriptName);
 			return script;
 		}
@@ -32,22 +24,18 @@ public final class ScriptLoader {
 		try {
 			inputStream = new FileInputStream(SCRIPTS_DIRECTORY + File.separator + scriptName + ".json");
 		} catch (FileNotFoundException e) {
-			Util.log("Script: " + scriptName + ".json not found");
 			return null;
 		}
 
 		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 			Gson gson = new GsonBuilder().create();
 			script = gson.fromJson(reader, ScriptFile.class);
-			if (script == null) {
-				Util.log("Script file found but didn't deserialize");
-			}
 			scriptCache.put(scriptName, script);
 		} catch (IOException e) {
-			Util.log("Script Loading Error: " + e.getMessage());
+			System.out.println("Script Loading Error: " + e.getMessage());
 			return null;
 		}
-		Util.log("Loaded Script: " + scriptName + " from file");
+		script.name = scriptName;
 		return script;
 	}
 }

@@ -1,0 +1,53 @@
+{
+    "version": 0.8,
+    "regionId": 13109,
+    "citizenRoster": [
+        {
+            "name": "City workman",
+            "examineText": "Working hard.",
+            "remarks": [
+                "These rocks just won\u0027t go away...",
+                "My mining level isn\u0027t the highest...",
+                "Hey you! Help me out!"
+            ],
+            "moveAnimation": "HumanWalk",
+            "uuid": "daea7034-881f-4bfd-a1f4-c735a5196610",
+            "regionId": 13109,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3268,
+                "y": 3426,
+                "plane": 0
+            },
+            "modelIds": [
+                230,
+                247,
+                295,
+                151,
+                179,
+                254,
+                185,
+                509
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                43059,
+                8596,
+                6798,
+                16,
+                8090,
+                25238
+            ],
+            "modelRecolorReplace": [
+                7091,
+                4510,
+                4510,
+                7091,
+                11185,
+                43173
+            ],
+            "idleAnimation": "Mining"
+        }
+    ],
+    "sceneryRoster": []
+}

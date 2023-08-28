@@ -1,52 +1,43 @@
 package com.magnaboy;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import net.runelite.api.AABB;
-import net.runelite.api.Client;
-import net.runelite.api.GameObject;
-import net.runelite.api.Model;
-import net.runelite.api.ModelData;
-import net.runelite.api.Perspective;
-import static net.runelite.api.Perspective.COSINE;
-import static net.runelite.api.Perspective.SINE;
-import net.runelite.api.Player;
-import net.runelite.api.RuneLiteObject;
-import net.runelite.api.Scene;
-import net.runelite.api.Tile;
+import lombok.Getter;
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.api.model.Jarvis;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static net.runelite.api.Perspective.COSINE;
+import static net.runelite.api.Perspective.SINE;
+
 public class Entity<T extends Entity<T>> {
 	public Integer regionId;
-	public WorldPoint worldLocation;
 	public String name;
 	public String examine;
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
 	public float[] scale;
 	public float[] translate;
+	public List<MergedObject> mergedObjects = new ArrayList<>();
 	protected RuneLiteObject rlObject;
+	@Getter
 	protected EntityType entityType;
 	protected Integer baseOrientation;
 	protected UUID uuid;
+	@Getter
+	private WorldPoint worldLocation;
 	private int[] modelIDs;
 	private int[] recolorsToFind;
 	private int[] recolorsToReplace;
-	private SimplePolygon clickbox;
 	private Integer objectToRemove;
-	public List<MergedObject> mergedObjects = new ArrayList<>();
 
 	public Entity(CitizensPlugin plugin) {
 		this.plugin = plugin;
 		this.rlObject = plugin.client.createRuneLiteObject();
-	}
-
-	public boolean isCitizen() {
-		return entityType == EntityType.StationaryCitizen || entityType == EntityType.WanderingCitizen || entityType == EntityType.ScriptedCitizen;
 	}
 
 	protected static SimplePolygon calculateAABB(Client client, Model m, Integer jauOrient, int x, int y, int z, int zOff) {
@@ -129,6 +120,14 @@ public class Entity<T extends Entity<T>> {
 		}
 	}
 
+	public int getAnimationID() {
+		return rlObject.getAnimation().getId();
+	}
+
+	public boolean isCitizen() {
+		return entityType == EntityType.StationaryCitizen || entityType == EntityType.WanderingCitizen || entityType == EntityType.ScriptedCitizen;
+	}
+
 	public SimplePolygon getClickbox() {
 		LocalPoint location = getLocalLocation();
 		int zOff = Perspective.getTileHeight(plugin.client, location, plugin.client.getPlane());
@@ -139,8 +138,19 @@ public class Entity<T extends Entity<T>> {
 		return rlObject.getLocation();
 	}
 
-	public WorldPoint getWorldLocation() {
-		return this.worldLocation;
+	public int getOrientation() {
+		return rlObject.getOrientation();
+	}
+
+	public void setModel(Model model) {
+		rlObject.setModel(model);
+	}
+
+	public void setAnimation(int animationID) {
+		plugin.clientThread.invokeLater(() -> {
+			Animation anim = plugin.client.loadAnimation(animationID);
+			rlObject.setAnimation(anim);
+		});
 	}
 
 	public T setWorldLocation(WorldPoint location) {
@@ -209,7 +219,8 @@ public class Entity<T extends Entity<T>> {
 			throw new IllegalStateException("Tried to set null location");
 		}
 		rlObject.setLocation(location, getPlane());
-		setWorldLocation(WorldPoint.fromLocal(plugin.client, location));
+		WorldPoint wp = WorldPoint.fromLocal(plugin.client, location);
+		setWorldLocation(wp);
 		return (T) this;
 	}
 
@@ -223,7 +234,8 @@ public class Entity<T extends Entity<T>> {
 		}
 
 		float distanceFromPlayer = distanceToPlayer();
-		if (distanceFromPlayer > 50) {
+
+		if (distanceFromPlayer > Util.MAX_ENTITY_RENDER_DISTANCE) {
 			return false;
 		}
 
@@ -244,6 +256,7 @@ public class Entity<T extends Entity<T>> {
 		if (!rlObject.isActive()) {
 			return false;
 		}
+
 
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);
@@ -298,14 +311,15 @@ public class Entity<T extends Entity<T>> {
 		}
 
 		if (this.idleAnimationId != null && rlObject.getAnimation() == null) {
-			rlObject.setAnimation(plugin.getAnimation(this.idleAnimationId));
+			setAnimation((this.idleAnimationId).getId());
 		}
 
 		rlObject.setShouldLoop(true);
 	}
 
 	public String debugName() {
-		return "N:" + name + " T:" + entityType + " ID:" + uuid.toString().substring(0, 6);
+		float dist = distanceToPlayer();
+		return "N:" + name + " T:" + entityType + " ID:" + uuid.toString().substring(0, 6) + " D:" + dist;
 	}
 
 	public void validate() {
@@ -335,7 +349,14 @@ public class Entity<T extends Entity<T>> {
 		if (objectToRemove != null) {
 			removeOtherObjects();
 		}
-		rlObject.setActive(true);
+
+		if (idleAnimationId != null) {
+			setAnimation(idleAnimationId.getId());
+		}
+
+		plugin.clientThread.invokeLater(() -> {
+			rlObject.setActive(true);
+		});
 
 		if (plugin.IS_DEVELOPMENT) {
 			plugin.panel.update();
@@ -349,33 +370,32 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public boolean rotateObject(double intx, double inty) {
-		final int JAU_FULL_ROTATION = 2048;
+		if (intx == 0 && inty == 0) {
+			return true;
+		}
 		int targetOrientation = Util.radToJau(Math.atan2(intx, inty));
 		int currentOrientation = rlObject.getOrientation();
 
-		int dJau = (targetOrientation - currentOrientation) % JAU_FULL_ROTATION;
-
+		int dJau = (targetOrientation - currentOrientation) % Util.JAU_FULL_ROTATION;
 		if (dJau != 0) {
 			final int JAU_HALF_ROTATION = 1024;
 			final int JAU_TURN_SPEED = 32;
 			int dJauCW = Math.abs(dJau);
 
 			if (dJauCW > JAU_HALF_ROTATION) {
-				dJau = (currentOrientation - targetOrientation) % JAU_FULL_ROTATION;
+				dJau = (currentOrientation - targetOrientation) % Util.JAU_FULL_ROTATION;
 			} else if (dJauCW == JAU_HALF_ROTATION) {
 				dJau = dJauCW;
 			}
 
-			// only use the delta if it won't send up past the target
 			if (Math.abs(dJau) > JAU_TURN_SPEED) {
 				dJau = Integer.signum(dJau) * JAU_TURN_SPEED;
 			}
 
-			int newOrientation = (JAU_FULL_ROTATION + rlObject.getOrientation() + dJau) % JAU_FULL_ROTATION;
+			int newOrientation = (Util.JAU_FULL_ROTATION + rlObject.getOrientation() + dJau) % Util.JAU_FULL_ROTATION;
 
 			rlObject.setOrientation(newOrientation);
-
-			dJau = (targetOrientation - newOrientation) % JAU_FULL_ROTATION;
+			dJau = (targetOrientation - newOrientation) % Util.JAU_FULL_ROTATION;
 		}
 
 		return dJau == 0;
@@ -396,10 +416,6 @@ public class Entity<T extends Entity<T>> {
 	public T setRegion(int regionId) {
 		this.regionId = regionId;
 		return (T) this;
-	}
-
-	public EntityType getEntityType() {
-		return this.entityType;
 	}
 
 	@Override

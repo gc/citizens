@@ -1,12 +1,5 @@
 package com.magnaboy;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import javax.inject.Inject;
 import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import net.runelite.api.coords.LocalPoint;
@@ -20,9 +13,14 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
+import javax.inject.Inject;
+import java.awt.*;
+
 public class CitizensOverlay extends Overlay {
 	private final CitizensPlugin plugin;
 	private final ModelOutlineRenderer modelOutlineRenderer;
+
+	Font overheadFont = FontManager.getRunescapeBoldFont();
 
 	@Inject
 	public CitizensOverlay(CitizensPlugin plugin, ModelOutlineRenderer modelOutlineRenderer) {
@@ -33,7 +31,7 @@ public class CitizensOverlay extends Overlay {
 	}
 
 	private void renderText(Graphics2D graphics, LocalPoint lp, String text) {
-		if (!plugin.getConfig().showOverlay()) {
+		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
 		renderText(graphics, lp, text, new Color(0, 255, 3));
@@ -58,7 +56,7 @@ public class CitizensOverlay extends Overlay {
 		if (lp == null) {
 			return;
 		}
-		if (!plugin.getConfig().showOverlay()) {
+		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
 		final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
@@ -68,7 +66,7 @@ public class CitizensOverlay extends Overlay {
 	}
 
 	private void highlightTile(Graphics2D graphics, WorldPoint wp, Color color) {
-		if (!plugin.getConfig().showOverlay()) {
+		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
 		LocalPoint lp = LocalPoint.fromWorld(plugin.client, wp);
@@ -106,15 +104,9 @@ public class CitizensOverlay extends Overlay {
 			Color selectedColor = new Color(0, 255, 255, 200);
 			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
 			LocalPoint lp = LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition);
-			if (plugin.getConfig().showOverlay() && lp != null) {
+			if (plugin.IS_DEVELOPMENT && lp != null) {
 				renderText(graphics, lp, "Selected Tile", selectedColor);
 			}
-		}
-
-		WorldPoint bl = plugin.panel.wanderRegionBL;
-		WorldPoint tr = plugin.panel.wanderRegionTR;
-		if (bl != null && tr != null) {
-			highlightRegion(graphics, bl, tr, bl.getPlane(), new Color(0, 255, 255, 20));
 		}
 
 		if (CitizenPanel.selectedEntity != null) {
@@ -122,24 +114,17 @@ public class CitizensOverlay extends Overlay {
 			modelOutlineRenderer.drawOutline(CitizenPanel.selectedEntity.rlObject, outlineWidth, Color.cyan, outlineWidth - 2);
 		}
 
-		CitizenRegion.forEachEntity((entity) -> {
-			if (entity == null || !(entity instanceof Citizen)) {
+		CitizenRegion.forEachActiveEntity((entity) -> {
+			if (!entity.isCitizen()) {
 				return;
 			}
 
 			Citizen citizen = (Citizen) entity;
 			LocalPoint localLocation = citizen.getLocalLocation();
 
-			if (!citizen.isActive() || !citizen.shouldRender() || localLocation == null) {
+			if (!citizen.shouldRender() || localLocation == null) {
 				return;
 			}
-
-			// Render generic marker for debugging
-			highlightTile(graphics, localLocation, new Color(0, 255, 0, 255 / 2));
-			highlightTile(graphics, citizen.getWorldLocation(), new Color(0, 255, 0, 255 / 2));
-			String debugText =
-				citizen.name + " D:" + citizen.distanceToPlayer() + " MH:" + citizen.rlObject.getModelHeight();
-			renderText(graphics, localLocation, debugText);
 
 			// Render remarks
 			if (citizen.activeRemark != null) {
@@ -148,7 +133,6 @@ public class CitizensOverlay extends Overlay {
 					.getPlane(), citizen
 					.rlObject.getModelHeight());
 				if (p != null) {
-					Font overheadFont = FontManager.getRunescapeBoldFont();
 					graphics.setFont(overheadFont);
 					FontMetrics metrics = graphics.getFontMetrics(overheadFont);
 					Point shiftedP = new Point(p.getX() - (metrics.stringWidth(citizen.activeRemark) / 2), p.getY());
@@ -157,17 +141,18 @@ public class CitizensOverlay extends Overlay {
 				}
 			}
 
-			// For wandering citizens, highlight their wandering area.
-			if (citizen instanceof WanderingCitizen) {
-				WorldArea boundingBox = ((WanderingCitizen) citizen).boundingBox;
-				Color color = new Color(0, 0, 255, 5);
-				highlightRegion(graphics, boundingBox, citizen.getPlane(), color);
-			}
-
-			// If the citizen has a walking target, mark it.
-			if (citizen.currentTarget != null) {
-				Citizen.Target target = ((Citizen<WanderingCitizen>.Target) citizen.currentTarget);
-				if (target.localDestinationPosition != null) {
+			if (plugin.IS_DEVELOPMENT && citizen.distanceToPlayer() < 15) {
+				String extraString = "";
+				if (citizen.entityType == EntityType.ScriptedCitizen) {
+					ScriptedCitizen scriptedCitizen = (ScriptedCitizen) citizen;
+					if (scriptedCitizen.currentAction != null && scriptedCitizen.currentAction.action != null) {
+						extraString = scriptedCitizen.currentAction.action + " ";
+					}
+				}
+				String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModelHeight() + " ";
+				renderText(graphics, localLocation, debugText, JagexColors.YELLOW_INTERFACE_TEXT);
+				Citizen.Target target = citizen.getCurrentTarget();
+				if (target != null) {
 					highlightTile(graphics, target.localDestinationPosition, new Color(235, 150, 52));
 				}
 			}

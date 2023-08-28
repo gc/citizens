@@ -1,30 +1,21 @@
 package com.magnaboy;
 
-import static com.magnaboy.Util.worldPointToShortCoord;
 import com.magnaboy.serialization.CitizenInfo;
 import com.magnaboy.serialization.SceneryInfo;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.util.HashSet;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.util.HashSet;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.magnaboy.Util.worldPointToShortCoord;
 
 class CitizenPanel extends PluginPanel {
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
@@ -108,7 +99,6 @@ class CitizenPanel extends PluginPanel {
 		});
 
 		int totalEntities = activeEntities.get() + inactiveEntities.get();
-
 		label.setText(activeEntities + "/" + totalEntities + " entities are active");
 
 		UpdateEditorFields();
@@ -130,8 +120,8 @@ class CitizenPanel extends PluginPanel {
 		spawnButton.setEnabled(state == GameState.LOGGED_IN && valid);
 		spawnButton.setText(spawnButton.isEnabled() ? "Spawn Entity" : "Can't Spawn: " + errorMessage);
 
-		saveChangesButton.setEnabled(dirtySize > 0);
-		saveChangesButton.setText(dirtySize > 0 ? "Save Changes" : "Nothing To Save");
+		saveChangesButton.setEnabled(true);
+		saveChangesButton.setText("Save Changes");
 
 		if (selectedEntity != null && !CitizenPanel.selectedEntity.isActive()) {
 			selectedEntity = null;
@@ -154,9 +144,9 @@ class CitizenPanel extends PluginPanel {
 	}
 
 	private String validateFields() {
-		if (selectedPosition == null) {
-			return "No Position Selected";
-		}
+//		if (selectedPosition == null) {
+//			return "No Position Selected";
+//		}
 
 		EntityType selectedType = (EntityType) entityTypeSelection.getSelectedItem();
 
@@ -217,8 +207,9 @@ class CitizenPanel extends PluginPanel {
 
 			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
-				CitizenRegion.cleanUp();
-				plugin.cleanup();
+				plugin.shutDown();
+				plugin.startUp();
+				UpdateEditorFields();
 			});
 			layoutPanel.add(reloadButton, gbc);
 
@@ -452,10 +443,19 @@ class CitizenPanel extends PluginPanel {
 			updateButton.setText("Update Entity");
 			updateButton.setFocusable(false);
 			updateButton.addActionListener(e -> {
-				CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
-				if (selectedEntity != null) {
-					info.uuid = selectedEntity.uuid;
-					CitizenRegion.updateEntity(info);
+				if (selectedEntity.isCitizen()) {
+					CitizenInfo info = buildCitizenInfo(selectedEntity.regionId);
+					if (selectedEntity != null) {
+						info.uuid = selectedEntity.uuid;
+						CitizenRegion.updateEntity(info);
+					}
+				} else if (selectedEntity.entityType == EntityType.Scenery) {
+					SceneryInfo info = buildSceneryInfo();
+					if (selectedEntity != null) {
+
+						info.uuid = selectedEntity.uuid;
+						CitizenRegion.updateEntity(info);
+					}
 				}
 
 				update();

@@ -1,8 +1,12 @@
 package com.magnaboy;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 
+@Getter
 public enum CardinalDirection {
+	SouthEast(1792),
 	South(0),
 	SouthWest(256),
 	West(512),
@@ -28,7 +32,4 @@ public enum CardinalDirection {
 		return i == null ? CardinalDirection.South : intToType.get(i);
 	}
 
-	public int getAngle() {
-		return this.angle;
-	}
 }

@@ -1,0 +1,47 @@
+{
+    "version": 0.8,
+    "regionId": 11577,
+    "citizenRoster": [
+        {
+            "name": "Lost troll",
+            "examineText": "Doesn\u0027t know where he is.",
+            "moveAnimation": "TrollWalk",
+            "wanderBoxBL": {
+                "x": 2887,
+                "y": 3674,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2890,
+                "y": 3678,
+                "plane": 0
+            },
+            "uuid": "0f00d012-c189-4625-b29c-c05b4130b149",
+            "regionId": 11577,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2890,
+                "y": 3678,
+                "plane": 0
+            },
+            "modelIds": [
+                4942,
+                6239,
+                3756
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                61,
+                21570,
+                10355
+            ],
+            "modelRecolorReplace": [
+                8478,
+                7580,
+                7768
+            ],
+            "idleAnimation": "TrollIdle"
+        }
+    ],
+    "sceneryRoster": []
+}
