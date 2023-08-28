@@ -45,7 +45,9 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	}
 
 	private void refreshExecutor() {
-		if (!isActive()) return;
+		if (!isActive()) {
+			return;
+		}
 		if (scriptExecutor == null || scriptExecutor.isShutdown()) {
 			scriptExecutor = Executors.newSingleThreadExecutor();
 			// When script restarts, make them walk to start location?

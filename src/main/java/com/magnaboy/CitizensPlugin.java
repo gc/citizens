@@ -167,7 +167,9 @@ public class CitizensPlugin extends Plugin {
 		Point mousePos = client.getMouseCanvasPosition();
 		final AtomicBoolean[] clickedCitizen = {new AtomicBoolean(false)};
 		CitizenRegion.forEachActiveEntity(entity -> {
-			if (entity.entityType == EntityType.Scenery && !IS_DEVELOPMENT) return;
+			if (entity.entityType == EntityType.Scenery && !IS_DEVELOPMENT) {
+				return;
+			}
 			if ((entity.name != null && entity.examine != null) || IS_DEVELOPMENT) {
 				SimplePolygon clickbox;
 				try {

@@ -367,7 +367,9 @@ public class CitizenRegion {
 
 		for (int i = 0; i < selectedCount; i++) {
 			Entity entity = entityList.get(i);
-			if (!entity.isActive()) continue;
+			if (!entity.isActive()) {
+				continue;
+			}
 			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelayMillis), TimeUnit.MILLISECONDS);
 		}
 	}
