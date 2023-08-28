@@ -4,7 +4,7 @@
 
 This plugin adds a lot of NPCs (citizens) around runescape to make the world feel more alive.
 
-# Guidelines
+# Guidelines For Adding Citizens
 
 1. Citizens should 'fit in' with runescape, and look natural for the area that they're in (e.g. no zalcano standing in
    varrock square).

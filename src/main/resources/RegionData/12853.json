@@ -436,7 +436,9 @@
             "name": "Pryce",
             "examineText": "He\u0027s not having a good day.",
             "remarks": [
-                "Woe is me..."
+                "Woe is me...",
+                "I thought my plan was flawless...",
+                "I didn't think we'd get caught..."
             ],
             "uuid": "6b4cbab3-e8c4-46bd-bcd5-a20a3157fbca",
             "regionId": 12853,
@@ -996,7 +998,12 @@
             "name": "Toren",
             "examineText": "A citizen of Varrock.",
             "remarks": [
-                "He should be here by now..."
+                "He should be here by now...",
+                "He's always late...",
+                "Tick tock...",
+                "Places to go, things to do.",
+                "I'm not waiting around all day...",
+                "Well... I guess I'll wait a little longer..."
             ],
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {

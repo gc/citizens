@@ -31,7 +31,7 @@ public class CitizensOverlay extends Overlay {
 	}
 
 	private void renderText(Graphics2D graphics, LocalPoint lp, String text) {
-		if (!plugin.getConfig().showOverlay()) {
+		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
 		renderText(graphics, lp, text, new Color(0, 255, 3));
@@ -56,7 +56,7 @@ public class CitizensOverlay extends Overlay {
 		if (lp == null) {
 			return;
 		}
-		if (!plugin.getConfig().showOverlay()) {
+		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
 		final Polygon poly = Perspective.getCanvasTilePoly(plugin.client, lp);
@@ -66,7 +66,7 @@ public class CitizensOverlay extends Overlay {
 	}
 
 	private void highlightTile(Graphics2D graphics, WorldPoint wp, Color color) {
-		if (!plugin.getConfig().showOverlay()) {
+		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
 		LocalPoint lp = LocalPoint.fromWorld(plugin.client, wp);
@@ -104,7 +104,7 @@ public class CitizensOverlay extends Overlay {
 			Color selectedColor = new Color(0, 255, 255, 200);
 			highlightTile(graphics, CitizenPanel.selectedPosition, selectedColor);
 			LocalPoint lp = LocalPoint.fromWorld(plugin.client, CitizenPanel.selectedPosition);
-			if (plugin.getConfig().showOverlay() && lp != null) {
+			if (plugin.IS_DEVELOPMENT && lp != null) {
 				renderText(graphics, lp, "Selected Tile", selectedColor);
 			}
 		}
