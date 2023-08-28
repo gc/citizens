@@ -120,8 +120,8 @@ class CitizenPanel extends PluginPanel {
 		spawnButton.setEnabled(state == GameState.LOGGED_IN && valid);
 		spawnButton.setText(spawnButton.isEnabled() ? "Spawn Entity" : "Can't Spawn: " + errorMessage);
 
-		saveChangesButton.setEnabled(dirtySize > 0);
-		saveChangesButton.setText(dirtySize > 0 ? "Save Changes" : "Nothing To Save");
+		saveChangesButton.setEnabled(true);
+		saveChangesButton.setText("Save Changes");
 
 		if (selectedEntity != null && !CitizenPanel.selectedEntity.isActive()) {
 			selectedEntity = null;
@@ -144,9 +144,9 @@ class CitizenPanel extends PluginPanel {
 	}
 
 	private String validateFields() {
-		if (selectedPosition == null) {
-			return "No Position Selected";
-		}
+//		if (selectedPosition == null) {
+//			return "No Position Selected";
+//		}
 
 		EntityType selectedType = (EntityType) entityTypeSelection.getSelectedItem();
 
@@ -209,6 +209,7 @@ class CitizenPanel extends PluginPanel {
 				selectedEntity = null;
 				plugin.shutDown();
 				plugin.startUp();
+				UpdateEditorFields();
 			});
 			layoutPanel.add(reloadButton, gbc);
 

@@ -221,7 +221,6 @@ public class Entity<T extends Entity<T>> {
 		rlObject.setLocation(location, getPlane());
 		WorldPoint wp = WorldPoint.fromLocal(plugin.client, location);
 		setWorldLocation(wp);
-//		log("Set Location: " + location + " " + wp);
 		return (T) this;
 	}
 

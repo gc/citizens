@@ -1,46 +1,46 @@
 {
-  "version": 0.8,
-  "regionId": 12083,
-  "citizenRoster": [
-    {
-      "name": "Brassican Mage",
-      "examineText": "Rather old and smells of cabbage.",
-      "moveAnimation": "HumanWalk",
-      "wanderBoxBL": {
-        "x": 3047,
-        "y": 3288,
-        "plane": 0
-      },
-      "wanderBoxTR": {
-        "x": 3063,
-        "y": 3295,
-        "plane": 0
-      },
-      "uuid": "ce85a266-2fd1-4ae9-82a4-327be70749d3",
-      "regionId": 12083,
-      "entityType": "WanderingCitizen",
-      "worldLocation": {
-        "x": 3063,
-        "y": 3295,
-        "plane": 0
-      },
-      "modelIds": [
-        31794,
-        214,
-        250,
-        31805,
-        31797,
-        177,
-        31783,
-        181,
-        31911,
-        31889
-      ],
-      "baseOrientation": 512,
-      "modelRecolorFind": [],
-      "modelRecolorReplace": [],
-      "idleAnimation": "HumanIdle"
-    }
-  ],
-  "sceneryRoster": []
+    "version": 0.8,
+    "regionId": 12083,
+    "citizenRoster": [
+        {
+            "name": "Brassican Mage",
+            "examineText": "Rather old and smells of cabbage.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3047,
+                "y": 3288,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3063,
+                "y": 3295,
+                "plane": 0
+            },
+            "uuid": "ce85a266-2fd1-4ae9-82a4-327be70749d3",
+            "regionId": 12083,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3063,
+                "y": 3295,
+                "plane": 0
+            },
+            "modelIds": [
+                31794,
+                214,
+                250,
+                31805,
+                31797,
+                177,
+                31783,
+                181,
+                31911,
+                31889
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
 }

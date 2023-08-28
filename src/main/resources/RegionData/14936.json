@@ -1,0 +1,32 @@
+{
+  "version": 0.8,
+  "regionId": 14936,
+  "citizenRoster": [
+    {
+      "name": "Draug",
+      "examineText": "A dwarf.",
+      "moveAnimation": "HumanWalk",
+      "uuid": "f53ec9a2-5ce3-4a2f-a63b-b371d6e38ebc",
+      "regionId": 14936,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3746,
+        "y": 5676,
+        "plane": 0
+      },
+      "modelIds": [
+        2970,
+        2981,
+        2979,
+        2983,
+        2985,
+        2990
+      ],
+      "baseOrientation": 1024,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "DwarfMining"
+    }
+  ],
+  "sceneryRoster": []
+}
