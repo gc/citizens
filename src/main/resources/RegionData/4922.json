@@ -1,0 +1,37 @@
+{
+  "version": 0.8,
+  "regionId": 4922,
+  "citizenRoster": [
+    {
+      "name": "Twiggles",
+      "examineText": "The Tangleroot pet of Jane.",
+      "moveAnimation": "TanglerootWalk",
+      "wanderBoxBL": {
+        "x": 1247,
+        "y": 3731,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 1250,
+        "y": 3741,
+        "plane": 0
+      },
+      "uuid": "d8e35623-105f-43f2-9998-578b3417c178",
+      "regionId": 4922,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 1250,
+        "y": 3741,
+        "plane": 0
+      },
+      "modelIds": [
+        39571
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "TanglerootIdle"
+    }
+  ],
+  "sceneryRoster": []
+}

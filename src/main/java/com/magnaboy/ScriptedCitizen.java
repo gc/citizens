@@ -39,7 +39,9 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	@Override
 	public boolean despawn() {
-		scriptExecutor.shutdownNow();
+		if (scriptExecutor != null) {
+			scriptExecutor.shutdownNow();
+		}
 		return super.despawn();
 	}
 

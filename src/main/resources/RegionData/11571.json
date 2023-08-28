@@ -1,0 +1,41 @@
+{
+    "version": 0.8,
+    "regionId": 11571,
+    "citizenRoster": [
+        {
+            "name": "Craftsman Jim",
+            "examineText": "A man who crafts.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "4576a1ca-90fa-48dc-9042-f4bf4e4260ce",
+            "regionId": 11571,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 2935,
+                "y": 3282,
+                "plane": 0
+            },
+            "modelIds": [
+                214,
+                247,
+                302,
+                173,
+                179,
+                254,
+                185
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [
+                25238,
+                6798,
+                8741
+            ],
+            "modelRecolorReplace": [
+                8472,
+                7236,
+                61
+            ],
+            "idleAnimation": "Think"
+        }
+    ],
+    "sceneryRoster": []
+}

@@ -236,7 +236,7 @@ public class CitizenRegion {
 
 	public static Scenery spawnSceneryFromPanel(SceneryInfo info) {
 		Scenery scenery = loadScenery(plugin, info);
-		CitizenRegion region = regionCache.get(info.regionId);
+		CitizenRegion region = loadRegion(info.regionId, true);
 		region.entities.put(info.uuid, scenery);
 		region.sceneryRoster.add(info);
 		dirtyRegion(region);

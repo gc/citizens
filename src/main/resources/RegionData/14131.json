@@ -1,0 +1,206 @@
+{
+  "version": 0.8,
+  "regionId": 14131,
+  "citizenRoster": [
+    {
+      "name": "Dharok the Wretched",
+      "examineText": "The ghost of Dharok the Wretched.",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3572,
+        "y": 3294,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3578,
+        "y": 3301,
+        "plane": 0
+      },
+      "uuid": "cf1b6b28-f503-4901-9077-40aeda080fe5",
+      "regionId": 14131,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3578,
+        "y": 3301,
+        "plane": 0
+      },
+      "modelIds": [
+        6652,
+        6671,
+        6640,
+        6661,
+        6703,
+        6679
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Ahrim the Blighted",
+      "examineText": "The ghost of Ahrim the Blighted.",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3562,
+        "y": 3286,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3566,
+        "y": 3291,
+        "plane": 0
+      },
+      "uuid": "d78ce759-d6ca-43ba-ba38-3af7d181c436",
+      "regionId": 14131,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3566,
+        "y": 3291,
+        "plane": 0
+      },
+      "modelIds": [
+        6668
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Torag the Corrupted",
+      "examineText": "The ghost of Torag the Corrupted.",
+      "remarks": [],
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3551,
+        "y": 3280,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3555,
+        "y": 3284,
+        "plane": 0
+      },
+      "uuid": "8b8d70ef-f890-4fdd-bc67-23549a7dabe1",
+      "regionId": 14131,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3555,
+        "y": 3284,
+        "plane": 0
+      },
+      "modelIds": [
+        6657,
+        6677,
+        6645,
+        6663,
+        6708,
+        6679
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Verac the Defiled",
+      "examineText": "The ghost of Verac the Defiled.",
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3555,
+        "y": 3295,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3558,
+        "y": 3300,
+        "plane": 0
+      },
+      "uuid": "65a7afe5-950c-4031-9453-41d8d5f68a07",
+      "regionId": 14131,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3558,
+        "y": 3300,
+        "plane": 0
+      },
+      "modelIds": [
+        6678,
+        6705
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Karil the Tainted",
+      "examineText": "The ghost of Karil the Tainted.",
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3563,
+        "y": 3273,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3567,
+        "y": 3278,
+        "plane": 0
+      },
+      "uuid": "ce292e57-cdc3-4132-9a8f-01c139903a50",
+      "regionId": 14131,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3567,
+        "y": 3278,
+        "plane": 0
+      },
+      "modelIds": [
+        6675
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    },
+    {
+      "name": "Guthan the Infested",
+      "examineText": "The ghost of Guthan the Infested.",
+      "moveAnimation": "HumanWalk",
+      "wanderBoxBL": {
+        "x": 3575,
+        "y": 3280,
+        "plane": 0
+      },
+      "wanderBoxTR": {
+        "x": 3579,
+        "y": 3285,
+        "plane": 0
+      },
+      "uuid": "976bfe11-b438-412a-ad26-57615c673017",
+      "regionId": 14131,
+      "entityType": "WanderingCitizen",
+      "worldLocation": {
+        "x": 3579,
+        "y": 3285,
+        "plane": 0
+      },
+      "modelIds": [
+        6654,
+        6673,
+        6642,
+        6666,
+        6679,
+        6710
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    }
+  ],
+  "sceneryRoster": []
+}

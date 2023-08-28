@@ -144,7 +144,10 @@ public class CitizensOverlay extends Overlay {
 			if (plugin.IS_DEVELOPMENT && citizen.distanceToPlayer() < 15) {
 				String extraString = "";
 				if (citizen.entityType == EntityType.ScriptedCitizen) {
-					extraString = ((ScriptedCitizen) citizen).currentAction.action.toString() + " ";
+					ScriptedCitizen scriptedCitizen = (ScriptedCitizen) citizen;
+					if (scriptedCitizen.currentAction != null && scriptedCitizen.currentAction.action != null) {
+						extraString = scriptedCitizen.currentAction.action + " ";
+					}
 				}
 				String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModelHeight() + " ";
 				renderText(graphics, localLocation, debugText, JagexColors.YELLOW_INTERFACE_TEXT);

@@ -32,6 +32,7 @@ public enum AnimationID {
 	LayingDown(838),
 	HumanLook(2713),
 	WateringCanPour(2293),
+	Fishing(622),
 
 	ChildStarJump(218),
 	ChildPlay1(6484),
@@ -42,6 +43,9 @@ public enum AnimationID {
 	SuzieIdle(10060),
 	LectorIdle(5875),
 	LectorWalk(5876),
+
+	FallenManDead(6280),
+	FallenManIdle(6282),
 
 	// Non-human
 	FireIdle(475),
@@ -57,6 +61,15 @@ public enum AnimationID {
 	RiftGuardianIdle(7307),
 	RiftGuardianWalk(7306),
 	RiftGuardianSit(9397),
+
+	CowIdle(180),
+	CowWalk(229),
+
+	TanglerootIdle(7312),
+	TanglerootWalk(7313),
+
+	TrollIdle(286),
+	TrollWalk(283),
 
 	DwarfLean(6206),
 	DwarfWalk(98),

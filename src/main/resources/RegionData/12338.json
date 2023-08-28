@@ -1,0 +1,56 @@
+{
+  "version": 0.8,
+  "regionId": 12338,
+  "citizenRoster": [
+    {
+      "name": "Sailor",
+      "examineText": "A sailor.",
+      "moveAnimation": "HumanWalk",
+      "uuid": "9d08b31b-abf9-4beb-ab95-5b25079190a9",
+      "regionId": 12338,
+      "entityType": "StationaryCitizen",
+      "worldLocation": {
+        "x": 3099,
+        "y": 3260,
+        "plane": 0
+      },
+      "modelIds": [
+        211,
+        236,
+        249,
+        41802,
+        41801,
+        3660,
+        259
+      ],
+      "baseOrientation": 0,
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "Sitting"
+    }
+  ],
+  "sceneryRoster": [
+    {
+      "uuid": "4e2be834-2853-4a57-955e-7e0bdfd38733",
+      "regionId": 12338,
+      "entityType": "Scenery",
+      "worldLocation": {
+        "x": 3101,
+        "y": 3259,
+        "plane": 0
+      },
+      "modelIds": [
+        19268
+      ],
+      "baseOrientation": 512,
+      "translate": [
+        0.0,
+        0.6,
+        0.0
+      ],
+      "modelRecolorFind": [],
+      "modelRecolorReplace": [],
+      "idleAnimation": "HumanIdle"
+    }
+  ]
+}

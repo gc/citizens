@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 @Getter
 public enum CardinalDirection {
+	SouthEast(1792),
 	South(0),
 	SouthWest(256),
 	West(512),
