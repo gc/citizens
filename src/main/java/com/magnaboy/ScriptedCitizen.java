@@ -1,6 +1,7 @@
 package com.magnaboy;
 
 import com.magnaboy.Util.AnimData;
+import com.magnaboy.scripting.ActionType;
 import com.magnaboy.scripting.ScriptAction;
 import com.magnaboy.scripting.ScriptFile;
 import com.magnaboy.scripting.ScriptLoader;
@@ -14,6 +15,8 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ExecutorService scriptExecutor;
 	public ScriptAction currentAction;
 
+	public WorldPoint baseLocation;
+
 	public ScriptedCitizen(CitizensPlugin plugin) {
 		super(plugin);
 		entityType = EntityType.ScriptedCitizen;
@@ -21,10 +24,8 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void submitAction(ScriptAction action, Runnable task) {
 		scriptExecutor.submit(() -> {
-			long startTime = System.currentTimeMillis();
 			this.currentAction = action;
 			task.run();
-			long endTime = System.currentTimeMillis();
 		});
 	}
 
@@ -33,7 +34,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 			return this;
 		}
 		this.script = ScriptLoader.loadScript(scriptName);
-		buildRoutine();
 		return this;
 	}
 
@@ -46,6 +46,13 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void refreshExecutor() {
 		if (!isActive()) return;
 		if (scriptExecutor == null || scriptExecutor.isShutdown()) {
+			scriptExecutor = Executors.newSingleThreadExecutor();
+			// When script restarts, make them walk to start location?
+			ScriptAction walkAction = new ScriptAction();
+			walkAction.action = ActionType.WalkTo;
+			walkAction.targetPosition = baseLocation;
+			walkAction.secondsTilNextAction = 0f;
+			addWalkAction(walkAction);
 			buildRoutine();
 		}
 	}
@@ -67,7 +74,6 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		if (script == null) {
 			return;
 		}
-		scriptExecutor = Executors.newSingleThreadExecutor();
 
 		for (ScriptAction action : script.actions) {
 			addAction(action);

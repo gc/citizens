@@ -164,6 +164,8 @@ public class CitizenRegion {
 		initCitizenInfo(citizen, info);
 		citizen.setWorldLocation(info.worldLocation)
 			.setScript(info.startScript);
+
+		citizen.baseLocation = info.worldLocation;
 		return citizen;
 	}
 
