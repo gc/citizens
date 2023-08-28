@@ -12,26 +12,12 @@ import java.util.List;
 import static com.magnaboy.Util.getRandomItem;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
-	private final Client client;
-	public final CitizensPlugin plugin;
-
-	@Nullable
-	public String activeRemark = null;
-	private int remarkTimer = 0;
-
-	private final List<Target> targetQueue = new ArrayList<>();
-
-	public String[] remarks;
-	@Nullable
-	public AnimationID movingAnimationId = AnimationID.HumanWalk;
-
 	private static final int[][] BLOCKING_DIRECTIONS_5x5 = {
 		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
 		{CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_SOUTH_WEST},
 		{CollisionDataFlag.BLOCK_MOVEMENT_EAST, CollisionDataFlag.BLOCK_MOVEMENT_EAST, 0, CollisionDataFlag.BLOCK_MOVEMENT_WEST, CollisionDataFlag.BLOCK_MOVEMENT_WEST},
 		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST},
 		{CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_EAST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST, CollisionDataFlag.BLOCK_MOVEMENT_NORTH_WEST}};
-
 	private static final int[][] JAU_DIRECTIONS_5X5 = {
 		{768, 768, 1024, 1280, 1280},
 		{768, 768, 1024, 1280, 1280},
@@ -39,26 +25,15 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 		{256, 256, 0, 1792, 1792},
 		{256, 256, 0, 1792, 1792}};
 	private static final int CENTER_INDEX_5X5 = 2;
-
-
-	public static class Target {
-		public WorldPoint worldDestinationPosition;
-		public LocalPoint localDestinationPosition;
-		public int jauDestinationOrientation;
-		public boolean isPoseAnimation;
-		public boolean isInteracting;
-
-		@Override
-		public String toString() {
-			return "Target{" +
-				"worldDestinationPosition=" + worldDestinationPosition +
-				", localDestinationPosition=" + localDestinationPosition +
-				", jauDestinationOrientation=" + jauDestinationOrientation +
-				", isPoseAnimation=" + isPoseAnimation +
-				", isInteracting=" + isInteracting +
-				'}';
-		}
-	}
+	public final CitizensPlugin plugin;
+	private final Client client;
+	private final List<Target> targetQueue = new ArrayList<>();
+	@Nullable
+	public String activeRemark = null;
+	public String[] remarks;
+	@Nullable
+	public AnimationID movingAnimationId = AnimationID.HumanWalk;
+	private int remarkTimer = 0;
 
 
 	public Citizen(CitizensPlugin plugin) {
@@ -310,5 +285,24 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 
 	public void stopMoving() {
 		setAnimation(idleAnimationId.getId());
+	}
+
+	public static class Target {
+		public WorldPoint worldDestinationPosition;
+		public LocalPoint localDestinationPosition;
+		public int jauDestinationOrientation;
+		public boolean isPoseAnimation;
+		public boolean isInteracting;
+
+		@Override
+		public String toString() {
+			return "Target{" +
+				"worldDestinationPosition=" + worldDestinationPosition +
+				", localDestinationPosition=" + localDestinationPosition +
+				", jauDestinationOrientation=" + jauDestinationOrientation +
+				", isPoseAnimation=" + isPoseAnimation +
+				", isInteracting=" + isInteracting +
+				'}';
+		}
 	}
 }
