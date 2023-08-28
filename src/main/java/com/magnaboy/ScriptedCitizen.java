@@ -43,15 +43,23 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		return super.despawn();
 	}
 
+	private void refreshExecutor() {
+		if (!isActive()) return;
+		if (scriptExecutor == null || scriptExecutor.isShutdown()) {
+			buildRoutine();
+		}
+	}
+
 	public boolean spawn() {
 		boolean didSpawn = super.spawn();
-		if ((scriptExecutor == null && scriptExecutor.isShutdown()) && didSpawn) {
-			buildRoutine();
+		if (didSpawn) {
+			refreshExecutor();
 		}
 		return didSpawn;
 	}
 
 	public void update() {
+		refreshExecutor();
 		super.update();
 	}
 
