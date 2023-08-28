@@ -1,0 +1,48 @@
+{
+  "version": 0.8,
+  "regionId": 12850,
+  "citizenRoster": [
+    {
+      "name": "Mike",
+      "examineText": "A gardener.",
+      "moveAnimation": "HumanWalk",
+      "uuid": "8fcb62b4-b275-49e8-8e89-b68c02b998fe",
+      "regionId": 12850,
+      "entityType": "ScriptedCitizen",
+      "worldLocation": {
+        "x": 3225,
+        "y": 3227,
+        "plane": 0
+      },
+      "modelIds": [
+        230,
+        251,
+        292,
+        4391,
+        170,
+        179,
+        254,
+        183,
+        7368,
+        4843,
+        11812
+      ],
+      "baseOrientation": 1536,
+      "modelRecolorFind": [
+        4550,
+        8741,
+        25238,
+        123
+      ],
+      "modelRecolorReplace": [
+        3507,
+        16026,
+        37394,
+        5572
+      ],
+      "idleAnimation": "HumanIdle",
+      "startScript": "lumbridgeGardenerScript"
+    }
+  ],
+  "sceneryRoster": []
+}

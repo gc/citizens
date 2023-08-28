@@ -7,9 +7,7 @@ import com.magnaboy.scripting.ScriptLoader;
 import net.runelite.api.coords.WorldPoint;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
 
 public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private ScriptFile script;
@@ -47,14 +45,13 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	public boolean spawn() {
 		boolean didSpawn = super.spawn();
-		if (scriptExecutor.isShutdown() && didSpawn) {
+		if ((scriptExecutor == null && scriptExecutor.isShutdown()) && didSpawn) {
 			buildRoutine();
 		}
 		return didSpawn;
 	}
 
 	public void update() {
-
 		super.update();
 	}
 
@@ -62,7 +59,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		if (script == null) {
 			return;
 		}
-		scriptExecutor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+		scriptExecutor = Executors.newSingleThreadExecutor();
 
 		for (ScriptAction action : script.actions) {
 			addAction(action);
@@ -103,13 +100,15 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 
 	private void addWalkAction(ScriptAction action) {
 		submitAction(action, () -> {
+			int tilesToWalk = action.targetPosition.distanceTo2D(getWorldLocation()) + 1;
+			sleep(tilesToWalk * 100);
 			plugin.clientThread.invokeLater(() -> {
 				moveTo(action.targetPosition, action.targetRotation == null ? null : action.targetRotation.getAngle(),
 					false, false);
 			});
 			while (!getWorldLocation().equals(action.targetPosition) ||
 				getAnimationID() != idleAnimationId.getId() ||
-				WorldPoint.fromLocal(plugin.client, getLocalLocation()).distanceTo2D(getWorldLocation()) > 1) {
+				WorldPoint.fromLocal(plugin.client, getLocalLocation()).distanceTo2D(getWorldLocation()) > 0) {
 				sleep();
 			}
 
@@ -120,13 +119,22 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	private void addRotateAction(ScriptAction action) {
 		submitAction(action, () -> {
 			rlObject.setOrientation(action.targetRotation.getAngle());
+			sleep(50);
+			while (rlObject.getOrientation() != action.targetRotation.getAngle()) {
+				sleep();
+				rlObject.setOrientation(action.targetRotation.getAngle());
+			}
 			setWait(action.secondsTilNextAction);
 		});
 	}
 
 	private void sleep() {
+		sleep(30);
+	}
+
+	private void sleep(int millis) {
 		try {
-			Thread.sleep(30);
+			Thread.sleep(millis);
 		} catch (InterruptedException e) {
 			// Ignored, because this happens if the citizen despawns.
 		}
