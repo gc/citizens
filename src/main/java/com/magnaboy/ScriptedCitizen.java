@@ -32,7 +32,7 @@ public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 		if (scriptName == null || scriptName.isEmpty()) {
 			return this;
 		}
-		this.script = ScriptLoader.loadScript(scriptName);
+		this.script = ScriptLoader.loadScript(plugin, scriptName);
 		return this;
 	}
 

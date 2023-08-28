@@ -1,6 +1,5 @@
 package com.magnaboy;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.runelite.api.Perspective;
 import net.runelite.api.coords.WorldArea;
@@ -16,18 +15,15 @@ public final class Util {
 	public final static int JAU_FULL_ROTATION = 2048;
 	public final static int MAX_ENTITY_RENDER_DISTANCE = 25;
 	private final static String animDataFilePath = "src/main/resources/animationData.json";
-	private static final Map<String, AnimData> animData;
 	public static Random rng = new Random();
+	private static Map<String, AnimData> animData;
 
-	static {
+	public static void initAnimationData(CitizensPlugin plugin) {
 		try {
-			animData = readAnimData();
+			animData = readAnimData(plugin);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	private Util() throws IOException {
 	}
 
 	public static int getRandom(int min, int max) {
@@ -88,11 +84,10 @@ public final class Util {
 		return animData.get(String.valueOf(id));
 	}
 
-	private static Map<String, AnimData> readAnimData() throws IOException {
-		Gson gson = new Gson();
+	private static Map<String, AnimData> readAnimData(CitizensPlugin plugin) throws IOException {
 		Type type = new TypeToken<Map<String, AnimData>>() {
 		}.getType();
-		Map<String, AnimData> map = gson.fromJson(new FileReader(animDataFilePath), type);
+		Map<String, AnimData> map = plugin.gson.fromJson(new FileReader(animDataFilePath), type);
 
 		return map;
 	}

@@ -1,5 +1,6 @@
 package com.magnaboy;
 
+import com.google.gson.Gson;
 import com.google.inject.Provides;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,6 @@ import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.temporal.ChronoUnit;
@@ -44,10 +44,11 @@ public class CitizensPlugin extends Plugin {
 	@Inject
 	public ClientThread clientThread;
 	public CitizenPanel panel;
-	@Inject
-	@Named("developerMode")
-	public boolean IS_DEVELOPMENT;
+
+	public boolean IS_DEVELOPMENT = false;
 	public boolean entitiesAreReady = false;
+	@Inject
+	public Gson gson;
 	@Inject
 	ChatMessageManager chatMessageManager;
 	@Inject
@@ -94,6 +95,7 @@ public class CitizensPlugin extends Plugin {
 			checkRegions();
 		}
 		CitizenRegion.updateAllEntities();
+		Util.initAnimationData(this);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.magnaboy.scripting;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.magnaboy.CitizensPlugin;
 
 import java.io.*;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public final class ScriptLoader {
 	private ScriptLoader() {
 	}
 
-	public static ScriptFile loadScript(String scriptName) {
+	public static ScriptFile loadScript(CitizensPlugin plugin, String scriptName) {
 		ScriptFile script;
 		if (scriptCache.containsKey(scriptName)) {
 			script = scriptCache.get(scriptName);
@@ -28,7 +28,7 @@ public final class ScriptLoader {
 		}
 
 		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			Gson gson = new GsonBuilder().create();
+			Gson gson = plugin.gson;
 			script = gson.fromJson(reader, ScriptFile.class);
 			scriptCache.put(scriptName, script);
 		} catch (IOException e) {

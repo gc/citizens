@@ -66,8 +66,7 @@ public class CitizenRegion {
 		}
 
 		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			Gson gson = new Gson();
-			CitizenRegion region = gson.fromJson(reader, CitizenRegion.class);
+			CitizenRegion region = plugin.gson.fromJson(reader, CitizenRegion.class);
 			if (region == null) {
 				return null;
 			}
@@ -340,7 +339,7 @@ public class CitizenRegion {
 		try {
 			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
 			Writer wr = new BufferedWriter(new FileWriter(path.toString()));
-			GsonBuilder gb = new GsonBuilder();
+			GsonBuilder gb = plugin.gson.newBuilder();
 			gb.setPrettyPrinting();
 			Gson gson = gb.create();
 			gson.toJson(this, wr);
