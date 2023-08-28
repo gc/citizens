@@ -19,9 +19,9 @@ import static com.magnaboy.Util.getRandomItem;
 
 public class CitizenRegion {
 
+	public static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
 	private static final float VALID_REGION_VERSION = 0.8f;
 	private static final HashMap<Integer, CitizenRegion> dirtyRegions = new HashMap<>();
-	public static final HashMap<Integer, CitizenRegion> regionCache = new HashMap<>();
 	private static final String REGIONDATA_DIRECTORY = new File("src/main/resources/RegionData/").getAbsolutePath();
 	private static CitizensPlugin plugin;
 	public transient HashMap<UUID, Entity> entities = new HashMap<>();
@@ -30,6 +30,7 @@ public class CitizenRegion {
 	public int regionId;
 	public List<CitizenInfo> citizenRoster = new ArrayList<>();
 	public List<SceneryInfo> sceneryRoster = new ArrayList<>();
+	public transient ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 	public static void init(CitizensPlugin p) {
 		plugin = p;
@@ -326,6 +327,15 @@ public class CitizenRegion {
 		clearDirtyRegions();
 	}
 
+	public static void updateAllEntities() {
+		for (CitizenRegion region : regionCache.values()) {
+			region.updateEntities();
+		}
+		if (plugin.IS_DEVELOPMENT) {
+			plugin.panel.update();
+		}
+	}
+
 	public void saveRegion() throws IOException {
 		try {
 			Path path = Paths.get(REGIONDATA_DIRECTORY, regionId + ".json");
@@ -346,17 +356,6 @@ public class CitizenRegion {
 			entities.values().forEach(Entity::update);
 		});
 	}
-
-	public static void updateAllEntities() {
-		for (CitizenRegion region : regionCache.values()) {
-			region.updateEntities();
-		}
-		if (plugin.IS_DEVELOPMENT) {
-			plugin.panel.update();
-		}
-	}
-
-	public transient ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
 	public void percentileAction(int percentage, int maxDelaySeconds, Consumer<Entity> callback) {
 		List<Entity> entityList = new ArrayList<>(entities.values());

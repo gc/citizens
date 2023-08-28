@@ -13,10 +13,19 @@ import java.util.Map;
 import java.util.Random;
 
 public final class Util {
-	public static Random rng = new Random();
 	public final static int JAU_FULL_ROTATION = 2048;
-
 	public final static int MAX_ENTITY_RENDER_DISTANCE = 25;
+	private final static String animDataFilePath = "src/main/resources/animationData.json";
+	private static final Map<String, AnimData> animData;
+	public static Random rng = new Random();
+
+	static {
+		try {
+			animData = readAnimData();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	private Util() throws IOException {
 	}
@@ -75,25 +84,6 @@ public final class Util {
 		return new WorldArea(bottomLeft, width, height);
 	}
 
-	private final static String animDataFilePath = "src/main/resources/animationData.json";
-
-	private static final Map<String, AnimData> animData;
-
-	public static class AnimData {
-		public int id;
-		public int frameCount;
-		public int clientTicks;
-		public int realDurationMillis;
-	}
-
-	static {
-		try {
-			animData = readAnimData();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public static AnimData getAnimData(int id) {
 		return animData.get(String.valueOf(id));
 	}
@@ -105,6 +95,13 @@ public final class Util {
 		Map<String, AnimData> map = gson.fromJson(new FileReader(animDataFilePath), type);
 
 		return map;
+	}
+
+	public static class AnimData {
+		public int id;
+		public int frameCount;
+		public int clientTicks;
+		public int realDurationMillis;
 	}
 
 }

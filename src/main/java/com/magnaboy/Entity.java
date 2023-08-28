@@ -16,36 +16,28 @@ import static net.runelite.api.Perspective.SINE;
 
 public class Entity<T extends Entity<T>> {
 	public Integer regionId;
-	@Getter
-	private WorldPoint worldLocation;
 	public String name;
 	public String examine;
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
 	public float[] scale;
 	public float[] translate;
+	public List<MergedObject> mergedObjects = new ArrayList<>();
 	protected RuneLiteObject rlObject;
 	@Getter
 	protected EntityType entityType;
 	protected Integer baseOrientation;
 	protected UUID uuid;
+	@Getter
+	private WorldPoint worldLocation;
 	private int[] modelIDs;
 	private int[] recolorsToFind;
 	private int[] recolorsToReplace;
 	private Integer objectToRemove;
-	public List<MergedObject> mergedObjects = new ArrayList<>();
 
 	public Entity(CitizensPlugin plugin) {
 		this.plugin = plugin;
 		this.rlObject = plugin.client.createRuneLiteObject();
-	}
-
-	public int getAnimationID() {
-		return rlObject.getAnimation().getId();
-	}
-
-	public boolean isCitizen() {
-		return entityType == EntityType.StationaryCitizen || entityType == EntityType.WanderingCitizen || entityType == EntityType.ScriptedCitizen;
 	}
 
 	protected static SimplePolygon calculateAABB(Client client, Model m, Integer jauOrient, int x, int y, int z, int zOff) {
@@ -126,6 +118,14 @@ public class Entity<T extends Entity<T>> {
 			x2d[i] = viewX;
 			y2d[i] = viewY;
 		}
+	}
+
+	public int getAnimationID() {
+		return rlObject.getAnimation().getId();
+	}
+
+	public boolean isCitizen() {
+		return entityType == EntityType.StationaryCitizen || entityType == EntityType.WanderingCitizen || entityType == EntityType.ScriptedCitizen;
 	}
 
 	public SimplePolygon getClickbox() {

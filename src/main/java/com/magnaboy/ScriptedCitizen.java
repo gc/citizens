@@ -11,11 +11,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
+	public ScriptAction currentAction;
+	public WorldPoint baseLocation;
 	private ScriptFile script;
 	private ExecutorService scriptExecutor;
-	public ScriptAction currentAction;
-
-	public WorldPoint baseLocation;
 
 	public ScriptedCitizen(CitizensPlugin plugin) {
 		super(plugin);
