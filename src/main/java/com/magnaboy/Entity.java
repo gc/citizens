@@ -294,8 +294,10 @@ public class Entity<T extends Entity<T>> {
 				}
 			}
 			if (scale != null) {
-				finalModel.cloneVertices();
-				finalModel.scale(-(Math.round(scale[0] * 128)), -(Math.round(scale[1] * 128)), -(Math.round(scale[2] * 128)));
+				if (scale[0] < 10) { //otherwise reinterpret meaning of scale[0] as radius
+					finalModel.cloneVertices();
+					finalModel.scale(-(Math.round(scale[0] * 128)), -(Math.round(scale[1] * 128)), -(Math.round(scale[2] * 128)));
+				}
 			}
 
 			if (translate != null) {
@@ -304,6 +306,11 @@ public class Entity<T extends Entity<T>> {
 			}
 
 			rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
+			if (scale != null){
+				if (scale[0] > 10) {
+					rlObject.setRadius(Math.round(scale[0]));
+				}
+			}
 		}
 
 		if (baseOrientation != null && rlObject.getOrientation() == 0) {

@@ -251,15 +251,15 @@ public class CitizenRegion {
 			Entity e = region.entities.get(info.uuid);
 			Scenery updated = loadScenery(plugin, (SceneryInfo) info);
 
-			addEntityToRegion(updated, info);
 			removeEntityFromRegion(e);
+			addEntityToRegion(updated, info);
 		} else {
 			CitizenRegion region = regionCache.get(info.regionId);
 			Entity e = region.entities.get(info.uuid);
 			Citizen updated = loadCitizen(plugin, (CitizenInfo) info);
 
-			addEntityToRegion(updated, info);
 			removeEntityFromRegion(e);
+			addEntityToRegion(updated, info);
 		}
 	}
 
