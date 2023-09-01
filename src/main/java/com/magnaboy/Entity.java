@@ -21,6 +21,7 @@ public class Entity<T extends Entity<T>> {
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
 	public float[] scale;
+	public Integer radius;
 	public float[] translate;
 	public List<MergedObject> mergedObjects = new ArrayList<>();
 	protected RuneLiteObject rlObject;
@@ -183,6 +184,11 @@ public class Entity<T extends Entity<T>> {
 		return (T) this;
 	}
 
+	public T setRadius(Integer radius) {
+		this.radius = radius;
+		return (T) this;
+	}
+
 	public T setTranslate(float translateX, float translateY, float translateZ) {
 		this.translate = new float[]{translateX, translateY, translateZ};
 		return (T) this;
@@ -294,10 +300,8 @@ public class Entity<T extends Entity<T>> {
 				}
 			}
 			if (scale != null) {
-				if (scale[0] < 10) { //otherwise reinterpret meaning of scale[0] as radius
-					finalModel.cloneVertices();
-					finalModel.scale(-(Math.round(scale[0] * 128)), -(Math.round(scale[1] * 128)), -(Math.round(scale[2] * 128)));
-				}
+				finalModel.cloneVertices();
+				finalModel.scale(-(Math.round(scale[0] * 128)), -(Math.round(scale[1] * 128)), -(Math.round(scale[2] * 128)));
 			}
 
 			if (translate != null) {
@@ -306,10 +310,8 @@ public class Entity<T extends Entity<T>> {
 			}
 
 			rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
-			if (scale != null){
-				if (scale[0] > 10) {
-					rlObject.setRadius(Math.round(scale[0]));
-				}
+			if (radius != null){
+					rlObject.setRadius(radius);
 			}
 		}
 

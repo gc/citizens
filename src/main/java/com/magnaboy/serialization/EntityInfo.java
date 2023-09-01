@@ -16,6 +16,7 @@ public class EntityInfo {
 	public int[] modelIds = {};
 	public Integer baseOrientation;
 	public float[] scale;
+	public Integer radius;
 	public float[] translate;
 	public int[] modelRecolorFind = {};
 	public int[] modelRecolorReplace = {};

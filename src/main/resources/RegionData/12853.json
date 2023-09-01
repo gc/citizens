@@ -1272,7 +1272,7 @@
         },
         {
             "name": "Elara",
-            "examineText": "A Citizen of Gielinor",
+            "examineText": "She's got something on her mind.",
             "remarks": [],
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
@@ -1680,11 +1680,7 @@
                 24904
             ],
             "baseOrientation": 1792,
-            "scale": [
-                75.0,
-                1.0,
-                1.0
-            ],
+            "radius": 66,
             "translate": [
                 0.0,
                 0.0,
@@ -1814,11 +1810,7 @@
                 24903
             ],
             "baseOrientation": 1792,
-            "scale": [
-                66.0,
-                1.0,
-                1.0
-            ],
+            "radius": 66,
             "translate": [
                 0.0,
                 0.0,
@@ -1904,11 +1896,7 @@
                 24903
             ],
             "baseOrientation": 1280,
-            "scale": [
-                66.0,
-                1.0,
-                1.0
-            ],
+            "radius": 66,
             "translate": [
                 0.0,
                 0.0,
