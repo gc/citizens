@@ -21,6 +21,7 @@ public class Entity<T extends Entity<T>> {
 	public CitizensPlugin plugin;
 	public AnimationID idleAnimationId;
 	public float[] scale;
+	public Integer radius;
 	public float[] translate;
 	public List<MergedObject> mergedObjects = new ArrayList<>();
 	protected RuneLiteObject rlObject;
@@ -183,6 +184,11 @@ public class Entity<T extends Entity<T>> {
 		return (T) this;
 	}
 
+	public T setRadius(Integer radius) {
+		this.radius = radius;
+		return (T) this;
+	}
+
 	public T setTranslate(float translateX, float translateY, float translateZ) {
 		this.translate = new float[]{translateX, translateY, translateZ};
 		return (T) this;
@@ -304,6 +310,9 @@ public class Entity<T extends Entity<T>> {
 			}
 
 			rlObject.setModel(finalModel.light(64, 850, -30, -50, -30));
+			if (radius != null){
+					rlObject.setRadius(radius);
+			}
 		}
 
 		if (baseOrientation != null && rlObject.getOrientation() == 0) {

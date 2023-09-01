@@ -536,13 +536,33 @@
         {
             "name": "Emme",
             "examineText": "A protesting H.A.M member.",
-            "remarks": [],
-            "startScript": "testScript",
+            "remarks": [
+                "They shall devastate Varrock as they have done Lumbridge!",
+                "Humans Against Monsters - stand strong!",
+                "They murder and pillage - yet our King does nothing!",
+                "We must destroy the enemies of Saradomin!",
+                "Enough is enough! The time for action is now!",
+                "Say No to monsters! Join H.A.M. today!",
+                "We must protect our brethren!",
+                "Let us smite these monsters unto their deaths!",
+                "There can be no Peace with lovers of War!"
+            ],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3208,
+                "y": 3422,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3215,
+                "y": 3425,
+                "plane": 0
+            },
             "uuid": "bb076237-1858-42e1-8346-21b5d4f45997",
             "regionId": 12853,
-            "entityType": "ScriptedCitizen",
+            "entityType": "WanderingCitizen",
             "worldLocation": {
-                "x": 3209,
+                "x": 3215,
                 "y": 3425,
                 "plane": 0
             },
@@ -980,7 +1000,6 @@
                 173,
                 176,
                 279,
-                540,
                 201
             ],
             "baseOrientation": 0,
@@ -1253,16 +1272,16 @@
         },
         {
             "name": "Elara",
-            "examineText": "A Citizen of Gielinor",
+            "examineText": "She's got something on her mind.",
             "remarks": [],
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
-                "x": 3205,
-                "y": 3432,
+                "x": 3206,
+                "y": 3426,
                 "plane": 0
             },
             "wanderBoxTR": {
-                "x": 3219,
+                "x": 3209,
                 "y": 3434,
                 "plane": 0
             },
@@ -1301,11 +1320,11 @@
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
                 "x": 3216,
-                "y": 3422,
+                "y": 3429,
                 "plane": 0
             },
             "wanderBoxTR": {
-                "x": 3219,
+                "x": 3220,
                 "y": 3434,
                 "plane": 0
             },
@@ -1349,6 +1368,56 @@
                 5056
             ],
             "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Oscar",
+            "examineText": "Living his best life.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3216,
+                "y": 3429,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3222,
+                "y": 3430,
+                "plane": 0
+            },
+            "uuid": "5a0367b5-64c4-49e7-85dc-663b8bac42bc",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3218,
+                "y": 3430,
+                "plane": 0
+            },
+            "modelIds": [
+                32834,
+                246,
+                27563,
+                163,
+                176,
+                267,
+                181
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [
+                6798,
+                -10304,
+                4550,
+                8741,
+                25238
+            ],
+            "modelRecolorReplace": [
+                5640,
+                5640,
+                5584,
+                26506,
+                520
+            ],
+            "idleAnimation": "HumanIdle",
+            "mergedObjects": []
         },
         {
             "name": "Zethrus",
@@ -1400,17 +1469,18 @@
             "remarks": [
                 "Pure silver, pure satisfaction!",
                 "Your silver needs, met right here!",
-                "Looking for silverware? You\u0027re in luck!"
+                "Looking for silverware? You\u0027re in luck!",
+                "Only the finest silver in Misthalin!"
             ],
             "moveAnimation": "HumanWalk",
             "wanderBoxBL": {
-                "x": 3207,
-                "y": 3425,
+                "x": 3206,
+                "y": 3431,
                 "plane": 0
             },
             "wanderBoxTR": {
-                "x": 3209,
-                "y": 3433,
+                "x": 3211,
+                "y": 3434,
                 "plane": 0
             },
             "uuid": "9aba3eb4-06ec-48d9-9b58-ce04ef61a7d2",
@@ -1591,6 +1661,257 @@
                 5557
             ],
             "idleAnimation": "DwarfIdle"
+        },
+        {
+            "name": "Silver stall",
+            "examineText": "Fine silver items are for sale here.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "f21330f8-8de3-404a-b079-abcb36e2630b",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3207,
+                "y": 3436,
+                "plane": 0
+            },
+            "modelIds": [
+                24908,
+                24904
+            ],
+            "baseOrientation": 1792,
+            "radius": 66,
+            "translate": [
+                0.0,
+                0.0,
+                0.7
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle",
+            "removedObject": 2303,
+            "mergedObjects": [
+                {
+                    "objectID": 1493,
+                    "count90CCWRotations": 0
+                }
+            ]
+        },
+        {
+            "name": "Palace Guard",
+            "examineText": "They mean business.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3209,
+                "y": 3433,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3215,
+                "y": 3437,
+                "plane": 0
+            },
+            "uuid": "370225ed-2bd2-40d7-9102-ed7ae10be6ac",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3215,
+                "y": 3437,
+                "plane": 0
+            },
+            "modelIds": [
+                46759,
+                46761,
+                176,
+                46762,
+                4954,
+                555,
+                46764
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                8741,
+                25238,
+                7952,
+                4550
+            ],
+            "modelRecolorReplace": [
+                61347,
+                61347,
+                61347,
+                4564
+            ],
+            "idleAnimation": "HumanIdle",
+            "mergedObjects": []
+        },
+        {
+            "name": "Palace Guard",
+            "examineText": "They mean business.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3209,
+                "y": 3433,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3215,
+                "y": 3437,
+                "plane": 0
+            },
+            "uuid": "6cd89bee-b69f-4969-bb2d-b85349177e49",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3215,
+                "y": 3437,
+                "plane": 0
+            },
+            "modelIds": [
+                46759,
+                46761,
+                176,
+                46762,
+                4954,
+                555,
+                46764
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [
+                8741,
+                25238,
+                7952,
+                4550
+            ],
+            "modelRecolorReplace": [
+                61347,
+                61347,
+                61347,
+                4564
+            ],
+            "idleAnimation": "HumanIdle",
+            "mergedObjects": []
+        },
+        {
+            "name": "Silk stall",
+            "examineText": "Fine silk woven by experts.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "d6ff5222-293c-4236-99e8-127cead3c90e",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3221,
+                "y": 3425,
+                "plane": 0
+            },
+            "modelIds": [
+                24903
+            ],
+            "baseOrientation": 1792,
+            "radius": 66,
+            "translate": [
+                0.0,
+                0.0,
+                -0.7
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle",
+            "removedObject": 2307,
+            "mergedObjects": [
+                {
+                    "objectID": 1485,
+                    "count90CCWRotations": 0
+                }
+            ]
+        },
+        {
+            "name": "Silk merchant",
+            "examineText": "Seems very well off.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3216,
+                "y": 3424,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3219,
+                "y": 3429,
+                "plane": 0
+            },
+            "uuid": "5b97c142-2f94-4f89-9824-7e08e2f1ff9e",
+            "regionId": 12853,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3219,
+                "y": 3429,
+                "plane": 0
+            },
+            "modelIds": [
+                215,
+                198,
+                254,
+                248,
+                170,
+                176,
+                181,
+                292,
+                181
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                4550,
+                25238,
+                6798,
+                8741,
+                10659
+            ],
+            "modelRecolorReplace": [
+                4647,
+                46307,
+                10508,
+                54722,
+                54722
+            ],
+            "idleAnimation": "HumanIdle",
+            "mergedObjects": []
+        },
+        {
+            "name": "Veg stall",
+            "examineText": "Fresh vegetables.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "6898c59e-4dd0-4665-ad66-b490e9f9ef8d",
+            "regionId": 12853,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3220,
+                "y": 3436,
+                "plane": 0
+            },
+            "modelIds": [
+                24903
+            ],
+            "baseOrientation": 1280,
+            "radius": 66,
+            "translate": [
+                0.0,
+                0.0,
+                -0.7
+            ],
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle",
+            "removedObject": 2307,
+            "mergedObjects": [
+                {
+                    "objectID": 37254,
+                    "count90CCWRotations": 2
+                }
+            ]
         }
     ],
     "sceneryRoster": [

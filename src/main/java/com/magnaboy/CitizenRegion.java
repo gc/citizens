@@ -106,6 +106,7 @@ public class CitizenRegion {
 			.setModelRecolors(info.modelRecolorFind, info.modelRecolorReplace)
 			.setIdleAnimation(info.idleAnimation)
 			.setScale(info.scale)
+			.setRadius(info.radius)
 			.setTranslate(info.translate)
 			.setBaseOrientation(info.baseOrientation)
 			.setUUID(info.uuid)
@@ -175,6 +176,7 @@ public class CitizenRegion {
 			.setModelRecolors(info.modelRecolorFind, info.modelRecolorReplace)
 			.setIdleAnimation(info.idleAnimation)
 			.setScale(info.scale)
+			.setRadius(info.radius)
 			.setTranslate(info.translate)
 			.setBaseOrientation(info.baseOrientation)
 			.setUUID(info.uuid)
@@ -251,15 +253,15 @@ public class CitizenRegion {
 			Entity e = region.entities.get(info.uuid);
 			Scenery updated = loadScenery(plugin, (SceneryInfo) info);
 
-			addEntityToRegion(updated, info);
 			removeEntityFromRegion(e);
+			addEntityToRegion(updated, info);
 		} else {
 			CitizenRegion region = regionCache.get(info.regionId);
 			Entity e = region.entities.get(info.uuid);
 			Citizen updated = loadCitizen(plugin, (CitizenInfo) info);
 
-			addEntityToRegion(updated, info);
 			removeEntityFromRegion(e);
+			addEntityToRegion(updated, info);
 		}
 	}
 
