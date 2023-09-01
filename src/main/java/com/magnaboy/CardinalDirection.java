@@ -6,13 +6,14 @@ import java.util.HashMap;
 
 @Getter
 public enum CardinalDirection {
-	SouthEast(1792),
 	South(0),
 	SouthWest(256),
 	West(512),
-	North(1024),
 	NorthWest(768),
-	East(1536);
+	North(1024),
+	NorthEast(1280),
+	East(1536),
+	SouthEast(1792);
 
 	private static final HashMap<Integer, CardinalDirection> intToType = new HashMap<>();
 
