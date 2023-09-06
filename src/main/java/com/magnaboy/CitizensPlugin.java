@@ -74,10 +74,12 @@ public class CitizensPlugin extends Plugin {
 	protected void startUp() {
 		CitizenRegion.init(this);
 
+		panel = injector.getInstance(CitizenPanel.class);
+		panel.init(this, citizensOverlay);
+		overlayManager.add(citizensOverlay);
+
 		// For now, the only thing in the panel is dev stuff
 		if (IS_DEVELOPMENT) {
-			panel = injector.getInstance(CitizenPanel.class);
-			panel.init(this, citizensOverlay);
 			// Add to sidebar
 			final BufferedImage icon = ImageUtil.loadImageResource(CitizensPlugin.class, "/citizens_icon.png");
 			NavigationButton navButton = NavigationButton.builder()
@@ -87,8 +89,6 @@ public class CitizensPlugin extends Plugin {
 				.panel(panel)
 				.build();
 			clientToolbar.addNavigation(navButton);
-
-			overlayManager.add(citizensOverlay);
 		}
 
 		if (isReady()) {
