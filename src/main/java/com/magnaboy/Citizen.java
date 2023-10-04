@@ -1,15 +1,13 @@
 package com.magnaboy;
 
+import static com.magnaboy.Util.getRandomItem;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.runelite.api.Client;
 import net.runelite.api.CollisionDataFlag;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.magnaboy.Util.getRandomItem;
 
 public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	private static final int[][] BLOCKING_DIRECTIONS_5x5 = {
@@ -34,7 +32,6 @@ public class Citizen<T extends Citizen<T>> extends Entity<T> {
 	@Nullable
 	public AnimationID movingAnimationId = AnimationID.HumanWalk;
 	private int remarkTimer = 0;
-
 
 	public Citizen(CitizensPlugin plugin) {
 		super(plugin);

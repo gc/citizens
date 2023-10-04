@@ -1,18 +1,26 @@
 package com.magnaboy;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
-import net.runelite.api.*;
+import net.runelite.api.AABB;
+import net.runelite.api.Animation;
+import net.runelite.api.Client;
+import net.runelite.api.GameObject;
+import net.runelite.api.Model;
+import net.runelite.api.ModelData;
+import net.runelite.api.Perspective;
+import static net.runelite.api.Perspective.COSINE;
+import static net.runelite.api.Perspective.SINE;
+import net.runelite.api.Player;
+import net.runelite.api.RuneLiteObject;
+import net.runelite.api.Scene;
+import net.runelite.api.Tile;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.api.model.Jarvis;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static net.runelite.api.Perspective.COSINE;
-import static net.runelite.api.Perspective.SINE;
 
 public class Entity<T extends Entity<T>> {
 	public Integer regionId;
@@ -256,7 +264,6 @@ public class Entity<T extends Entity<T>> {
 		if (!rlObject.isActive()) {
 			return false;
 		}
-
 
 		plugin.clientThread.invokeLater(() -> {
 			rlObject.setActive(false);

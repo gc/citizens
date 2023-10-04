@@ -2,11 +2,28 @@ package com.magnaboy;
 
 import com.google.gson.Gson;
 import com.google.inject.Provides;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.MenuAction;
 import net.runelite.api.Point;
-import net.runelite.api.*;
-import net.runelite.api.events.*;
+import net.runelite.api.Tile;
+import net.runelite.api.events.ClientTick;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOpened;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.geometry.SimplePolygon;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
@@ -23,16 +40,6 @@ import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
-
-import javax.inject.Inject;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 @Slf4j
 @PluginDescriptor(name = "Citizens", description = "Adds citizens to help bring life to the world")
@@ -60,6 +67,7 @@ public class CitizensPlugin extends Plugin {
 	private CitizensOverlay citizensOverlay;
 	@Inject
 	private ClientToolbar clientToolbar;
+	private NavigationButton navButton;
 
 	@Provides
 	CitizensConfig getConfig(ConfigManager configManager) {
@@ -82,7 +90,7 @@ public class CitizensPlugin extends Plugin {
 		if (IS_DEVELOPMENT) {
 			// Add to sidebar
 			final BufferedImage icon = ImageUtil.loadImageResource(CitizensPlugin.class, "/citizens_icon.png");
-			NavigationButton navButton = NavigationButton.builder()
+			navButton = NavigationButton.builder()
 				.tooltip("Citizens")
 				.icon(icon)
 				.priority(7)
@@ -101,6 +109,9 @@ public class CitizensPlugin extends Plugin {
 	@Override
 	protected void shutDown() {
 		cleanupAll();
+		if (navButton != null) {
+			clientToolbar.addNavigation(navButton);
+		}
 	}
 
 	protected void despawnAll() {

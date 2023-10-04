@@ -1,15 +1,17 @@
 package com.magnaboy;
 
 import com.google.gson.reflect.TypeToken;
-import net.runelite.api.Perspective;
-import net.runelite.api.coords.WorldArea;
-import net.runelite.api.coords.WorldPoint;
-
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Random;
+import net.runelite.api.Perspective;
+import net.runelite.api.coords.WorldArea;
+import net.runelite.api.coords.WorldPoint;
 
 public final class Util {
 	public final static int JAU_FULL_ROTATION = 2048;
@@ -19,8 +21,11 @@ public final class Util {
 	private static Map<String, AnimData> animData;
 
 	public static void initAnimationData(CitizensPlugin plugin) {
-		try {
-			animData = readAnimData(plugin);
+		try (InputStream inputStream = plugin.getClass().getResourceAsStream("/animationData.json");
+			 Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			Type type = new TypeToken<Map<String, AnimData>>() {
+			}.getType();
+			animData = plugin.gson.fromJson(reader, type);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -82,14 +87,6 @@ public final class Util {
 
 	public static AnimData getAnimData(int id) {
 		return animData.get(String.valueOf(id));
-	}
-
-	private static Map<String, AnimData> readAnimData(CitizensPlugin plugin) throws IOException {
-		Type type = new TypeToken<Map<String, AnimData>>() {
-		}.getType();
-		Map<String, AnimData> map = plugin.gson.fromJson(new FileReader(animDataFilePath), type);
-
-		return map;
 	}
 
 	public static class AnimData {

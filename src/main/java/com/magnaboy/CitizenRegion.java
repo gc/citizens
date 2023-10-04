@@ -2,20 +2,31 @@ package com.magnaboy;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import static com.magnaboy.Util.getRandomItem;
 import com.magnaboy.serialization.CitizenInfo;
 import com.magnaboy.serialization.EntityInfo;
 import com.magnaboy.serialization.SceneryInfo;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
-import static com.magnaboy.Util.getRandomItem;
 
 public class CitizenRegion {
 
@@ -45,10 +56,8 @@ public class CitizenRegion {
 			return regionCache.get(regionId);
 		}
 
-		InputStream inputStream;
-		try {
-			inputStream = new FileInputStream(REGIONDATA_DIRECTORY + File.separator + regionId + ".json");
-		} catch (FileNotFoundException e) {
+		InputStream inputStream = plugin.getClass().getClassLoader().getResourceAsStream("RegionData/" + regionId + ".json");
+		if (inputStream == null) {
 			// No region file was found.
 			// If in development, create one, save it and then try to load it.
 			if (plugin.IS_DEVELOPMENT && createIfNotExists) {
