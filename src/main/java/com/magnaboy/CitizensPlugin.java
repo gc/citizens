@@ -110,7 +110,7 @@ public class CitizensPlugin extends Plugin {
 	protected void shutDown() {
 		cleanupAll();
 		if (navButton != null) {
-			clientToolbar.addNavigation(navButton);
+			clientToolbar.removeNavigation(navButton);
 		}
 	}
 
