@@ -373,7 +373,7 @@ public class Entity<T extends Entity<T>> {
 	}
 
 	public boolean isActive() {
-		return rlObject.isActive();
+		return rlObject != null && rlObject.isActive();
 	}
 
 	public boolean rotateObject(double intx, double inty) {

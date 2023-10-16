@@ -1,19 +1,20 @@
 package com.magnaboy;
 
+import static com.magnaboy.Util.getRandom;
+import java.time.Instant;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-
-import static com.magnaboy.Util.getRandom;
 
 public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	public WorldArea boundingBox;
 	public WorldPoint wanderRegionBL;
 	public WorldPoint wanderRegionTR;
+	private Instant lastWanderTime;
 
 	public WanderingCitizen(CitizensPlugin plugin) {
 		super(plugin);
 		entityType = EntityType.WanderingCitizen;
-
+		lastWanderTime = Instant.now().minusSeconds(6);
 	}
 
 	public WanderingCitizen setBoundingBox(WorldPoint bottomLeft, WorldPoint topRight) {
@@ -44,11 +45,11 @@ public class WanderingCitizen extends Citizen<WanderingCitizen> {
 	}
 
 	public void wander() {
-		if (getCurrentTarget() != null) {
+		if (getCurrentTarget() != null || Instant.now().isBefore(lastWanderTime.plusSeconds(6))) {
 			return;
 		}
 		WorldPoint randomSpot = getRandomInBoundingBox();
 		this.moveTo(randomSpot);
+		lastWanderTime = Instant.now();
 	}
-
 }

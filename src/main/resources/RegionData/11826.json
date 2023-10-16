@@ -1,0 +1,25 @@
+{
+    "version": 0.8,
+    "regionId": 11826,
+    "citizenRoster": [],
+    "sceneryRoster": [
+        {
+            "uuid": "d1135796-203f-46c0-9111-9ce6f399a0e1",
+            "regionId": 11826,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 2978,
+                "y": 3216,
+                "plane": 0
+            },
+            "modelIds": [
+                25033
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle",
+            "removedObject": 15508
+        }
+    ]
+}

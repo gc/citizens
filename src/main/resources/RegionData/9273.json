@@ -1,0 +1,101 @@
+{
+    "version": 0.8,
+    "regionId": 9273,
+    "citizenRoster": [
+        {
+            "name": "Seer",
+            "examineText": "An old swan the locals have named.",
+            "moveAnimation": "SwanWalk",
+            "wanderBoxBL": {
+                "x": 2332,
+                "y": 3705,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2350,
+                "y": 3708,
+                "plane": 0
+            },
+            "uuid": "171f7e0c-f9cb-4836-ac97-b472240c6db1",
+            "regionId": 9273,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2350,
+                "y": 3708,
+                "plane": 0
+            },
+            "modelIds": [
+                11725
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                103,
+                94
+            ],
+            "modelRecolorReplace": [
+                16,
+                12
+            ],
+            "idleAnimation": "SwanIdle"
+        },
+        {
+            "name": "Ol\u0027 Tony",
+            "examineText": "A local fisherman.",
+            "moveAnimation": "HumanIdle",
+            "remarks": [
+                "Too many strangers!",
+                "You know why they're called monkfish?"
+            ],
+            "wanderBoxBL": {
+                "x": 2336,
+                "y": 3692,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2350,
+                "y": 3698,
+                "plane": 0
+            },
+            "uuid": "157bbb65-58f4-4112-ae91-68afc18d1b5d",
+            "regionId": 9273,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2350,
+                "y": 3698,
+                "plane": 0
+            },
+            "modelIds": [
+                230,
+                299,
+                151,
+                179,
+                267,
+                185,
+                194,
+                251,
+                562,
+                236,
+                320
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                8741,
+                25238,
+                43569,
+                6798,
+                4550,
+                54397
+            ],
+            "modelRecolorReplace": [
+                4626,
+                8472,
+                4626,
+                103,
+                6709,
+                33694
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

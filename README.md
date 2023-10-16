@@ -1,8 +1,6 @@
 # Citizens
 
-### **Not Yet Released On Plugin Hub**
-
-This plugin adds a lot of NPCs (citizens) around runescape to make the world feel more alive.
+This plugin adds 'fake npcs' (citizens) to RuneScape to bring more life and action to the world.
 
 # Guidelines For Adding Citizens
 

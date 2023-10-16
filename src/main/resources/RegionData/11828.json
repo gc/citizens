@@ -1,0 +1,60 @@
+{
+    "version": 0.8,
+    "regionId": 11828,
+    "citizenRoster": [
+        {
+            "name": "Sir Wendes",
+            "examineText": "A respected knight.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 2962,
+                "y": 3382,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2970,
+                "y": 3390,
+                "plane": 0
+            },
+            "uuid": "a1e7e73e-edf4-4f15-b96a-fcb52f4e4fb0",
+            "regionId": 11828,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2970,
+                "y": 3390,
+                "plane": 0
+            },
+            "modelIds": [
+                206,
+                249,
+                306,
+                323,
+                164,
+                179,
+                546,
+                7723,
+                268,
+                184
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                70,
+                5532,
+                41,
+                61,
+                7700,
+                4550
+            ],
+            "modelRecolorReplace": [
+                99,
+                82,
+                82,
+                99,
+                103,
+                4442
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

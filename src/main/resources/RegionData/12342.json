@@ -99,7 +99,7 @@
             "name": "Damien",
             "examineText": "A victim of the wilderness.",
             "remarks": [
-                "I should've teleported...",
+                "I should\u0027ve teleported...",
                 "Need... to train... defence...",
                 "It happened so fast..."
             ],
@@ -126,6 +126,48 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "FallenManIdle"
+        },
+        {
+            "name": "Eugene",
+            "examineText": "A craftsman, making something.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "cfc24594-dd40-4716-b05d-bf7aa4fa2aa2",
+            "regionId": 12342,
+            "entityType": "ScriptedCitizen",
+            "worldLocation": {
+                "x": 3106,
+                "y": 3497,
+                "plane": 0
+            },
+            "modelIds": [
+                12137,
+                246,
+                292,
+                10723,
+                10980,
+                179,
+                254,
+                185
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                8741,
+                8860,
+                10004,
+                25238,
+                6798,
+                933
+            ],
+            "modelRecolorReplace": [
+                13978,
+                14226,
+                5904,
+                39574,
+                8757,
+                5532
+            ],
+            "idleAnimation": "HumanIdle",
+            "startScript": "edgevilleSmith"
         }
     ],
     "sceneryRoster": [
@@ -142,18 +184,18 @@
                 2384
             ],
             "baseOrientation": 1024,
+            "translate": [
+                0.0,
+                0.0,
+                -0.5
+            ],
             "modelRecolorFind": [
                 61
             ],
             "modelRecolorReplace": [
                 10939
             ],
-            "idleAnimation": "FallenManIdle",
-            "translate": [
-                0.0,
-                0.0,
-                -0.5
-            ]
+            "idleAnimation": "FallenManIdle"
         }
     ]
 }

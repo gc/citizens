@@ -1,0 +1,56 @@
+{
+    "version": 0.8,
+    "regionId": 9776,
+    "citizenRoster": [
+        {
+            "name": "Stoffel",
+            "examineText": "An explorer.",
+            "remarks": [
+                "Lot\u0027s passing through...",
+                "Lot\u0027s to see!",
+                "I\u0027ll be on my way..."
+            ],
+            "moveAnimation": "HumanWithStickWalk",
+            "wanderBoxBL": {
+                "x": 2454,
+                "y": 3089,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2461,
+                "y": 3098,
+                "plane": 0
+            },
+            "uuid": "a07bc297-4502-46f3-89d0-bc65e2e4ec3a",
+            "regionId": 9776,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2461,
+                "y": 3098,
+                "plane": 0
+            },
+            "modelIds": [
+                215,
+                246,
+                292,
+                3707,
+                151,
+                176,
+                3711,
+                254,
+                181
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                8741,
+                25238
+            ],
+            "modelRecolorReplace": [
+                59437,
+                7331
+            ],
+            "idleAnimation": "HumanWithStickIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

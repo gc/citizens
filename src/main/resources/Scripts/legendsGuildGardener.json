@@ -1,0 +1,94 @@
+{
+    "actions": [
+        {
+            "action": "FaceDirection",
+            "targetRotation": "South"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 2755,
+                "y": 3485,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "South"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 2760,
+                "y": 3485,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "South"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 2761,
+                "y": 3485,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "South"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 2763,
+                "y": 3485,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "South"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "WateringCanPour"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 2754,
+                "y": 3485,
+                "plane": 0
+            }
+        }
+    ]
+}

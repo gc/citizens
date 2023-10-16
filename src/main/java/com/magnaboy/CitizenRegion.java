@@ -18,7 +18,6 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class CitizenRegion {
 		return loadRegion(regionId, false);
 	}
 
-	public static CitizenRegion loadRegion(int regionId, Boolean createIfNotExists) {
+	public synchronized static CitizenRegion loadRegion(int regionId, Boolean createIfNotExists) {
 		if (regionCache.containsKey(regionId)) {
 			return regionCache.get(regionId);
 		}
@@ -69,37 +68,38 @@ public class CitizenRegion {
 				} catch (IOException ex) {
 					throw new RuntimeException(ex);
 				}
-				return loadRegion(regionId, false);
+				CitizenRegion newRegion = loadRegion(regionId, false);
+				return newRegion;
 			}
-			return null;
-		}
-
-		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			CitizenRegion region = plugin.gson.fromJson(reader, CitizenRegion.class);
-			if (region == null) {
-				return null;
-			}
-			if (region.version != VALID_REGION_VERSION) {
-				return null;
-			}
-			for (CitizenInfo cInfo : region.citizenRoster) {
-				Citizen citizen = loadCitizen(plugin, cInfo);
-				if (citizen != null) {
-					region.entities.put(citizen.uuid, citizen);
+		} else {
+			try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+				CitizenRegion region = plugin.gson.fromJson(reader, CitizenRegion.class);
+				if (region == null) {
+					return null;
 				}
+				if (region.version != VALID_REGION_VERSION) {
+					return null;
+				}
+				for (CitizenInfo cInfo : region.citizenRoster) {
+					Citizen citizen = loadCitizen(plugin, cInfo);
+					if (citizen != null) {
+						region.entities.put(citizen.uuid, citizen);
+					}
+				}
+				for (SceneryInfo sInfo : region.sceneryRoster) {
+					Scenery scenery = loadScenery(plugin, sInfo);
+					region.entities.put(scenery.uuid, scenery);
+				}
+				if (plugin.IS_DEVELOPMENT) {
+					region.entities.values().forEach(Entity::validate);
+				}
+				regionCache.put(regionId, region);
+				return region;
+			} catch (IOException e) {
+				return null;
 			}
-			for (SceneryInfo sInfo : region.sceneryRoster) {
-				Scenery scenery = loadScenery(plugin, sInfo);
-				region.entities.put(scenery.uuid, scenery);
-			}
-			if (plugin.IS_DEVELOPMENT) {
-				region.entities.values().forEach(Entity::validate);
-			}
-			regionCache.put(regionId, region);
-			return region;
-		} catch (IOException e) {
-			return null;
 		}
+		return null;
 	}
 
 	public static void initCitizenInfo(Citizen citizen, CitizenInfo info) {
@@ -222,20 +222,25 @@ public class CitizenRegion {
 
 	public static void cleanUp() {
 		forEachEntity(Entity::despawn);
+		regionCache.clear();
+		dirtyRegions.clear();
 
 		for (CitizenRegion r : regionCache.values()) {
 			r.citizenRoster.clear();
 			r.sceneryRoster.clear();
 			r.entities.clear();
+			r.executorService.shutdownNow();
 		}
-		regionCache.clear();
-		dirtyRegions.clear();
 	}
 
 	// DEVELOPMENT SECTION
 	public static Citizen spawnCitizenFromPanel(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
+		loadRegion(info.regionId, true);
 		CitizenRegion region = loadRegion(info.regionId, true);
+		if (region == null) {
+			throw new RuntimeException("Null region for ID: " + info.regionId);
+		}
 		region.entities.put(info.uuid, citizen);
 		region.citizenRoster.add(info);
 		dirtyRegion(region);
@@ -365,21 +370,19 @@ public class CitizenRegion {
 		});
 	}
 
-	public void percentileAction(int percentage, int maxDelaySeconds, Consumer<Entity> callback) {
+	public void runOncePerTimePeriod(int timePeriodSeconds, int callIntervalSeconds, Consumer<Entity> callback) {
+		double chance = (double) callIntervalSeconds / timePeriodSeconds;
+
 		List<Entity> entityList = new ArrayList<>(entities.values());
-		Collections.shuffle(entityList);
 
-		int selectedCount = (int) Math.ceil(percentage * entityList.size() / 100.0);
-
-		int maxDelayMillis = maxDelaySeconds * 1000;
-
-		for (int i = 0; i < selectedCount; i++) {
-			Entity entity = entityList.get(i);
+		for (Entity entity : entityList) {
 			if (!entity.isActive()) {
 				continue;
 			}
-			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelayMillis), TimeUnit.MILLISECONDS);
+			if (Math.random() < chance) {
+				int delayMs = (Util.getRandom(0, (callIntervalSeconds / 2) * 1000));
+				executorService.schedule(() -> callback.accept(entity), delayMs, TimeUnit.MILLISECONDS);
+			}
 		}
 	}
-
 }

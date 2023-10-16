@@ -16,6 +16,9 @@ public enum AnimationID {
 	ChurchSitting(3281),
 	CurledUp(4712),
 
+	HumanWithStickIdle(813),
+	HumanWithStickWalk(1146),
+
 	// Actions
 	Grabbing(551),
 	Eat(829),
@@ -79,11 +82,19 @@ public enum AnimationID {
 	DwarfSmith(4021),
 	DwarfSit(2337),
 	DwarfHandsBehindBack(2151),
+	DrunkenDwarfIdle(900),
+	DrunkenDwarfWalk(104),
 
 	ChickenIdle(5386),
 	ChickenWalk(5385),
 
 	GoblinPull(3387),
+	GoblinChill(6837),
+	GoblinIdle(6203),
+	GoblinIdl2(6835),
+	GoblinIdle3(6834),
+	GoblinWalk(6202),
+	GoblinExcitedWalk(6193),
 
 	PigeonIdle(4133),
 
@@ -100,9 +111,48 @@ public enum AnimationID {
 
 	SheepDogIdle(2268),
 
+	DogIdle(4777),
+	DogWalk(4773),
+
+	SquirrelIdle(3211),
+	SquirrelWalk(3210),
+
+	SwanIdle(3242),
+	SwanWalk(3241),
+
+	PigletWalk(2165),
+	PigletIdle(2166),
+
+	CrabIdle(3424),
+	CrabWalk(3426),
+
+	GoatIdle(5339),
+	GoatWalk(5334),
+
+	RaccoonIdle(3213),
+	RaccoonWalk(3214),
+
+	CrowIdle(6784),
+	CrowWalk(6784),
+
+	GoblinFishIdle(6061),
+	GoblinFishWalk(6062),
+
+	MonkeyIdle(222),
+	MonkeyWalk(219),
+
+	GhostIdle(5538),
+	GhostWalk(5539),
+
+	PenguinIdle(5668),
+	PenguinWalk(5666),
+
+	WheatFieldIdle(6627),
+
 	// ???
 	FrontalGrab(897),
-	ChestRub(190);
+	ChestRub(190),
+	Swinging(3475);
 
 	private final Integer id;
 

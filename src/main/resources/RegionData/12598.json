@@ -28,6 +28,48 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "FireCook"
+        },
+        {
+            "name": "Squirrel",
+            "examineText": "Cute.",
+            "moveAnimation": "SquirrelWalk",
+            "wanderBoxBL": {
+                "x": 3170,
+                "y": 3456,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3179,
+                "y": 3461,
+                "plane": 0
+            },
+            "uuid": "dc287ef4-aa9c-4789-93de-11ba37de7a3c",
+            "regionId": 12598,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3179,
+                "y": 3461,
+                "plane": 0
+            },
+            "modelIds": [
+                11723
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                4300,
+                7240,
+                61,
+                5173,
+                30
+            ],
+            "modelRecolorReplace": [
+                3738,
+                4510,
+                4510,
+                4760,
+                3738
+            ],
+            "idleAnimation": "SquirrelIdle"
         }
     ],
     "sceneryRoster": [

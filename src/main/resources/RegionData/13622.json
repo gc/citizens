@@ -1,0 +1,50 @@
+{
+    "version": 0.8,
+    "regionId": 13622,
+    "citizenRoster": [
+        {
+            "name": "Sister Palus",
+            "examineText": "On the lookout for all kinds of evil.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3448,
+                "y": 3487,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3451,
+                "y": 3496,
+                "plane": 0
+            },
+            "uuid": "06cc0333-dab0-47d8-b319-15af17f65ae9",
+            "regionId": 13622,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3451,
+                "y": 3496,
+                "plane": 0
+            },
+            "modelIds": [
+                398,
+                471,
+                444,
+                448,
+                348,
+                10706,
+                421,
+                8934
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                8741,
+                25238
+            ],
+            "modelRecolorReplace": [
+                94,
+                94
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

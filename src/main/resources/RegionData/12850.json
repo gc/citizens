@@ -47,6 +47,7 @@
         {
             "name": "Fisherman",
             "examineText": "A man who is fishing.",
+            "remarks": [],
             "moveAnimation": "HumanWalk",
             "uuid": "5081d41b-dae3-41c5-a653-c285c0498fc2",
             "regionId": 12850,
@@ -87,7 +88,277 @@
                 33694
             ],
             "idleAnimation": "Fishing"
+        },
+        {
+            "name": "Scruffy",
+            "examineText": "Woof woof.",
+            "remarks": [],
+            "moveAnimation": "DogWalk",
+            "wanderBoxBL": {
+                "x": 3204,
+                "y": 3252,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3214,
+                "y": 3255,
+                "plane": 0
+            },
+            "uuid": "e7769931-0a38-4dd9-89c0-4a371b608224",
+            "regionId": 12850,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3214,
+                "y": 3255,
+                "plane": 0
+            },
+            "modelIds": [
+                18168,
+                18169
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "DogIdle"
+        },
+        {
+            "name": "Zack",
+            "examineText": "Feeling the heat.",
+            "remarks": [],
+            "moveAnimation": "DogWalk",
+            "uuid": "8bf2267d-68c4-4c99-8458-1f075dfc81c4",
+            "regionId": 12850,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3227,
+                "y": 3255,
+                "plane": 0
+            },
+            "modelIds": [
+                37996
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "FurnaceSmelt"
+        },
+        {
+            "name": "Drunken dwarf",
+            "examineText": " Had too much to drink.",
+            "remarks": [],
+            "moveAnimation": "DrunkenDwarfWalk",
+            "wanderBoxBL": {
+                "x": 3227,
+                "y": 3241,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3229,
+                "y": 3242,
+                "plane": 0
+            },
+            "uuid": "4d980aea-37ae-4571-beb6-ee5d1d17c93a",
+            "regionId": 12850,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3229,
+                "y": 3242,
+                "plane": 0
+            },
+            "modelIds": [
+                2974,
+                2986,
+                2983,
+                2979,
+                2981,
+                2985,
+                2992
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "DrunkenDwarfIdle"
+        },
+        {
+            "name": "Thalindra",
+            "examineText": "She\u0027s not sure witch drink to order.",
+            "remarks": [],
+            "moveAnimation": "DrunkenDwarfWalk",
+            "uuid": "2fcbd88a-94ba-4f5b-8268-6bd4635506c1",
+            "regionId": 12850,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3228,
+                "y": 3236,
+                "plane": 0
+            },
+            "modelIds": [
+                405,
+                470,
+                348,
+                353,
+                428,
+                361,
+                377
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                25238,
+                8741,
+                38814,
+                27548,
+                8741
+            ],
+            "modelRecolorReplace": [
+                10508,
+                10508,
+                10508,
+                4550,
+                10508
+            ],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Dark wizard",
+            "examineText": "A wizard of the evil kind.",
+            "remarks": [],
+            "moveAnimation": "DrunkenDwarfWalk",
+            "uuid": "222d63fc-757a-483c-b0e0-96d11fa6e460",
+            "regionId": 12850,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3228,
+                "y": 3238,
+                "plane": 0
+            },
+            "modelIds": [
+                208,
+                181,
+                251,
+                292,
+                170,
+                176,
+                265
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                25238,
+                8741,
+                6798
+            ],
+            "modelRecolorReplace": [
+                10508,
+                10508,
+                10508
+            ],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Limping Locke",
+            "examineText": "Don\u0027t ask him how he lost the leg.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "60ce35c0-d99b-4c50-90fb-189f6199fddd",
+            "regionId": 12850,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3231,
+                "y": 3237,
+                "plane": 0
+            },
+            "modelIds": [
+                230,
+                250,
+                7611,
+                170,
+                176,
+                259
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Grace",
+            "examineText": "A Citizen of Gielinor.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3223,
+                "y": 3261,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3241,
+                "y": 3262,
+                "plane": 0
+            },
+            "uuid": "7e0d0eb3-19be-4ba2-83b9-b3fceec7ef22",
+            "regionId": 12850,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3241,
+                "y": 3262,
+                "plane": 0
+            },
+            "modelIds": [
+                11352,
+                391,
+                418,
+                23957,
+                346,
+                356,
+                433,
+                7366
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                6798,
+                4550,
+                8741,
+                25238,
+                908,
+                5652
+            ],
+            "modelRecolorReplace": [
+                39,
+                4558,
+                13859,
+                34213,
+                916,
+                5276
+            ],
+            "idleAnimation": "HumanIdle"
         }
     ],
-    "sceneryRoster": []
+    "sceneryRoster": [
+        {
+            "uuid": "02e7d848-5642-428b-a3e2-f8185add1860",
+            "regionId": 12850,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3228,
+                "y": 3237,
+                "plane": 0
+            },
+            "modelIds": [
+                2491
+            ],
+            "baseOrientation": 0,
+            "translate": [
+                0.0,
+                0.8,
+                0.0
+            ],
+            "modelRecolorFind": [
+                7091,
+                7116
+            ],
+            "modelRecolorReplace": [
+                43208,
+                43216
+            ],
+            "idleAnimation": "Sitting"
+        }
+    ]
 }

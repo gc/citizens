@@ -1,21 +1,32 @@
 package com.magnaboy;
 
+import static com.magnaboy.Util.worldPointToShortCoord;
 import com.magnaboy.serialization.CitizenInfo;
 import com.magnaboy.serialization.SceneryInfo;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.util.HashSet;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.magnaboy.Util.worldPointToShortCoord;
 
 class CitizenPanel extends PluginPanel {
 	private final static String RELOAD_BUTTON_READY = "Reload All Entites";
@@ -83,6 +94,7 @@ class CitizenPanel extends PluginPanel {
 		if (!plugin.IS_DEVELOPMENT) {
 			return;
 		}
+		UpdateEditorFields();
 
 		AtomicInteger activeEntities = new AtomicInteger();
 		AtomicInteger inactiveEntities = new AtomicInteger();
@@ -117,8 +129,9 @@ class CitizenPanel extends PluginPanel {
 
 		String errorMessage = validateFields();
 		boolean valid = errorMessage.isEmpty();
-		spawnButton.setEnabled(state == GameState.LOGGED_IN && valid);
-		spawnButton.setText(spawnButton.isEnabled() ? "Spawn Entity" : "Can't Spawn: " + errorMessage);
+		boolean canSpawn = state == GameState.LOGGED_IN && valid;
+		spawnButton.setEnabled(canSpawn);
+		spawnButton.setText(canSpawn ? "Spawn Entity" : "Can't Spawn: " + errorMessage);
 
 		saveChangesButton.setEnabled(true);
 		saveChangesButton.setText("Save Changes");
@@ -144,9 +157,9 @@ class CitizenPanel extends PluginPanel {
 	}
 
 	private String validateFields() {
-//		if (selectedPosition == null) {
-//			return "No Position Selected";
-//		}
+		if (selectedPosition == null) {
+			return "No Position Selected";
+		}
 
 		EntityType selectedType = (EntityType) entityTypeSelection.getSelectedItem();
 
@@ -207,8 +220,7 @@ class CitizenPanel extends PluginPanel {
 
 			reloadButton.addActionListener(e -> {
 				selectedEntity = null;
-				plugin.shutDown();
-				plugin.startUp();
+				plugin.reload();
 				UpdateEditorFields();
 			});
 			layoutPanel.add(reloadButton, gbc);
@@ -311,6 +323,7 @@ class CitizenPanel extends PluginPanel {
 			});
 
 			AnimationID[] animIds = AnimationID.values();
+			Arrays.sort(animIds, Comparator.comparing(Enum::name));
 
 			gbc.gridy++;
 			gbc.gridx = 0;
@@ -459,6 +472,7 @@ class CitizenPanel extends PluginPanel {
 				}
 
 				update();
+				plugin.reload();
 			});
 			layoutPanel.add(updateButton, gbc);
 		}
@@ -705,7 +719,19 @@ class CitizenPanel extends PluginPanel {
 		recolorFindField.setText(e.getRecolorFindString());
 		recolorReplaceField.setText(e.getRecolorReplaceString());
 
-		if (e instanceof Citizen) {
+		if (e.translate != null) {
+			translateFieldX.setText(String.valueOf(e.translate[0]));
+			translateFieldY.setText(String.valueOf(e.translate[1]));
+			translateFieldZ.setText(String.valueOf(e.translate[2]));
+		}
+
+		if (e.scale != null) {
+			scaleFieldX.setText(String.valueOf(e.scale[0]));
+			scaleFieldY.setText(String.valueOf(e.scale[1]));
+			scaleFieldZ.setText(String.valueOf(e.scale[2]));
+		}
+
+		if (e.isCitizen()) {
 			Citizen c = (Citizen) e;
 			entityNameField.setText(c.name);
 			examineTextField.setText(c.examine);
@@ -715,11 +741,13 @@ class CitizenPanel extends PluginPanel {
 			}
 		}
 
-		if (e instanceof WanderingCitizen) {
+		if (e.entityType == EntityType.WanderingCitizen) {
 			WanderingCitizen w = (WanderingCitizen) e;
 			wanderRegionBL = w.wanderRegionBL;
 			wanderRegionTR = w.wanderRegionTR;
 		}
+
+		update();
 	}
 
 	public void cleanup() {

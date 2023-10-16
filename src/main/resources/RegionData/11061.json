@@ -1,0 +1,41 @@
+{
+    "version": 0.8,
+    "regionId": 11061,
+    "citizenRoster": [
+        {
+            "name": "Bees",
+            "examineText": "Not the bees!",
+            "moveAnimation": "BeeIdle",
+            "wanderBoxBL": {
+                "x": 2756,
+                "y": 3441,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2758,
+                "y": 3446,
+                "plane": 0
+            },
+            "uuid": "80264988-b3b8-40e4-8288-e9df69d1cda4",
+            "regionId": 11061,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2758,
+                "y": 3446,
+                "plane": 0
+            },
+            "modelIds": [
+                2950
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                12
+            ],
+            "modelRecolorReplace": [
+                3988
+            ],
+            "idleAnimation": "BeeIdle"
+        }
+    ],
+    "sceneryRoster": []
+}
