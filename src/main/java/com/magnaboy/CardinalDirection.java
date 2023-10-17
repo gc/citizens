@@ -1,8 +1,7 @@
 package com.magnaboy;
 
-import lombok.Getter;
-
 import java.util.HashMap;
+import lombok.Getter;
 
 @Getter
 public enum CardinalDirection {

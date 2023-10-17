@@ -5,10 +5,9 @@ import com.magnaboy.scripting.ActionType;
 import com.magnaboy.scripting.ScriptAction;
 import com.magnaboy.scripting.ScriptFile;
 import com.magnaboy.scripting.ScriptLoader;
-import net.runelite.api.coords.WorldPoint;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import net.runelite.api.coords.WorldPoint;
 
 public class ScriptedCitizen extends Citizen<ScriptedCitizen> {
 	public ScriptAction currentAction;
