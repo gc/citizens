@@ -127,8 +127,33 @@
                 99
             ],
             "idleAnimation": "ChurchSitting"
+        },
+        {
+            "name": "Kors Aertsen",
+            "examineText": "Visiting Varrock for a few weeks, for business.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "9a7e1243-59b7-4a95-b76a-0b67669d2772",
+            "regionId": 12854,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3214,
+                "y": 3504,
+                "plane": 0
+            },
+            "modelIds": [
+                170,
+                256,
+                292,
+                317,
+                217,
+                249,
+                176
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "Sitting"
         }
     ],
-    "sceneryRoster": [
-    ]
+    "sceneryRoster": []
 }

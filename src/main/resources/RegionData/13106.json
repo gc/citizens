@@ -1,0 +1,51 @@
+{
+    "version": 0.8,
+    "regionId": 13106,
+    "citizenRoster": [
+        {
+            "name": "Ali the wanderer",
+            "examineText": "He\u0027s just wandering around.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3279,
+                "y": 3240,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3292,
+                "y": 3248,
+                "plane": 0
+            },
+            "uuid": "7de72de4-8585-4756-8c6d-c87847115c65",
+            "regionId": 13106,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3292,
+                "y": 3248,
+                "plane": 0
+            },
+            "modelIds": [
+                6086,
+                249,
+                292,
+                170,
+                254,
+                185,
+                176
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                8741,
+                25238,
+                4550
+            ],
+            "modelRecolorReplace": [
+                10351,
+                10351,
+                5555
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

@@ -1,0 +1,37 @@
+{
+    "version": 0.8,
+    "regionId": 12849,
+    "citizenRoster": [
+        {
+            "name": "Ghost of Lumbridge",
+            "examineText": "Spooky!",
+            "moveAnimation": "GhostWalk",
+            "wanderBoxBL": {
+                "x": 3247,
+                "y": 3194,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3252,
+                "y": 3195,
+                "plane": 0
+            },
+            "uuid": "fc955860-f844-4401-9e80-d634482143bf",
+            "regionId": 12849,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3252,
+                "y": 3195,
+                "plane": 0
+            },
+            "modelIds": [
+                21154
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "GhostIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

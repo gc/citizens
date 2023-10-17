@@ -18,7 +18,6 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -365,21 +364,19 @@ public class CitizenRegion {
 		});
 	}
 
-	public void percentileAction(int percentage, int maxDelaySeconds, Consumer<Entity> callback) {
+	public void runOncePerTimePeriod(int timePeriodSeconds, int callIntervalSeconds, Consumer<Entity> callback) {
+		double chance = (double) callIntervalSeconds / timePeriodSeconds;
+
 		List<Entity> entityList = new ArrayList<>(entities.values());
-		Collections.shuffle(entityList);
 
-		int selectedCount = (int) Math.ceil(percentage * entityList.size() / 100.0);
-
-		int maxDelayMillis = maxDelaySeconds * 1000;
-
-		for (int i = 0; i < selectedCount; i++) {
-			Entity entity = entityList.get(i);
+		for (Entity entity : entityList) {
 			if (!entity.isActive()) {
 				continue;
 			}
-			executorService.schedule(() -> callback.accept(entity), Util.getRandom(0, maxDelayMillis), TimeUnit.MILLISECONDS);
+			if (Math.random() < chance) {
+				int delayMs = (Util.getRandom(0, (callIntervalSeconds / 2) * 1000));
+				executorService.schedule(() -> callback.accept(entity), delayMs, TimeUnit.MILLISECONDS);
+			}
 		}
 	}
-
 }

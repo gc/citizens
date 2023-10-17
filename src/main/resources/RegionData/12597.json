@@ -37,10 +37,10 @@
                 "It\u0027s all about balance...",
                 "Is this safe?"
             ],
+            "startScript": "apothecaryScript",
             "uuid": "edd6337c-423e-42b6-ad10-2b0e308b9cd3",
             "regionId": 12597,
             "entityType": "ScriptedCitizen",
-            "startScript": "apothecaryScript",
             "worldLocation": {
                 "x": 3197,
                 "y": 3405,
@@ -78,11 +78,12 @@
         {
             "name": "Gardener",
             "examineText": "A gardener.",
+            "remarks": [],
             "moveAnimation": "HumanWalk",
+            "startScript": "gardenerScript",
             "uuid": "f1b99e86-4365-4cde-ae0a-bed5263aa418",
             "regionId": 12597,
             "entityType": "ScriptedCitizen",
-            "startScript": "gardenerScript",
             "worldLocation": {
                 "x": 3163,
                 "y": 3446,
@@ -115,6 +116,44 @@
                 5572
             ],
             "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Raccoon",
+            "examineText": "Cute.",
+            "moveAnimation": "RaccoonWalk",
+            "wanderBoxBL": {
+                "x": 3149,
+                "y": 3422,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3159,
+                "y": 3423,
+                "plane": 0
+            },
+            "uuid": "e49e4891-124c-414e-93ae-238b558bb583",
+            "regionId": 12597,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3159,
+                "y": 3423,
+                "plane": 0
+            },
+            "modelIds": [
+                11724
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                5161,
+                5165,
+                7240
+            ],
+            "modelRecolorReplace": [
+                3243,
+                3247,
+                2235
+            ],
+            "idleAnimation": "RaccoonIdle"
         }
     ],
     "sceneryRoster": [

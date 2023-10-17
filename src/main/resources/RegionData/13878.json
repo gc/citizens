@@ -1,0 +1,43 @@
+{
+    "version": 0.8,
+    "regionId": 13878,
+    "citizenRoster": [
+        {
+            "name": "Steven",
+            "examineText": "A freshly-turned werewolf.",
+            "remarks": [
+                "Why oh why...",
+                "Somebody help me..."
+            ],
+            "moveAnimation": "WerewolfWalk",
+            "wanderBoxBL": {
+                "x": 3504,
+                "y": 3467,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3507,
+                "y": 3468,
+                "plane": 0
+            },
+            "uuid": "e8b75a86-588c-445a-b118-8414b4dae5ca",
+            "regionId": 13878,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3507,
+                "y": 3468,
+                "plane": 0
+            },
+            "modelIds": [
+                26177,
+                26188,
+                26181
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "WerewolfIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

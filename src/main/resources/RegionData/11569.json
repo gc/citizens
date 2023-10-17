@@ -1,0 +1,48 @@
+{
+    "version": 0.8,
+    "regionId": 11569,
+    "citizenRoster": [
+        {
+            "name": "Harry",
+            "examineText": "A little monkey.",
+            "moveAnimation": "MonkeyWalk",
+            "wanderBoxBL": {
+                "x": 2911,
+                "y": 3167,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2913,
+                "y": 3172,
+                "plane": 0
+            },
+            "uuid": "8dcbbf3c-f074-4ba7-9ec2-cf0780fb39c3",
+            "regionId": 11569,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2913,
+                "y": 3172,
+                "plane": 0
+            },
+            "modelIds": [
+                7744
+            ],
+            "baseOrientation": 0,
+            "scale": [
+                -0.8,
+                -0.8,
+                -0.8
+            ],
+            "modelRecolorFind": [
+                7721,
+                6932
+            ],
+            "modelRecolorReplace": [
+                7605,
+                6689
+            ],
+            "idleAnimation": "MonkeyIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

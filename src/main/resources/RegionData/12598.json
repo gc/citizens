@@ -28,6 +28,91 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "FireCook"
+        },
+        {
+            "name": "Squirrel",
+            "examineText": "Cute.",
+            "remarks": [],
+            "moveAnimation": "SquirrelWalk",
+            "wanderBoxBL": {
+                "x": 3170,
+                "y": 3456,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3179,
+                "y": 3461,
+                "plane": 0
+            },
+            "uuid": "dc287ef4-aa9c-4789-93de-11ba37de7a3c",
+            "regionId": 12598,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3179,
+                "y": 3461,
+                "plane": 0
+            },
+            "modelIds": [
+                11723
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                4300,
+                7240,
+                61,
+                5173,
+                30
+            ],
+            "modelRecolorReplace": [
+                3738,
+                4510,
+                4510,
+                4760,
+                3738
+            ],
+            "idleAnimation": "SquirrelIdle"
+        },
+        {
+            "name": "Child",
+            "examineText": "A child.",
+            "moveAnimation": "ChildWalk",
+            "wanderBoxBL": {
+                "x": 3177,
+                "y": 3506,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3181,
+                "y": 3512,
+                "plane": 0
+            },
+            "uuid": "bbff28c1-4bc3-45a1-b510-3fbb9222d67f",
+            "regionId": 12598,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3181,
+                "y": 3512,
+                "plane": 0
+            },
+            "modelIds": [
+                2906,
+                2915,
+                2910
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                8741,
+                22426,
+                25238,
+                4550
+            ],
+            "modelRecolorReplace": [
+                10351,
+                10351,
+                10351,
+                5555
+            ],
+            "idleAnimation": "ChildIdle"
         }
     ],
     "sceneryRoster": [

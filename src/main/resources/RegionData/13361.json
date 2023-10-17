@@ -1,0 +1,51 @@
+{
+    "version": 0.8,
+    "regionId": 13361,
+    "citizenRoster": [
+        {
+            "name": "Ali the spy",
+            "examineText": "Up to no good. But who is he spying on?",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3337,
+                "y": 3148,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3342,
+                "y": 3155,
+                "plane": 0
+            },
+            "uuid": "576030cc-da28-4179-ac65-c88826e9fffc",
+            "regionId": 13361,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3342,
+                "y": 3155,
+                "plane": 0
+            },
+            "modelIds": [
+                6086,
+                249,
+                292,
+                170,
+                254,
+                185,
+                176
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                8741,
+                25238,
+                4550
+            ],
+            "modelRecolorReplace": [
+                10351,
+                10351,
+                5555
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

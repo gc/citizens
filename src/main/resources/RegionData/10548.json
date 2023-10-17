@@ -1,0 +1,37 @@
+{
+    "version": 0.8,
+    "regionId": 10548,
+    "citizenRoster": [
+        {
+            "name": "Plopper",
+            "examineText": "A compost machine.",
+            "moveAnimation": "PigletWalk",
+            "wanderBoxBL": {
+                "x": 2662,
+                "y": 3373,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2665,
+                "y": 3376,
+                "plane": 0
+            },
+            "uuid": "9cd6e1d7-7615-4c9c-9b4d-9c0c0355cb60",
+            "regionId": 10548,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2665,
+                "y": 3376,
+                "plane": 0
+            },
+            "modelIds": [
+                7363
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "PigletIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

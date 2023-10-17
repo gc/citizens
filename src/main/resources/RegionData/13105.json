@@ -1,0 +1,98 @@
+{
+    "version": 0.8,
+    "regionId": 13105,
+    "citizenRoster": [
+        {
+            "name": "Ali the goat herder",
+            "examineText": "Loves his goat.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3311,
+                "y": 3138,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3313,
+                "y": 3140,
+                "plane": 0
+            },
+            "uuid": "bc9a8714-c376-4ea6-b381-fa5c3127968b",
+            "regionId": 13105,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3313,
+                "y": 3140,
+                "plane": 0
+            },
+            "modelIds": [
+                6085,
+                247,
+                292,
+                326,
+                173,
+                176,
+                6090,
+                181
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                8741,
+                43072,
+                4550
+            ],
+            "modelRecolorReplace": [
+                10353,
+                4537,
+                4525
+            ],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Abex",
+            "examineText": "The goat, loves his Ali.",
+            "moveAnimation": "GoatWalk",
+            "wanderBoxBL": {
+                "x": 3314,
+                "y": 3138,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3316,
+                "y": 3140,
+                "plane": 0
+            },
+            "uuid": "5f951976-3061-435b-8a94-d6c6ade7f504",
+            "regionId": 13105,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3316,
+                "y": 3140,
+                "plane": 0
+            },
+            "modelIds": [
+                20273,
+                20281,
+                20276
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                8390,
+                8384,
+                8371,
+                5268,
+                5388,
+                5392
+            ],
+            "modelRecolorReplace": [
+                7500,
+                7504,
+                8394,
+                10421,
+                8406,
+                8400
+            ],
+            "idleAnimation": "GoatIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

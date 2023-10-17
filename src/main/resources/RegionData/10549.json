@@ -1,0 +1,103 @@
+{
+    "version": 0.8,
+    "regionId": 10549,
+    "citizenRoster": [
+        {
+            "name": "Dominic",
+            "examineText": "Think\u0027s he\u0027s the next Robin Hood.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 2644,
+                "y": 3422,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2650,
+                "y": 3426,
+                "plane": 0
+            },
+            "uuid": "4f362fc3-9660-4e66-9da2-7ee35b5e2f08",
+            "regionId": 10549,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2650,
+                "y": 3426,
+                "plane": 0
+            },
+            "modelIds": [
+                12137,
+                246,
+                311,
+                323,
+                169,
+                10218,
+                563,
+                262,
+                185
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [
+                926,
+                7700,
+                11200,
+                25238,
+                7469
+            ],
+            "modelRecolorReplace": [
+                1701,
+                1581,
+                1701,
+                1820,
+                7446
+            ],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Gordon",
+            "examineText": "A dwarven smith, hardly working.",
+            "moveAnimation": "DwarfWalk",
+            "wanderBoxBL": {
+                "x": 2636,
+                "y": 3415,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2638,
+                "y": 3417,
+                "plane": 0
+            },
+            "uuid": "f5d5407f-c850-44ed-95fe-09263f6160fd",
+            "regionId": 10549,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2638,
+                "y": 3417,
+                "plane": 0
+            },
+            "modelIds": [
+                2970,
+                7059,
+                2978,
+                2981,
+                2985
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [
+                61,
+                803,
+                2578,
+                33,
+                49
+            ],
+            "modelRecolorReplace": [
+                24730,
+                6040,
+                4750,
+                11175,
+                169
+            ],
+            "idleAnimation": "DwarfIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

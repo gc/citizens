@@ -1,0 +1,48 @@
+{
+    "version": 0.8,
+    "regionId": 13110,
+    "citizenRoster": [
+        {
+            "name": "Amanda",
+            "examineText": "Waiting for her husband to return from Canifis.",
+            "remarks": [
+                "Where is he?",
+                "I\u0027ve been waiting for days...",
+                "Steven my love - where are you?"
+            ],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3317,
+                "y": 3467,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3319,
+                "y": 3468,
+                "plane": 0
+            },
+            "uuid": "0efecdaa-3557-4566-b14a-852e399baa75",
+            "regionId": 13110,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3319,
+                "y": 3468,
+                "plane": 0
+            },
+            "modelIds": [
+                16456,
+                417,
+                470,
+                332,
+                10706,
+                419,
+                358
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

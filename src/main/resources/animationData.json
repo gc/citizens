@@ -17,6 +17,12 @@
         "clientTicks": 23,
         "realDurationMillis": 460
     },
+    "3": {
+        "id": 3,
+        "frameCount": 4,
+        "clientTicks": 20,
+        "realDurationMillis": 400
+    },
     "98": {
         "id": 98,
         "frameCount": 8,
@@ -34,6 +40,18 @@
         "frameCount": 4,
         "clientTicks": 69,
         "realDurationMillis": 1380
+    },
+    "104": {
+        "id": 104,
+        "frameCount": 8,
+        "clientTicks": 40,
+        "realDurationMillis": 800
+    },
+    "180": {
+        "id": 180,
+        "frameCount": 89,
+        "clientTicks": 450,
+        "realDurationMillis": 9000
     },
     "189": {
         "id": 189,
@@ -58,6 +76,36 @@
         "frameCount": 8,
         "clientTicks": 31,
         "realDurationMillis": 620
+    },
+    "219": {
+        "id": 219,
+        "frameCount": 5,
+        "clientTicks": 20,
+        "realDurationMillis": 400
+    },
+    "222": {
+        "id": 222,
+        "frameCount": 2,
+        "clientTicks": 42,
+        "realDurationMillis": 840
+    },
+    "229": {
+        "id": 229,
+        "frameCount": 16,
+        "clientTicks": 60,
+        "realDurationMillis": 1200
+    },
+    "283": {
+        "id": 283,
+        "frameCount": 8,
+        "clientTicks": 54,
+        "realDurationMillis": 1080
+    },
+    "286": {
+        "id": 286,
+        "frameCount": 2,
+        "clientTicks": 42,
+        "realDurationMillis": 840
     },
     "314": {
         "id": 314,
@@ -106,6 +154,12 @@
         "frameCount": 9,
         "clientTicks": 42,
         "realDurationMillis": 840
+    },
+    "622": {
+        "id": 622,
+        "frameCount": 19,
+        "clientTicks": 238,
+        "realDurationMillis": 4760
     },
     "713": {
         "id": 713,
@@ -179,6 +233,12 @@
         "clientTicks": 138,
         "realDurationMillis": 2760
     },
+    "900": {
+        "id": 900,
+        "frameCount": 2,
+        "clientTicks": 42,
+        "realDurationMillis": 840
+    },
     "1147": {
         "id": 1147,
         "frameCount": 2,
@@ -233,6 +293,18 @@
         "clientTicks": 72,
         "realDurationMillis": 1440
     },
+    "2165": {
+        "id": 2165,
+        "frameCount": 12,
+        "clientTicks": 46,
+        "realDurationMillis": 920
+    },
+    "2166": {
+        "id": 2166,
+        "frameCount": 5,
+        "clientTicks": 45,
+        "realDurationMillis": 900
+    },
     "2268": {
         "id": 2268,
         "frameCount": 8,
@@ -275,6 +347,42 @@
         "clientTicks": 52,
         "realDurationMillis": 1040
     },
+    "3210": {
+        "id": 3210,
+        "frameCount": 9,
+        "clientTicks": 36,
+        "realDurationMillis": 720
+    },
+    "3211": {
+        "id": 3211,
+        "frameCount": 46,
+        "clientTicks": 272,
+        "realDurationMillis": 5440
+    },
+    "3213": {
+        "id": 3213,
+        "frameCount": 4,
+        "clientTicks": 20,
+        "realDurationMillis": 400
+    },
+    "3214": {
+        "id": 3214,
+        "frameCount": 9,
+        "clientTicks": 36,
+        "realDurationMillis": 720
+    },
+    "3241": {
+        "id": 3241,
+        "frameCount": 3,
+        "clientTicks": 18,
+        "realDurationMillis": 360
+    },
+    "3242": {
+        "id": 3242,
+        "frameCount": 80,
+        "clientTicks": 384,
+        "realDurationMillis": 7680
+    },
     "3281": {
         "id": 3281,
         "frameCount": 9,
@@ -286,6 +394,24 @@
         "frameCount": 13,
         "clientTicks": 65,
         "realDurationMillis": 1300
+    },
+    "3424": {
+        "id": 3424,
+        "frameCount": 8,
+        "clientTicks": 40,
+        "realDurationMillis": 800
+    },
+    "3426": {
+        "id": 3426,
+        "frameCount": 8,
+        "clientTicks": 24,
+        "realDurationMillis": 480
+    },
+    "3475": {
+        "id": 3475,
+        "frameCount": 10,
+        "clientTicks": 60,
+        "realDurationMillis": 1200
     },
     "4021": {
         "id": 4021,
@@ -317,11 +443,35 @@
         "clientTicks": 36,
         "realDurationMillis": 720
     },
+    "4773": {
+        "id": 4773,
+        "frameCount": 8,
+        "clientTicks": 40,
+        "realDurationMillis": 800
+    },
+    "4777": {
+        "id": 4777,
+        "frameCount": 57,
+        "clientTicks": 356,
+        "realDurationMillis": 7120
+    },
     "5221": {
         "id": 5221,
         "frameCount": 6,
         "clientTicks": 24,
         "realDurationMillis": 480
+    },
+    "5334": {
+        "id": 5334,
+        "frameCount": 8,
+        "clientTicks": 32,
+        "realDurationMillis": 640
+    },
+    "5339": {
+        "id": 5339,
+        "frameCount": 40,
+        "clientTicks": 224,
+        "realDurationMillis": 4480
     },
     "5385": {
         "id": 5385,
@@ -334,6 +484,30 @@
         "frameCount": 99,
         "clientTicks": 396,
         "realDurationMillis": 7920
+    },
+    "5538": {
+        "id": 5538,
+        "frameCount": 16,
+        "clientTicks": 64,
+        "realDurationMillis": 1280
+    },
+    "5539": {
+        "id": 5539,
+        "frameCount": 16,
+        "clientTicks": 64,
+        "realDurationMillis": 1280
+    },
+    "5666": {
+        "id": 5666,
+        "frameCount": 8,
+        "clientTicks": 24,
+        "realDurationMillis": 480
+    },
+    "5668": {
+        "id": 5668,
+        "frameCount": 14,
+        "clientTicks": 84,
+        "realDurationMillis": 1680
     },
     "5872": {
         "id": 5872,
@@ -359,11 +533,53 @@
         "clientTicks": 48,
         "realDurationMillis": 960
     },
+    "6061": {
+        "id": 6061,
+        "frameCount": 1,
+        "clientTicks": 5,
+        "realDurationMillis": 100
+    },
+    "6062": {
+        "id": 6062,
+        "frameCount": 33,
+        "clientTicks": 494,
+        "realDurationMillis": 9880
+    },
+    "6193": {
+        "id": 6193,
+        "frameCount": 20,
+        "clientTicks": 40,
+        "realDurationMillis": 800
+    },
+    "6202": {
+        "id": 6202,
+        "frameCount": 16,
+        "clientTicks": 48,
+        "realDurationMillis": 960
+    },
+    "6203": {
+        "id": 6203,
+        "frameCount": 12,
+        "clientTicks": 60,
+        "realDurationMillis": 1200
+    },
     "6206": {
         "id": 6206,
         "frameCount": 16,
         "clientTicks": 80,
         "realDurationMillis": 1600
+    },
+    "6280": {
+        "id": 6280,
+        "frameCount": 1,
+        "clientTicks": 5,
+        "realDurationMillis": 100
+    },
+    "6282": {
+        "id": 6282,
+        "frameCount": 24,
+        "clientTicks": 120,
+        "realDurationMillis": 2400
     },
     "6484": {
         "id": 6484,
@@ -377,6 +593,36 @@
         "clientTicks": 196,
         "realDurationMillis": 3920
     },
+    "6627": {
+        "id": 6627,
+        "frameCount": 6,
+        "clientTicks": 30,
+        "realDurationMillis": 600
+    },
+    "6784": {
+        "id": 6784,
+        "frameCount": 7,
+        "clientTicks": 21,
+        "realDurationMillis": 420
+    },
+    "6834": {
+        "id": 6834,
+        "frameCount": 129,
+        "clientTicks": 516,
+        "realDurationMillis": 10320
+    },
+    "6835": {
+        "id": 6835,
+        "frameCount": 129,
+        "clientTicks": 516,
+        "realDurationMillis": 10320
+    },
+    "6837": {
+        "id": 6837,
+        "frameCount": 24,
+        "clientTicks": 152,
+        "realDurationMillis": 3040
+    },
     "7306": {
         "id": 7306,
         "frameCount": 8,
@@ -386,6 +632,18 @@
     "7307": {
         "id": 7307,
         "frameCount": 8,
+        "clientTicks": 40,
+        "realDurationMillis": 800
+    },
+    "7312": {
+        "id": 7312,
+        "frameCount": 8,
+        "clientTicks": 40,
+        "realDurationMillis": 800
+    },
+    "7313": {
+        "id": 7313,
+        "frameCount": 12,
         "clientTicks": 40,
         "realDurationMillis": 800
     },

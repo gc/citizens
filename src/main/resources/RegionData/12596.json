@@ -27,6 +27,26 @@
             "modelRecolorFind": [],
             "modelRecolorReplace": [],
             "idleAnimation": "DwarfMining2"
+        },
+        {
+            "name": "Skipper",
+            "examineText": "Undercover, spying on someone, or something.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "ac64d86d-8fb5-4d8d-b994-677c4cfe2911",
+            "regionId": 12596,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3174,
+                "y": 3350,
+                "plane": 0
+            },
+            "modelIds": [
+                21552
+            ],
+            "baseOrientation": 1536,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "PenguinIdle"
         }
     ],
     "sceneryRoster": [

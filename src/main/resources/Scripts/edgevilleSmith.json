@@ -1,0 +1,40 @@
+{
+    "actions": [
+        {
+            "action": "FaceDirection",
+            "targetRotation": "South"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "Swinging"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3109,
+                "y": 3497,
+                "plane": 0
+            }
+        },
+        {
+            "action": "FaceDirection",
+            "targetRotation": "East"
+        },
+        {
+            "action": "Animation",
+            "secondsTilNextAction": 0,
+            "animationId": "Grabbing"
+        },
+        {
+            "action": "WalkTo",
+            "secondsTilNextAction": 0.25,
+            "targetPosition": {
+                "x": 3106,
+                "y": 3497,
+                "plane": 0
+            }
+        }
+    ]
+}

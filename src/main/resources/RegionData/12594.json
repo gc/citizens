@@ -1,0 +1,180 @@
+{
+    "version": 0.8,
+    "regionId": 12594,
+    "citizenRoster": [
+        {
+            "name": "Sue",
+            "examineText": "Ready for action.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "be087374-15f8-4650-b7d0-bcd992339637",
+            "regionId": 12594,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3182,
+                "y": 3220,
+                "plane": 0
+            },
+            "modelIds": [
+                393,
+                468,
+                337,
+                353,
+                432,
+                361,
+                376,
+                23178,
+                23179
+            ],
+            "baseOrientation": 1536,
+            "translate": [
+                0.0,
+                0.0,
+                -1.0
+            ],
+            "modelRecolorFind": [
+                6798,
+                4626,
+                4550
+            ],
+            "modelRecolorReplace": [
+                4907,
+                24,
+                4556
+            ],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Prisoner",
+            "examineText": "A prisoner being transported. I wonder what he did.",
+            "remarks": [],
+            "moveAnimation": "HumanWalk",
+            "uuid": "2e1f587b-ed96-45ca-a8cc-e1ff2a6db82f",
+            "regionId": 12594,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3182,
+                "y": 3219,
+                "plane": 0
+            },
+            "modelIds": [
+                230,
+                246,
+                10741,
+                10743,
+                10742,
+                181
+            ],
+            "baseOrientation": 1536,
+            "translate": [
+                0.0,
+                0.0,
+                -1.0
+            ],
+            "modelRecolorFind": [
+                926
+            ],
+            "modelRecolorReplace": [
+                0
+            ],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Grimefang",
+            "remarks": [
+                "What's that noise?",
+                "Smells like human."
+            ],
+            "examineText": "A goblin.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "3328f161-d457-41d5-8ec2-f032e46a8402",
+            "regionId": 12594,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3185,
+                "y": 3254,
+                "plane": 0
+            },
+            "modelIds": [
+                24458,
+                24482,
+                24431,
+                24472,
+                24441,
+                24448
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "GoblinChill"
+        },
+        {
+            "name": "Sludgenose",
+            "remarks": [
+                "Me hungry.",
+                "Time for a nap?",
+                "Wish had more grog."
+            ],
+            "examineText": "A goblin.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "3c25fa0b-302e-4edb-94ed-f6cc2566086f",
+            "regionId": 12594,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3183,
+                "y": 3255,
+                "plane": 0
+            },
+            "modelIds": [
+                24458,
+                24482,
+                24431,
+                24472,
+                24441,
+                24448
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "GoblinIdle3"
+        }
+    ],
+    "sceneryRoster": [
+        {
+            "uuid": "40a05c92-639f-4ee4-a54d-02f236b8af8c",
+            "regionId": 12594,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3183,
+                "y": 3219,
+                "plane": 0
+            },
+            "modelIds": [
+                2260,
+                3818
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "FireIdle"
+        },
+        {
+            "uuid": "dc683d2c-667e-4a06-9226-ce0abf0fd27c",
+            "regionId": 12594,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3183,
+                "y": 3254,
+                "plane": 0
+            },
+            "modelIds": [
+                2260,
+                3818
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "FireIdle"
+        }
+    ]
+}

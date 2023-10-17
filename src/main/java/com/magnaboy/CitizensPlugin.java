@@ -109,9 +109,11 @@ public class CitizensPlugin extends Plugin {
 	@Override
 	protected void shutDown() {
 		cleanupAll();
-		if (navButton != null) {
-			clientToolbar.removeNavigation(navButton);
-		}
+	}
+
+	void reload() {
+		shutDown();
+		startUp();
 	}
 
 	protected void despawnAll() {
@@ -135,7 +137,7 @@ public class CitizensPlugin extends Plugin {
 	}
 
 	@Schedule(
-		period = 5,
+		period = 3,
 		unit = ChronoUnit.SECONDS,
 		asynchronous = true
 	)
@@ -145,18 +147,20 @@ public class CitizensPlugin extends Plugin {
 		}
 
 		for (CitizenRegion r : activeRegions.values()) {
-			r.percentileAction(75, 4, entity -> {
+			r.runOncePerTimePeriod(10, 3, entity -> {
 				if (entity instanceof WanderingCitizen) {
 					((WanderingCitizen) entity).wander();
 				}
 			});
 
-			r.percentileAction(20, 4, entity -> {
-				if (entity instanceof Citizen) {
+			r.runOncePerTimePeriod(60, 3, entity -> {
+				if (entity.isCitizen() && entity.distanceToPlayer() < 15) {
 					((Citizen) entity).sayRandomRemark();
 				}
 			});
 		}
+
+		panel.update();
 	}
 
 	@Subscribe
@@ -300,8 +304,8 @@ public class CitizensPlugin extends Plugin {
 
 	private void cleanupAll() {
 		shuttingDown = true;
-		despawnAll();
 		activeRegions.clear();
+		despawnAll();
 		overlayManager.remove(citizensOverlay);
 		CitizenRegion.cleanUp();
 		if (IS_DEVELOPMENT) {

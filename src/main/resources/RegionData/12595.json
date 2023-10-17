@@ -1,0 +1,129 @@
+{
+    "version": 0.8,
+    "regionId": 12595,
+    "citizenRoster": [
+        {
+            "name": "Rick",
+            "examineText": "A fisherman, not having much luck.",
+            "remarks": [
+                "This spot is cursed!",
+                "Where are all the fish?"
+            ],
+            "moveAnimation": "HumanWalk",
+            "uuid": "026ca9b8-a921-4526-b671-912768a58a43",
+            "regionId": 12595,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 3168,
+                "y": 3265,
+                "plane": 0
+            },
+            "modelIds": [
+                208,
+                252,
+                292,
+                162,
+                179,
+                4226,
+                4218,
+                562,
+                326,
+                417,
+                4390,
+                317
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "Fishing"
+        },
+        {
+            "name": "Ava",
+            "examineText": "A beautiful girl, waiting to be fed some fish.",
+            "remarks": [
+                "Let\u0027s just go somewhere else...",
+                "I\u0027m so hungry..."
+            ],
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 3168,
+                "y": 3263,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 3172,
+                "y": 3264,
+                "plane": 0
+            },
+            "uuid": "22758be6-5cd3-4a73-bed1-076b45414e84",
+            "regionId": 12595,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 3172,
+                "y": 3264,
+                "plane": 0
+            },
+            "modelIds": [
+                390,
+                471,
+                348,
+                353,
+                428,
+                358
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                25238,
+                43072,
+                8741,
+                4550,
+                6798
+            ],
+            "modelRecolorReplace": [
+                8472,
+                8472,
+                1686,
+                2524,
+                7613
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": [
+        {
+            "uuid": "ca904408-d915-4a32-a465-feb2092e38c8",
+            "regionId": 12595,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3179,
+                "y": 3266,
+                "plane": 0
+            },
+            "modelIds": [
+                2260,
+                3818
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "FireIdle"
+        },
+        {
+            "uuid": "65bb9395-6887-48f4-b493-c3a8fe03050f",
+            "regionId": 12595,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 3179,
+                "y": 3267,
+                "plane": 0
+            },
+            "modelIds": [
+                19995
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "FireIdle"
+        }
+    ]
+}
