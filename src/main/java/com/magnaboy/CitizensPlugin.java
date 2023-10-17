@@ -52,7 +52,7 @@ public class CitizensPlugin extends Plugin {
 	public ClientThread clientThread;
 	public CitizenPanel panel;
 
-	public boolean IS_DEVELOPMENT = true;
+	public boolean IS_DEVELOPMENT = false;
 	public boolean entitiesAreReady = false;
 	@Inject
 	public Gson gson;

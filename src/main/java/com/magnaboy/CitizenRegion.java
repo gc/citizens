@@ -50,7 +50,7 @@ public class CitizenRegion {
 		return loadRegion(regionId, false);
 	}
 
-	public synchronized static CitizenRegion loadRegion(int regionId, Boolean createIfNotExists) {
+	public static CitizenRegion loadRegion(int regionId, Boolean createIfNotExists) {
 		if (regionCache.containsKey(regionId)) {
 			return regionCache.get(regionId);
 		}
@@ -68,38 +68,37 @@ public class CitizenRegion {
 				} catch (IOException ex) {
 					throw new RuntimeException(ex);
 				}
-				CitizenRegion newRegion = loadRegion(regionId, false);
-				return newRegion;
+				return loadRegion(regionId, false);
 			}
-		} else {
-			try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-				CitizenRegion region = plugin.gson.fromJson(reader, CitizenRegion.class);
-				if (region == null) {
-					return null;
-				}
-				if (region.version != VALID_REGION_VERSION) {
-					return null;
-				}
-				for (CitizenInfo cInfo : region.citizenRoster) {
-					Citizen citizen = loadCitizen(plugin, cInfo);
-					if (citizen != null) {
-						region.entities.put(citizen.uuid, citizen);
-					}
-				}
-				for (SceneryInfo sInfo : region.sceneryRoster) {
-					Scenery scenery = loadScenery(plugin, sInfo);
-					region.entities.put(scenery.uuid, scenery);
-				}
-				if (plugin.IS_DEVELOPMENT) {
-					region.entities.values().forEach(Entity::validate);
-				}
-				regionCache.put(regionId, region);
-				return region;
-			} catch (IOException e) {
+			return null;
+		}
+
+		try (Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			CitizenRegion region = plugin.gson.fromJson(reader, CitizenRegion.class);
+			if (region == null) {
 				return null;
 			}
+			if (region.version != VALID_REGION_VERSION) {
+				return null;
+			}
+			for (CitizenInfo cInfo : region.citizenRoster) {
+				Citizen citizen = loadCitizen(plugin, cInfo);
+				if (citizen != null) {
+					region.entities.put(citizen.uuid, citizen);
+				}
+			}
+			for (SceneryInfo sInfo : region.sceneryRoster) {
+				Scenery scenery = loadScenery(plugin, sInfo);
+				region.entities.put(scenery.uuid, scenery);
+			}
+			if (plugin.IS_DEVELOPMENT) {
+				region.entities.values().forEach(Entity::validate);
+			}
+			regionCache.put(regionId, region);
+			return region;
+		} catch (IOException e) {
+			return null;
 		}
-		return null;
 	}
 
 	public static void initCitizenInfo(Citizen citizen, CitizenInfo info) {
@@ -222,15 +221,14 @@ public class CitizenRegion {
 
 	public static void cleanUp() {
 		forEachEntity(Entity::despawn);
-		regionCache.clear();
-		dirtyRegions.clear();
 
 		for (CitizenRegion r : regionCache.values()) {
 			r.citizenRoster.clear();
 			r.sceneryRoster.clear();
 			r.entities.clear();
-			r.executorService.shutdownNow();
 		}
+		regionCache.clear();
+		dirtyRegions.clear();
 	}
 
 	// DEVELOPMENT SECTION
