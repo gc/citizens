@@ -1,0 +1,38 @@
+{
+    "version": 0.8,
+    "regionId": 10038,
+    "citizenRoster": [
+        {
+            "name": "Goblin fish",
+            "examineText": "A goblin fish, not related to goblins.",
+            "moveAnimation": "GoblinFishWalk",
+            "wanderBoxBL": {
+                "x": 2503,
+                "y": 3507,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2507,
+                "y": 3512,
+                "plane": 0
+            },
+            "uuid": "74a1ec2a-81e9-432a-97a4-4e8682c88d12",
+            "regionId": 10038,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2507,
+                "y": 3512,
+                "plane": 0
+            },
+            "modelIds": [
+                23713,
+                23714
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "GoblinFishIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

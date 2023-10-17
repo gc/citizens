@@ -1,0 +1,49 @@
+{
+    "version": 0.8,
+    "regionId": 11829,
+    "citizenRoster": [
+        {
+            "name": "Squirrel",
+            "examineText": "Cute.",
+            "moveAnimation": "SquirrelWalk",
+            "wanderBoxBL": {
+                "x": 2957,
+                "y": 3431,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2963,
+                "y": 3436,
+                "plane": 0
+            },
+            "uuid": "342b7048-5fb6-439f-bd87-907cebb0152d",
+            "regionId": 11829,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2963,
+                "y": 3436,
+                "plane": 0
+            },
+            "modelIds": [
+                11723
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                4300,
+                7240,
+                61,
+                5173,
+                30
+            ],
+            "modelRecolorReplace": [
+                3738,
+                4510,
+                4510,
+                4760,
+                3738
+            ],
+            "idleAnimation": "SquirrelIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

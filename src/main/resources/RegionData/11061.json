@@ -5,6 +5,7 @@
         {
             "name": "Bees",
             "examineText": "Not the bees!",
+            "remarks": [],
             "moveAnimation": "BeeIdle",
             "wanderBoxBL": {
                 "x": 2756,
@@ -35,6 +36,46 @@
                 3988
             ],
             "idleAnimation": "BeeIdle"
+        },
+        {
+            "name": "Forester",
+            "examineText": "He likes to cut down trees. Not sure why.",
+            "moveAnimation": "DogWalk",
+            "uuid": "4ba2ae1e-b222-4f8f-9a98-aae5da1b432f",
+            "regionId": 11061,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 2758,
+                "y": 3431,
+                "plane": 0
+            },
+            "modelIds": [
+                217,
+                247,
+                292,
+                151,
+                179,
+                274,
+                181,
+                196,
+                326,
+                323,
+                510
+            ],
+            "baseOrientation": 512,
+            "modelRecolorFind": [
+                7700,
+                8741,
+                43072,
+                11200
+            ],
+            "modelRecolorReplace": [
+                13200,
+                11148,
+                4550,
+                10508
+            ],
+            "idleAnimation": "Woodcutting"
         }
     ],
     "sceneryRoster": []

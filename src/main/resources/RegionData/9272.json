@@ -1,0 +1,106 @@
+{
+    "version": 0.8,
+    "regionId": 9272,
+    "citizenRoster": [
+        {
+            "name": "Paul",
+            "examineText": "A wizard.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 2333,
+                "y": 3581,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2337,
+                "y": 3585,
+                "plane": 0
+            },
+            "uuid": "83b22a88-006c-44ff-a2b0-3f59759a7b04",
+            "regionId": 9272,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2337,
+                "y": 3585,
+                "plane": 0
+            },
+            "modelIds": [
+                215,
+                181,
+                251,
+                292,
+                170,
+                176,
+                4844,
+                534,
+                202
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                25238,
+                8741,
+                6798,
+                40384
+            ],
+            "modelRecolorReplace": [
+                38439,
+                38439,
+                127,
+                38439
+            ],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "name": "Kim",
+            "examineText": "A wizard.",
+            "moveAnimation": "HumanWalk",
+            "wanderBoxBL": {
+                "x": 2331,
+                "y": 3580,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2338,
+                "y": 3584,
+                "plane": 0
+            },
+            "uuid": "6c1142e9-9a6c-494f-8039-5448c2834326",
+            "regionId": 9272,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2338,
+                "y": 3584,
+                "plane": 0
+            },
+            "modelIds": [
+                390,
+                358,
+                11359,
+                11348,
+                10706,
+                11357,
+                11354,
+                3194
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                25238,
+                8741,
+                6798,
+                123,
+                908,
+                4550
+            ],
+            "modelRecolorReplace": [
+                38817,
+                38817,
+                20,
+                39607,
+                43792,
+                6730
+            ],
+            "idleAnimation": "HumanIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

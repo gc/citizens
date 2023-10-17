@@ -29,7 +29,7 @@
             "idleAnimation": "DwarfMining2"
         },
         {
-            "name": "Skippy",
+            "name": "Skipper",
             "examineText": "Undercover, spying on someone, or something.",
             "moveAnimation": "HumanWalk",
             "uuid": "ac64d86d-8fb5-4d8d-b994-677c4cfe2911",

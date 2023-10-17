@@ -1,0 +1,39 @@
+{
+    "version": 0.8,
+    "regionId": 10290,
+    "citizenRoster": [
+        {
+            "name": "Brother Keptic",
+            "examineText": "An elderly monk.",
+            "moveAnimation": "HumanWithStickWalk",
+            "uuid": "41c6a345-2104-40c3-9a6b-58ea12666725",
+            "regionId": 10290,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 2597,
+                "y": 3216,
+                "plane": 0
+            },
+            "modelIds": [
+                223,
+                181,
+                246,
+                299,
+                170,
+                176,
+                260
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [
+                25238,
+                8741
+            ],
+            "modelRecolorReplace": [
+                4769,
+                4769
+            ],
+            "idleAnimation": "Sitting"
+        }
+    ],
+    "sceneryRoster": []
+}

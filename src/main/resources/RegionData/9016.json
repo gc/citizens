@@ -1,0 +1,103 @@
+{
+    "version": 0.8,
+    "regionId": 9016,
+    "citizenRoster": [
+        {
+            "name": "Baby mole",
+            "examineText": "A baby mole.",
+            "moveAnimation": "MoleWalk",
+            "wanderBoxBL": {
+                "x": 2289,
+                "y": 3616,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2293,
+                "y": 3617,
+                "plane": 0
+            },
+            "uuid": "9a9aa207-b166-426c-87bc-5ba5c8968ffc",
+            "regionId": 9016,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2293,
+                "y": 3617,
+                "plane": 0
+            },
+            "modelIds": [
+                42012
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                5388,
+                5392,
+                5268,
+                5272,
+                5276,
+                4558
+            ],
+            "modelRecolorReplace": [
+                317,
+                322,
+                326,
+                328,
+                332,
+                63706
+            ],
+            "idleAnimation": "MoleIdle"
+        }
+    ],
+    "sceneryRoster": [
+        {
+            "uuid": "c09868a9-fb2b-4077-8ae4-01172e312182",
+            "regionId": 9016,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 2294,
+                "y": 3616,
+                "plane": 0
+            },
+            "modelIds": [
+                15049
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "482035c4-5537-4a85-af7a-38fa57f3d731",
+            "regionId": 9016,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 2291,
+                "y": 3619,
+                "plane": 0
+            },
+            "modelIds": [
+                15049
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        },
+        {
+            "uuid": "57780fc8-50e1-45d8-a4ac-7332067d625f",
+            "regionId": 9016,
+            "entityType": "Scenery",
+            "worldLocation": {
+                "x": 2288,
+                "y": 3616,
+                "plane": 0
+            },
+            "modelIds": [
+                15049
+            ],
+            "baseOrientation": 1024,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "HumanIdle"
+        }
+    ]
+}

@@ -147,6 +147,12 @@ public enum AnimationID {
 	PenguinIdle(5668),
 	PenguinWalk(5666),
 
+	WerewolfIdle(6539),
+	WerewolfWalk(6541),
+
+	MoleIdle(3309),
+	MoleWalk(3313),
+
 	WheatFieldIdle(6627),
 
 	// ???

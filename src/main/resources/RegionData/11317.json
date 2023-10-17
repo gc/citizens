@@ -1,0 +1,74 @@
+{
+    "version": 0.8,
+    "regionId": 11317,
+    "citizenRoster": [
+        {
+            "name": "Joanne",
+            "examineText": "A Citizen of Gielinor.",
+            "moveAnimation": "HumanWalk",
+            "uuid": "8a834912-49ca-45cd-9536-ce35c5a4d9b8",
+            "regionId": 11317,
+            "entityType": "StationaryCitizen",
+            "worldLocation": {
+                "x": 2854,
+                "y": 3435,
+                "plane": 0
+            },
+            "modelIds": [
+                393,
+                471,
+                348,
+                353,
+                421,
+                361
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                25238,
+                5532,
+                4550,
+                8741
+            ],
+            "modelRecolorReplace": [
+                571,
+                10508,
+                4645,
+                2714
+            ],
+            "idleAnimation": "Sitting"
+        },
+        {
+            "name": "Charlie",
+            "examineText": "A cute dog.",
+            "moveAnimation": "DogWalk",
+            "wanderBoxBL": {
+                "x": 2826,
+                "y": 3441,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2829,
+                "y": 3447,
+                "plane": 0
+            },
+            "uuid": "882a505f-7b0c-4fc5-b187-2be6f3d62b42",
+            "regionId": 11317,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2829,
+                "y": 3447,
+                "plane": 0
+            },
+            "modelIds": [
+                18168,
+                18170,
+                18167
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [],
+            "modelRecolorReplace": [],
+            "idleAnimation": "DogIdle"
+        }
+    ],
+    "sceneryRoster": []
+}

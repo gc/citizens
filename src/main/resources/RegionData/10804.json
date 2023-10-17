@@ -1,0 +1,59 @@
+{
+    "version": 0.8,
+    "regionId": 10804,
+    "citizenRoster": [
+        {
+            "name": "Legends\u0027 Guard",
+            "examineText": "A Legends\u0027 Guild guard.",
+            "moveAnimation": "HumanWithStickWalk",
+            "wanderBoxBL": {
+                "x": 2728,
+                "y": 3351,
+                "plane": 0
+            },
+            "wanderBoxTR": {
+                "x": 2729,
+                "y": 3365,
+                "plane": 0
+            },
+            "uuid": "e43ebcb9-aa2f-456b-aea4-242de5980fdd",
+            "regionId": 10804,
+            "entityType": "WanderingCitizen",
+            "worldLocation": {
+                "x": 2729,
+                "y": 3365,
+                "plane": 0
+            },
+            "modelIds": [
+                219,
+                253,
+                306,
+                164,
+                179,
+                268,
+                184,
+                540,
+                317
+            ],
+            "baseOrientation": 0,
+            "modelRecolorFind": [
+                7952,
+                61,
+                41,
+                926,
+                57,
+                10004
+            ],
+            "modelRecolorReplace": [
+                127,
+                43218,
+                43181,
+                127,
+                43218,
+                127
+            ],
+            "idleAnimation": "HumanWithStickIdle"
+        }
+    ],
+    "sceneryRoster": []
+}
