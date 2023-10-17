@@ -234,11 +234,7 @@ public class CitizenRegion {
 	// DEVELOPMENT SECTION
 	public static Citizen spawnCitizenFromPanel(CitizenInfo info) {
 		Citizen citizen = loadCitizen(plugin, info);
-		loadRegion(info.regionId, true);
 		CitizenRegion region = loadRegion(info.regionId, true);
-		if (region == null) {
-			throw new RuntimeException("Null region for ID: " + info.regionId);
-		}
 		region.entities.put(info.uuid, citizen);
 		region.citizenRoster.add(info);
 		dirtyRegion(region);
