@@ -109,6 +109,9 @@ public class CitizensPlugin extends Plugin {
 	@Override
 	protected void shutDown() {
 		cleanupAll();
+		if (navButton != null) {
+			clientToolbar.removeNavigation(navButton);
+		}
 	}
 
 	void reload() {
