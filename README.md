@@ -1,5 +1,7 @@
 # Citizens
 
+> This plugin currently doesn't work because an update to OSRS broke it, and I don't know how to fix it. If you are interested in helping, you can find me (Magnaboy) in the runelite discord.
+
 This plugin adds 'fake npcs' (citizens) to RuneScape to bring more life and action to the world.
 
 # Guidelines For Adding Citizens
