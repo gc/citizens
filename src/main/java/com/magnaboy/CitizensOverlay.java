@@ -135,7 +135,7 @@ public class CitizensOverlay extends Overlay {
 				Point p = Perspective.localToCanvas(plugin.client, citizen.getLocalLocation(), plugin
 					.client
 					.getPlane(), citizen
-					.rlObject.getModelHeight());
+					.rlObject.getModel().getModelHeight());
 				if (p != null) {
 					graphics.setFont(overheadFont);
 					FontMetrics metrics = graphics.getFontMetrics(overheadFont);
@@ -153,7 +153,7 @@ public class CitizensOverlay extends Overlay {
 						extraString = scriptedCitizen.currentAction.action + " ";
 					}
 				}
-				String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModelHeight() + " ";
+				String debugText = citizen.debugName() + " " + extraString + "H:" + citizen.rlObject.getModel().getModelHeight() + " ";
 				renderText(graphics, localLocation, debugText, JagexColors.YELLOW_INTERFACE_TEXT);
 				Citizen.Target target = citizen.getCurrentTarget();
 				if (target != null) {
