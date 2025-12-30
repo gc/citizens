@@ -367,12 +367,7 @@ public class CitizenRegion {
 	public void runOncePerTimePeriod(int timePeriodSeconds, int callIntervalSeconds, Consumer<Entity> callback) {
 		double chance = (double) callIntervalSeconds / timePeriodSeconds;
 
-		List<Entity> entityList = new ArrayList<>(entities.values());
-
-		for (Entity entity : entityList) {
-			if (!entity.isActive()) {
-				continue;
-			}
+		for (Entity entity : entities.values()) {
 			if (Math.random() < chance) {
 				int delayMs = (Util.getRandom(0, (callIntervalSeconds / 2) * 1000));
 				executorService.schedule(() -> callback.accept(entity), delayMs, TimeUnit.MILLISECONDS);

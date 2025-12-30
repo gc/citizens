@@ -151,13 +151,13 @@ public class CitizensPlugin extends Plugin {
 
 		for (CitizenRegion r : activeRegions.values()) {
 			r.runOncePerTimePeriod(10, 3, entity -> {
-				if (entity instanceof WanderingCitizen) {
+				if (entity instanceof WanderingCitizen && entity.isActive()) {
 					((WanderingCitizen) entity).wander();
 				}
 			});
 
 			r.runOncePerTimePeriod(60, 3, entity -> {
-				if (entity.isCitizen() && entity.distanceToPlayer() < 15) {
+				if (entity.isActive() && entity.isCitizen() && entity.distanceToPlayer() < 15) {
 					((Citizen) entity).sayRandomRemark();
 				}
 			});
@@ -318,6 +318,3 @@ public class CitizensPlugin extends Plugin {
 		shuttingDown = false;
 	}
 }
-
-
-
