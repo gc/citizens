@@ -78,6 +78,7 @@
         {
             "name": "Gardener",
             "examineText": "A gardener.",
+            "baseNpcId": 10758,
             "remarks": [],
             "moveAnimation": "HumanWalk",
             "startScript": "gardenerScript",
@@ -96,7 +97,7 @@
                 4391,
                 26619,
                 179,
-                54275,
+                28285,
                 183,
                 7368,
                 4843,
